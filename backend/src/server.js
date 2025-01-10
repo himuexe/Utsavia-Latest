@@ -30,7 +30,11 @@ mongoose
     console.error("Connected to Database:", err);
   });
 
+const userRouter = require("./routes/userRoute");
 
+
+
+app.use("/api/user",userRouter);
 
 
 app.listen(PORT, () => {
