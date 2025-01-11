@@ -39,10 +39,12 @@ mongoose
 
 const userRouter = require("./routes/userRoute");
 const authRouter = require("./routes/authRoute");
+const categoryRouter = require("./routes/categoryRoute");
 
 
 app.use("/api/user",userRouter);
 app.use("/api/auth",authRouter);
+app.use("/api/category",categoryRouter);
 
 
 app.listen(PORT, () => {

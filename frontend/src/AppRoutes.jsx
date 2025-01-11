@@ -12,7 +12,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { useAppContext } from "./contexts/AppContext";
 import ProfilePage from "./pages/ProfilePage";
-
+import Theme from "./pages/Theme";
+import CitySelector from "./components/CitySelector";
+import ProductBookingPage from "./pages/ProductBookingPage";
+import CheckoutPage from "./pages/CheckOut";
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn, isLoading } = useAppContext();
 
@@ -26,12 +29,9 @@ const ProtectedRoute = ({ children }) => {
 
   return isLoggedIn ? children : <Navigate to="/login" replace />;
 };
-const PublicRoute = ({ children }) => {
-  const { isLoggedIn } = useAppContext();
 
-  return isLoggedIn ? <Navigate to="/" replace /> : children;
-};
 const AppRoutes = () => {
+  const { currentLocation } = useAppContext();
   return (
     <Router>
       <Routes>
@@ -52,23 +52,43 @@ const AppRoutes = () => {
           }
         />
         <Route
+          path="/themes/:id"
+          element={
+            <Layout>
+              {currentLocation ? (
+                <Theme currentLocation={currentLocation} />
+              ) : (
+                <CitySelector isOpen={true} />
+              )}
+            </Layout>
+          }
+        />
+        <Route
+          path="/info/:id"
+          element={
+            <Layout>
+              {currentLocation ? (
+                <ProductBookingPage currentLocation={currentLocation} />
+              ) : (
+                <CitySelector isOpen={true} />
+              )}
+            </Layout>
+          }
+        />
+        <Route
           path="/login"
           element={
-            <PublicRoute>
-              <RegLayout>
-                <Login />
-              </RegLayout>
-            </PublicRoute>
+            <RegLayout>
+              <Login />
+            </RegLayout>
           }
         />
         <Route
           path="/register"
           element={
-            <PublicRoute>
-              <RegLayout>
-                <Register />
-              </RegLayout>
-            </PublicRoute>
+            <RegLayout>
+              <Register />
+            </RegLayout>
           }
         />
         <Route
@@ -79,6 +99,14 @@ const AppRoutes = () => {
                 <ProfilePage />
               </RegLayout>
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <RegLayout>
+              <CheckoutPage />
+            </RegLayout>
           }
         />
         <Route path="*" element={<Navigate to="/" />} />

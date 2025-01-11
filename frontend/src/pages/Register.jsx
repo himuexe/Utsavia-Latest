@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api/MyUserApi";
@@ -38,7 +37,7 @@ const Register = () => {
 
   return (
     <div className="w-full max-w-md mx-auto bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-8 mt-8 border border-purple-100">
-      <motion.form
+      <form
         className="flex flex-col gap-4"
         onSubmit={onSubmit}
         initial={{ opacity: 0, y: 20 }}
@@ -161,7 +160,7 @@ const Register = () => {
         >
           Create Account
         </button>
-      </motion.form>
+      </form>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import SearchBar from '../components/SearchBar';
 import Categories from '../components/Categories';
 import Carousel from '../components/Carousel';
+import Hero from '../components/Hero';
 const Home = () => {
   return (
     <div>
@@ -9,6 +10,7 @@ const Home = () => {
       </div>
       <Categories/>
       <Carousel/>
+      <Hero/>
     </div>
   );
 };
