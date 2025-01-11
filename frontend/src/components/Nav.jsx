@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useAppContext } from "../contexts/AppContext";
 import CitySelector from "./CitySelector";
-// import * as apiClient from "../api/MyUserApi";
+import * as apiClient from "../api/MyUserApi";
 import NavigationButton from "./ui/NavigationButton";
 import CompanyLogo from "./ui/CompanyLogo";
 import LocationDisplay from "./ui/LocationDisplay";
@@ -48,19 +48,19 @@ const Nav = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
   
-    // const signOutMutation = useMutation(apiClient.signOut, {
-    //   onSuccess: async () => {
-    //     await queryClient.invalidateQueries("validateToken");
-    //     setIsProfilePanelOpen(false);
-    //     setIsMenuOpen(false);
-    //     showToast({ message: "Signed Out!", type: "SUCCESS" });
-    //     navigate("/");
-    //   },
-    // });
+    const signOutMutation = useMutation(apiClient.signOut, {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries("validateToken");
+        setIsProfilePanelOpen(false);
+        setIsMenuOpen(false);
+        showToast({ message: "Signed Out!", type: "SUCCESS" });
+        navigate("/");
+      },
+    });
   
-    // const handleSignOut = useCallback(() => {
-    //   signOutMutation.mutate();
-    // }, [signOutMutation]);
+    const handleSignOut = useCallback(() => {
+      signOutMutation.mutate();
+    }, [signOutMutation]);
   
     const navigationItems = isLoggedIn ? (
       <>

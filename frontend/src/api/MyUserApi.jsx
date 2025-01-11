@@ -47,3 +47,48 @@ export const signOut = async () => {
     throw new Error("Error during sign out");
   }
 };
+
+export const validateToken = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/auth/validate-token`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Token invalid");
+  }
+
+  return response.json();
+};
+
+export const fetchCurrentUser = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/user/me`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching user");
+  }
+  return response.json();
+};
+
+export const updateUserProfile = async (formData) => {
+
+  const requestBody = {
+    phone: formData.phone || "",
+    address: formData.address || "",
+  };
+
+  const response = await fetch(`${API_BASE_URL}/api/user/me`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(requestBody),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Error updating profile");
+  }
+
+  return response.json();
+};

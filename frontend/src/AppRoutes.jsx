@@ -10,7 +10,27 @@ import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import { useAppContext } from "./contexts/AppContext";
+import ProfilePage from "./pages/ProfilePage";
 
+const ProtectedRoute = ({ children }) => {
+  const { isLoggedIn, isLoading } = useAppContext();
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-purple-600 text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  return isLoggedIn ? children : <Navigate to="/login" replace />;
+};
+const PublicRoute = ({ children }) => {
+  const { isLoggedIn } = useAppContext();
+
+  return isLoggedIn ? <Navigate to="/" replace /> : children;
+};
 const AppRoutes = () => {
   return (
     <Router>
@@ -34,19 +54,34 @@ const AppRoutes = () => {
         <Route
           path="/login"
           element={
-            <RegLayout>
-              <Login />
-            </RegLayout>
+            <PublicRoute>
+              <RegLayout>
+                <Login />
+              </RegLayout>
+            </PublicRoute>
           }
         />
-                <Route
+        <Route
           path="/register"
           element={
-            <RegLayout>
-              <Register />
-            </RegLayout>
+            <PublicRoute>
+              <RegLayout>
+                <Register />
+              </RegLayout>
+            </PublicRoute>
           }
         />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <RegLayout>
+                <ProfilePage />
+              </RegLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );

@@ -124,7 +124,7 @@ const SimpleSearchBar = () => {
             onChange={e => setCategory(e.target.value)}
             className="w-full pl-10 p-3 rounded-xl border-purple-100 
               focus:outline-none focus:ring-2 focus:ring-purple-400
-              bg-white/70 backdrop-blur-sm appearance-none"
+              bg-white/70 backdrop-blur-sm appearance-none font-happiness"
           >
             <option value="all">All Celebrations</option>
             <option value="events">Special Events</option>
@@ -137,7 +137,7 @@ const SimpleSearchBar = () => {
           onClick={handleSearch}
           className="bg-gradient-to-r from-purple-600 to-pink-600 
             text-white px-6 py-3 rounded-xl hover:opacity-90 transition-opacity
-            flex items-center gap-2 shadow-lg shadow-purple-200"
+            flex items-center gap-2 shadow-lg shadow-purple-200 font-happiness"
         >
           <Sparkles className="w-5 h-5" />
           <span>Find Events</span>
