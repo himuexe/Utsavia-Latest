@@ -49,19 +49,6 @@ const userSchema = new mongoose.Schema({
 
 userSchema.index({ 'authMethods.provider': 1, 'authMethods.email': 1 }, { unique: true });
 
-userSchema.pre("save", async function(next) {
-  const localAuth = this.authMethods.find(method => 
-    method.provider === 'local' && 
-    method.password && 
-    method.isModified('password')
-  );
-  
-  if (localAuth) {
-    localAuth.password = await bcrypt.hash(localAuth.password, 8);
-  }
-  next();
-});
-
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

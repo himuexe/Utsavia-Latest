@@ -14,11 +14,11 @@ const Toast = ({ message, type, onClose }) => {
 
   const toastStyles = {
     SUCCESS: {
-      background: "bg-green-500", // Softer green for success
+      background: "bg-green-500", 
       icon: <CheckCircle className="mr-2 text-white" />,
     },
     ERROR: {
-      background: "bg-red-500", // Softer red for errors
+      background: "bg-red-500", 
       icon: <XCircle className="mr-2 text-white" />,
     },
   };

@@ -12,7 +12,7 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        // First check if user already exists with Google auth
+
         let user = await User.findOne({
           'authMethods': {
             $elemMatch: {
@@ -26,36 +26,42 @@ passport.use(
           return done(null, user);
         }
 
-        // Check if user exists with the email
         user = await User.findOne({
           'authMethods.email': profile.emails[0].value
         });
 
         if (user) {
-          // Check if Google auth method already exists
-          const hasGoogleAuth = user.authMethods.some(
-            method => method.provider === 'google' && method.providerId === profile.id
+          
+          const existingGoogleAuth = user.authMethods.find(
+            method => method.provider === 'google'
           );
 
-          if (!hasGoogleAuth) {
-            // Add Google auth method while preserving existing methods
-            user.authMethods.push({
-              provider: 'google',
-              providerId: profile.id,
-              email: profile.emails[0].value
-            });
-
-            // Update user profile if needed
-            if (!user.firstName) user.firstName = profile.name.givenName;
-            if (!user.lastName) user.lastName = profile.name.familyName;
-
+          if (existingGoogleAuth) {
+            existingGoogleAuth.providerId = profile.id;
             await user.save();
+            return done(null, user);
           }
 
-          return done(null, user);
+          user.authMethods.push({
+            provider: 'google',
+            providerId: profile.id,
+            email: profile.emails[0].value
+          });
+
+
+          if (!user.firstName) user.firstName = profile.name.givenName;
+          if (!user.lastName) user.lastName = profile.name.familyName;
+          if (!user.primaryEmail) user.primaryEmail = profile.emails[0].value;
+
+          try {
+            await user.save();
+            return done(null, user);
+          } catch (saveError) {
+            return done(saveError, null);
+          }
         }
 
-        // Create new user if no existing user found
+
         const newUser = new User({
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
@@ -67,33 +73,18 @@ passport.use(
           }]
         });
 
-        await newUser.save();
-        return done(null, newUser);
+        try {
+          await newUser.save();
+          return done(null, newUser);
+        } catch (saveError) {
+          return done(saveError, null);
+        }
 
       } catch (error) {
-        console.error('Google Strategy Error:', error);
         return done(error, null);
       }
     }
   )
 );
-
-// These are needed if you're using sessions
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    if (!user) {
-      return done(new Error('User not found'), null);
-    }
-    done(null, user);
-  } catch (error) {
-    console.error('Deserialize Error:', error);
-    done(error, null);
-  }
-});
 
 module.exports = passport;

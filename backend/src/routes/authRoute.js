@@ -14,7 +14,7 @@ router.post(
       check(
         "password",
         "Password with 6 or more characters is required"
-      ).trim().isLength({ min: 6 }),
+      ).isLength({ min: 6 }),
     ],
     AuthController.login
   );
@@ -30,15 +30,14 @@ router.get('/google', passport.authenticate('google', {
     scope: ['profile', 'email']
   }));
 
-router.get('/google/callback', 
+  router.get(
+    '/google/callback',
     passport.authenticate('google', { 
-      failureRedirect: '/login',
-      session: false 
-    },
+      session: false,
+      failureRedirect: `${process.env.FRONTEND_URL}/login?error=auth_failed` 
+    }),
     AuthController.handleCallback
-),
+  );
     
-);
-
 
 module.exports = router;

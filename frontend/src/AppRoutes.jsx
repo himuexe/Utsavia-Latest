@@ -7,6 +7,9 @@ import {
 import Layout from "./layouts/Layout";
 import RegLayout from "./layouts/RegLayout";
 import Contact from "./pages/Contact";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 const AppRoutes = () => {
   return (
@@ -16,7 +19,7 @@ const AppRoutes = () => {
           path="/"
           element={
             <Layout>
-              <p>Home</p>
+              <Home />
             </Layout>
           }
         />
@@ -25,6 +28,22 @@ const AppRoutes = () => {
           element={
             <RegLayout>
               <Contact />
+            </RegLayout>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RegLayout>
+              <Login />
+            </RegLayout>
+          }
+        />
+                <Route
+          path="/register"
+          element={
+            <RegLayout>
+              <Register />
             </RegLayout>
           }
         />

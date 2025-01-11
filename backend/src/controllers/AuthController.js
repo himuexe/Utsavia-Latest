@@ -13,33 +13,30 @@ const login = async (req, res) => {
 
   try {
     const user = await User.findOne({
-      authMethods: {
-        $elemMatch: {
-          provider: "local",
-          email: email,
-        },
-      },
+      'authMethods.email': email
     });
-
     if (!user) {
       return res.status(400).json({ message: "Invalid Credentials" });
     }
 
     const localAuth = user.authMethods.find(
-      (method) => method.provider === "local" && method.email === email
+      method => method.provider === "local" && method.email === email
     );
-
     if (!localAuth) {
       const googleAuth = user.authMethods.find(
-        (method) => method.provider === "google" && method.email === email
+        method => method.provider === "google" && method.email === email
       );
 
       if (googleAuth) {
-        return res.status(400).json({ message: "Please sign in with Google" });
+        return res.status(400).json({ 
+          message: "Please sign in with Google",
+          useGoogle: true 
+        });
       }
 
       return res.status(400).json({ message: "Invalid Credentials" });
     }
+
 
     const isMatch = await bcrypt.compare(password, localAuth.password);
     if (!isMatch) {
@@ -65,18 +62,21 @@ const login = async (req, res) => {
       path: "/",
     });
 
-    res.status(200).json({ userId: user._id });
+    return res.status(200).json({ userId: user._id });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
-
 const handleCallback = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
+    }
+
+
     const token = jwt.sign(
       {
-        userId: req.user.id,
+        userId: req.user._id, 
         provider: "google",
       },
       process.env.JWT_SECRET_KEY,
@@ -91,20 +91,19 @@ const handleCallback = async (req, res) => {
       path: "/",
     });
 
-    res.redirect(`${process.env.FRONTEND_URL}/auth-success`);
+    res.redirect(`${process.env.FRONTEND_URL}/`);
   } catch (error) {
-    console.error("Google auth callback error:", error);
     res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
   }
 };
-
 const logout = (req, res) => {
-  // Clear the auth token cookie
   res.cookie("auth_token", "", {
     expires: new Date(0),
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
   });}
+
+  
 module.exports = {
   login,
   handleCallback,
