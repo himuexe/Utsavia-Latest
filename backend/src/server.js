@@ -1,8 +1,10 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const passport = require("passport");
 const mongoose = require("mongoose");
 require("dotenv").config();
+require("./config/passport");
 
 
 
@@ -19,6 +21,7 @@ app.use(
       credentials: true,
     })
   );
+app.use(passport.initialize());
 
 
 mongoose
@@ -31,10 +34,11 @@ mongoose
   });
 
 const userRouter = require("./routes/userRoute");
-
+const authRouter = require("./routes/authRoute");
 
 
 app.use("/api/user",userRouter);
+app.use("/api/auth",authRouter);
 
 
 app.listen(PORT, () => {
