@@ -69,9 +69,8 @@ const login = async (req, res) => {
 const handleCallback = async (req, res) => {
   try {
     if (!req.user) {
-      return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
+      return res.redirect(`${process.env.FRONTEND_URL}`);
     }
-
 
     const token = jwt.sign(
       {
@@ -89,9 +88,9 @@ const handleCallback = async (req, res) => {
       maxAge: 86400000,
     });
 
-    res.redirect(`${process.env.FRONTEND_URL}/`);
+    res.redirect(`${process.env.FRONTEND_URL}`);
   } catch (error) {
-    res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
+    res.redirect(`${process.env.FRONTEND_URL}`);
   }
 };
 const logout = (req, res) => {
