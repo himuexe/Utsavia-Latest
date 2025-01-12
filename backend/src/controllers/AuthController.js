@@ -57,9 +57,8 @@ const login = async (req, res) => {
     res.cookie("auth_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 86400000,
-      path: "/",
     });
 
     return res.status(200).json({ userId: user._id });
@@ -86,9 +85,8 @@ const handleCallback = async (req, res) => {
     res.cookie("auth_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 86400000,
-      path: "/",
     });
 
     res.redirect(`${process.env.FRONTEND_URL}/`);
