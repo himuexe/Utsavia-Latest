@@ -9,7 +9,9 @@ const authMethodSchema = new mongoose.Schema({
   },
   providerId: { 
     type: String,
-    required: false
+    required: function() {
+      return this.provider !== 'local';
+    }
   },
   email: {
     type: String,
@@ -17,7 +19,9 @@ const authMethodSchema = new mongoose.Schema({
   },
   password: { 
     type: String,
-    required: false
+    required: function() {
+      return this.provider === 'local';
+    }
   }
 }, { _id: false });
 
@@ -47,7 +51,7 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-userSchema.index({ 'authMethods.provider': 1, 'authMethods.email': 1 }, { unique: true });
+
 
 const User = mongoose.model("User", userSchema);
 
