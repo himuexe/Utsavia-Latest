@@ -1,18 +1,17 @@
 import React from 'react';
 import { X } from 'lucide-react';
 import useCitySelector from '../hooks/useCitySelector'; 
-import { useAppContext } from "../contexts/AppContext"; 
+import {  useDispatch } from 'react-redux';
+import { setSelectedCity } from '../store/appSlice';
 
 const CitySelector = ({ onClose, isOpen }) => {
   if (!isOpen) return null; 
-
+  const dispatch = useDispatch();
   const { selectedCity, cities,  } = useCitySelector();
-  const { setSelectedCity } = useAppContext(); 
-
   const handleCitySelection = (city) => {
-    setSelectedCity(city); 
-    onClose(); 
-  };
+    dispatch(setSelectedCity(city));
+    onClose();
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">

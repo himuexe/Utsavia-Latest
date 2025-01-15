@@ -27,12 +27,12 @@ const ProductImageCard = ({ imageUrl }) => (
 );
 
 // Price Card Component
-const PriceCard = ({ prices, currentLocation, onPincodeSubmit }) => {
+const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
   const [pincode, setPincode] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const locationPrice = prices?.find(p => p.city === currentLocation)?.price;
+  const locationPrice = prices?.find(p => p.city === selectedCity)?.price;
 
   const handleSubmit = useCallback(async () => {
     if (!pincode.trim()) {
@@ -53,7 +53,7 @@ const PriceCard = ({ prices, currentLocation, onPincodeSubmit }) => {
 
       if (data && data.Status === "Success" && data.PostOffice?.length > 0) {
         const pincodeDistrict = data.PostOffice[0].District.toLowerCase();
-        const currentLocationNormalized = currentLocation.toLowerCase();
+        const currentLocationNormalized = selectedCity.toLowerCase();
 
         console.log("District:", pincodeDistrict); // Debug log
         console.log("Current Location:", currentLocationNormalized); // Debug log
@@ -63,7 +63,7 @@ const PriceCard = ({ prices, currentLocation, onPincodeSubmit }) => {
           setIsSubmitted(true);
           onPincodeSubmit?.(pincode);
         } else {
-          setError(`This pincode is for ${data.PostOffice[0].District}, not for ${currentLocation}. Please enter a pincode for ${currentLocation}.`);
+          setError(`This pincode is for ${data.PostOffice[0].District}, not for ${selectedCity}. Please enter a pincode for ${selectedCity}.`);
           setIsSubmitted(false);
         }
       } else {
@@ -77,7 +77,7 @@ const PriceCard = ({ prices, currentLocation, onPincodeSubmit }) => {
     } finally {
       setIsSubmitting(false);
     }
-  }, [pincode, currentLocation, onPincodeSubmit]);
+  }, [pincode, selectedCity, onPincodeSubmit]);
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
@@ -113,7 +113,7 @@ const PriceCard = ({ prices, currentLocation, onPincodeSubmit }) => {
         </div>
         {error && <p className="text-red-500 text-sm">{error}</p>}
         {isSubmitted && !error && (
-          <p className="text-green-500 text-sm">Pincode verified for {currentLocation}!</p>
+          <p className="text-green-500 text-sm">Pincode verified for {selectedCity}!</p>
         )}
       </div>
     </div>

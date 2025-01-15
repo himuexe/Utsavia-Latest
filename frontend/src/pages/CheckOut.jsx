@@ -1,13 +1,14 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAppContext } from '../contexts/AppContext';
+import { useSelector } from 'react-redux';
+import { selectIsLoggedIn } from '../store/appSlice';
 import Login from './Login';
 
 const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { bookingDetails } = location.state || {};
-  const { isLoggedIn } = useAppContext();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   // Redirect if no booking details are present
   React.useEffect(() => {

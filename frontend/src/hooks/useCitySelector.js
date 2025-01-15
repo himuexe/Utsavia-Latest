@@ -1,7 +1,12 @@
-import { useAppContext } from "../contexts/AppContext";
+import { useDispatch, useSelector } from 'react-redux';
+import { 
+  selectSelectedCity,
+  setSelectedCity 
+} from '../store/appSlice';
 
 const useCitySelector = () => {
-    const { selectedCity, setSelectedCity } = useAppContext();
+    const selectedCity = useSelector(selectSelectedCity);
+    const dispatch = useDispatch();
 
   const cities = [
     "Jaipur",
@@ -21,7 +26,7 @@ const useCitySelector = () => {
   ];
 
   const handleCityClick = (city) => {
-    setSelectedCity(city);
+    dispatch(setSelectedCity(city));
   };
 
   return {

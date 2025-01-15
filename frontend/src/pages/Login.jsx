@@ -3,12 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api/MyUserApi";
-import { useAppContext } from "../contexts/AppContext";
+import { useDispatch } from "react-redux";
 import { Eye, EyeOff, Heart } from 'lucide-react';
+import { showToast } from "../store/appSlice";
 
 const SignIn = () => {
   const queryClient = useQueryClient();
-  const { showToast } = useAppContext();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -20,12 +21,12 @@ const SignIn = () => {
 
   const mutation = useMutation(apiClient.signIn, {
     onSuccess: async () => {
-      showToast({ message: "Sign in successful!", type: "SUCCESS" });
+      dispatch(showToast({ message: 'Signed in successfully', type: 'SUCCESS' }));
       await queryClient.invalidateQueries("validateToken");
       navigate("/");
     },
     onError: async (error) => {
-      showToast({ message: error.message, type: "ERROR" });
+      dispatch(showToast({ message: error.message, type: 'ERROR' }));
     },
   });
 

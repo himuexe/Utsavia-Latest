@@ -26,7 +26,7 @@ const ThemeSkeleton = () => (
   </Card>
 );
 
-const ThemesPage = ({ currentLocation }) => {
+const ThemesPage = ({selectedCity }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const {
@@ -34,8 +34,8 @@ const ThemesPage = ({ currentLocation }) => {
     isLoading,
     isError,
   } = useQuery(
-    ["items", id, currentLocation],
-    () => apiClient.getItems(id, currentLocation),
+    ["items", id, selectedCity],
+    () => apiClient.getItems(id, selectedCity),
     {
       retry: 2,
       staleTime: 300000,

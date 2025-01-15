@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useAppContext } from "../contexts/AppContext";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as apiClient from "../api/MyUserApi";
 import { Edit, Save, X } from 'lucide-react';
+import { showToast } from "../store/appSlice";
 
 const UserProfile = () => {
   const [user, setUser ] = useState(null);
@@ -20,7 +21,7 @@ const UserProfile = () => {
     address: '',
   });
 
-  const { showToast } = useAppContext();
+  const  dispatch  = useDispatch();
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -59,12 +60,12 @@ const UserProfile = () => {
       const updatedUser  = await apiClient.updateUserProfile(formData);
       setUser (updatedUser );
       setIsEditing(false);
-      showToast({ message: "Profile updated successfully!", type: "SUCCESS" });
+      dispatch(showToast({ message: 'Profile updated successfully', type: 'SUCCESS' }));
       navigate("/");
     } catch (err) {
       setError('Failed to update profile. Please try again.');
       console.error('Error updating profile:', err);
-      showToast({ message: 'Failed to update profile. Please try again.', type: "ERROR" });
+      dispatch(showToast({ message: 'Failed to update profile', type: 'ERROR' }));;
     } finally {
       setIsSaving(false);
     }

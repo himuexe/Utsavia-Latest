@@ -10,14 +10,17 @@ import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import { useAppContext } from "./contexts/AppContext";
+import { useSelector  } from "react-redux"; 
 import ProfilePage from "./pages/ProfilePage";
 import Theme from "./pages/Theme";
 import CitySelector from "./components/CitySelector";
 import ProductBookingPage from "./pages/ProductBookingPage";
 import CheckoutPage from "./pages/CheckOut";
+import { selectSelectedCity , selectIsLoading, selectIsLoggedIn } from "./store/appSlice";
+
 const ProtectedRoute = ({ children }) => {
-  const { isLoggedIn, isLoading } = useAppContext();
+  const isLoading = useSelector(selectIsLoading);
+  const isLoggedIn = useSelector(selectIsLoggedIn); 
 
   if (isLoading) {
     return (
@@ -31,7 +34,8 @@ const ProtectedRoute = ({ children }) => {
 };
 
 const AppRoutes = () => {
-  const { currentLocation } = useAppContext();
+  const selectedCity = useSelector(selectSelectedCity);
+
   return (
     <Router>
       <Routes>
@@ -55,8 +59,8 @@ const AppRoutes = () => {
           path="/themes/:id"
           element={
             <Layout>
-              {currentLocation ? (
-                <Theme currentLocation={currentLocation} />
+              {selectedCity ? (
+                <Theme selectedCity={selectedCity} />
               ) : (
                 <CitySelector isOpen={true} />
               )}
@@ -67,8 +71,8 @@ const AppRoutes = () => {
           path="/info/:id"
           element={
             <Layout>
-              {currentLocation ? (
-                <ProductBookingPage currentLocation={currentLocation} />
+              {selectedCity ? (
+                <ProductBookingPage selectedCity={selectedCity} />
               ) : (
                 <CitySelector isOpen={true} />
               )}

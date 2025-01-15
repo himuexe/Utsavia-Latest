@@ -1,64 +1,46 @@
-import React, { useContext, useState ,useEffect } from "react";
-import Toast from "../components/ui/Toast";
-import { useQuery } from "react-query";
-import * as apiClient from "../api/MyUserApi";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useQuery } from 'react-query';
+import * as apiClient from '../api/MyUserApi';
+import { 
+  setLoading, 
+  setLoggedIn,
+  selectToast,
+  clearToast
+} from '../store/appSlice';
+import Toast from '../components/ui/Toast';
 
-const AppContext = React.createContext(undefined);
+function AppContent({ children }) {
+  const dispatch = useDispatch();
+  const toast = useSelector(selectToast);
 
-export const AppContextProvider = ({ children }) => {
-  const [toast, setToast] = useState(undefined);
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedCity, setSelectedCity] = useState(() => {
-    return localStorage.getItem("selectedCity") || "";
-  });
-  const currentLocation = selectedCity || "";
   const { isError, isLoading: isValidatingToken } = useQuery(
-    "validateToken", 
-    apiClient.validateToken, 
+    'validateToken',
+    apiClient.validateToken,
     {
       retry: false,
       onSettled: () => {
-        setIsLoading(false);
-      }
+        dispatch(setLoading(false));
+      },
     }
   );
-  
+
   useEffect(() => {
-    if (selectedCity) {
-      localStorage.setItem("selectedCity", selectedCity);
-    } else {
-      localStorage.removeItem("selectedCity");
-    }
-  }, [selectedCity]);
+    dispatch(setLoggedIn(!isError));
+  }, [isError, dispatch]);
 
   return (
-    <AppContext.Provider
-      value={{
-        showToast: (toastMessage) => {
-          setToast(toastMessage);
-        },
-        isLoggedIn: !isError,
-        isLoading: isLoading || isValidatingToken,
-        currentLocation,
-        setSelectedCity
-      }}
-    >
+    <>
       {toast && (
         <Toast
           message={toast.message}
           type={toast.type}
-          onClose={() => setToast(undefined)}
+          onClose={() => dispatch(clearToast())}
         />
       )}
       {children}
-    </AppContext.Provider>
+    </>
   );
-};
+}
 
-export const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (context === undefined) {
-    throw new Error("useAppContext must be used within an AppContextProvider");
-  }
-  return context;
-};
+export default AppContent;

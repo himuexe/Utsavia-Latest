@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api/MyUserApi";
-import { useAppContext } from "../contexts/AppContext";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from 'lucide-react';
+import { showToast } from "../store/appSlice";
 
 const Register = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { showToast } = useAppContext();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -22,12 +23,12 @@ const Register = () => {
 
   const mutation = useMutation(apiClient.register, {
     onSuccess: async () => {
-      showToast({ message: "Registration Success!", type: "SUCCESS" });
+      dispatch(showToast({ message: 'Signed up successfully', type: 'SUCCESS' }));
       await queryClient.invalidateQueries("validateToken");
       navigate("/");
     },
     onError: (error) => {
-      showToast({ message: error.message, type: "ERROR" });
+      dispatch(showToast({ message: error.message, type: 'ERROR' }));
     },
   });
 
