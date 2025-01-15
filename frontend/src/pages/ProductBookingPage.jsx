@@ -32,6 +32,7 @@ const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  console.log(selectedCity)
   const locationPrice = prices?.find(p => p.city === selectedCity)?.price;
 
   const handleSubmit = useCallback(async () => {
@@ -151,7 +152,7 @@ const TimeSlotSelector = ({ slots = [], selectedSlot, onSelect }) => (
 );
 
 // Main Component
-const ProductBookingPage = ({ currentLocation }) => {
+const ProductBookingPage = ({ selectedCity }) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -161,8 +162,8 @@ const ProductBookingPage = ({ currentLocation }) => {
   const [bookingError, setBookingError] = useState("");
 
   const { data: item, isLoading, isError } = useQuery(
-    ["item", id, currentLocation],
-    () => apiClient.getItem(id, currentLocation),
+    ["item", id, selectedCity],
+    () => apiClient.getItem(id, selectedCity),
     {
       retry: 2,
       staleTime: 300000,
@@ -172,7 +173,7 @@ const ProductBookingPage = ({ currentLocation }) => {
     }
   );
 
-  const locationPrice = item?.prices?.find(p => p.city === currentLocation)?.price;
+  const locationPrice = item?.prices?.find(p => p.city === selectedCity)?.price;
 
   const handleDateChange = useCallback((e) => {
     const selectedDate = e.target.value;
@@ -270,7 +271,7 @@ const ProductBookingPage = ({ currentLocation }) => {
         <div>
           <PriceCard 
             prices={item?.prices} 
-            currentLocation={currentLocation}
+            selectedCity={selectedCity}
             onPincodeSubmit={handlePincodeSubmit}
           />
           <ProductInfoCard

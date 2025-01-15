@@ -86,7 +86,7 @@ const Nav = () => {
         <div className="container mx-auto flex justify-between items-center">
           <CompanyLogo onClick={() => navigate("/")} />
           <nav className="hidden md:flex space-x-4 items-center font-secondary">
-            <LocationDisplay currentLocation={selectedCity} onChange={() => setIsCitySelectorOpen(true)} />
+            <LocationDisplay selectedCity={selectedCity} onChange={() => setIsCitySelectorOpen(true)} />
             <div className="h-6 w-px bg-purple-200 mx-2" />
             <NavigationButton icon={CalendarHeart} to="/events">Browse Events</NavigationButton>
             <NavigationButton icon={Clock} to="/last-minute">Last Minute</NavigationButton>
@@ -105,7 +105,7 @@ const Nav = () => {
   
         <SidePanel isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} title="Menu">
           <div className="space-y-2">
-            <LocationDisplay currentLocation={selectedCity} onChange={() => setIsCitySelectorOpen(true)} />
+            <LocationDisplay selectedCity={selectedCity} onChange={() => setIsCitySelectorOpen(true)} />
             <NavigationButton icon={CalendarHeart} to="/events">Browse Events</NavigationButton>
             <NavigationButton icon={Clock} to="/last-minute">Last Minute</NavigationButton>
             {navigationItems}
