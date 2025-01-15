@@ -41,7 +41,6 @@ const ThemesPage = ({ currentLocation }) => {
       staleTime: 300000,
     }
   );
-  console.log(items);
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">

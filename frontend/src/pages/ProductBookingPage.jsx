@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import * as apiClient from "../api/ItemApi";
+import * as bookingClient from "../api/BookingApi";
 import { useQuery } from "react-query";
 
 // Custom Error Banner Component
@@ -26,12 +27,14 @@ const ProductImageCard = ({ imageUrl }) => (
 );
 
 // Price Card Component
-const PriceCard = ({ prices,currentLocation, onPincodeSubmit }) => {
+const PriceCard = ({ prices, currentLocation, onPincodeSubmit }) => {
   const [pincode, setPincode] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const locationPrice = prices?.find(p => p.city === currentLocation)?.price;
-  const handleSubmit = useCallback(() => {
+
+  const handleSubmit = useCallback(async () => {
     if (!pincode.trim()) {
       setError("Please enter a pincode");
       return;
@@ -40,10 +43,41 @@ const PriceCard = ({ prices,currentLocation, onPincodeSubmit }) => {
       setError("Please enter a valid 6-digit pincode");
       return;
     }
+
+    setIsSubmitting(true);
     setError("");
-    setIsSubmitted(true);
-    onPincodeSubmit?.(pincode);
-  }, [pincode, onPincodeSubmit]);
+
+    try {
+      const data = await bookingClient.validatePincode(pincode);
+      console.log("API Response:", data); // Debug log
+
+      if (data && data.Status === "Success" && data.PostOffice?.length > 0) {
+        const pincodeDistrict = data.PostOffice[0].District.toLowerCase();
+        const currentLocationNormalized = currentLocation.toLowerCase();
+
+        console.log("District:", pincodeDistrict); // Debug log
+        console.log("Current Location:", currentLocationNormalized); // Debug log
+
+        if (pincodeDistrict.includes(currentLocationNormalized) || 
+            currentLocationNormalized.includes(pincodeDistrict)) {
+          setIsSubmitted(true);
+          onPincodeSubmit?.(pincode);
+        } else {
+          setError(`This pincode is for ${data.PostOffice[0].District}, not for ${currentLocation}. Please enter a pincode for ${currentLocation}.`);
+          setIsSubmitted(false);
+        }
+      } else {
+        setError("Invalid pincode. Please enter a valid pincode.");
+        setIsSubmitted(false);
+      }
+    } catch (err) {
+      console.error("Error validating pincode:", err);
+      setError("Unable to validate pincode. Please try again.");
+      setIsSubmitted(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [pincode, currentLocation, onPincodeSubmit]);
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
@@ -63,13 +97,15 @@ const PriceCard = ({ prices,currentLocation, onPincodeSubmit }) => {
                   setIsSubmitted(false);
                 }}
                 placeholder="Enter Pincode"
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-500 outline-none"
+                disabled={isSubmitting}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-500 outline-none disabled:bg-gray-100"
               />
               <button
                 onClick={handleSubmit}
-                className="bg-purple-600 font-happiness text-white px-4 py-2 rounded-lg hover:bg-purple-700"
+                disabled={isSubmitting}
+                className="bg-purple-600 font-happiness text-white px-4 py-2 rounded-lg hover:bg-purple-700 disabled:bg-purple-400"
               >
-                Submit
+                {isSubmitting ? "Checking..." : "Submit"}
               </button>
             </div>
             <MapPin className="absolute right-24 top-2.5 text-gray-400" size={20} />
@@ -77,13 +113,12 @@ const PriceCard = ({ prices,currentLocation, onPincodeSubmit }) => {
         </div>
         {error && <p className="text-red-500 text-sm">{error}</p>}
         {isSubmitted && !error && (
-          <p className="text-green-500 text-sm">Pincode submitted successfully!</p>
+          <p className="text-green-500 text-sm">Pincode verified for {currentLocation}!</p>
         )}
       </div>
     </div>
   );
 };
-
 // Product Info Card Component
 const ProductInfoCard = ({ name, description }) => (
   <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
@@ -136,7 +171,9 @@ const ProductBookingPage = ({ currentLocation }) => {
       }
     }
   );
+
   const locationPrice = item?.prices?.find(p => p.city === currentLocation)?.price;
+
   const handleDateChange = useCallback((e) => {
     const selectedDate = e.target.value;
     const today = new Date().toISOString().split('T')[0];
@@ -153,19 +190,10 @@ const ProductBookingPage = ({ currentLocation }) => {
   }, []);
 
   const handlePincodeSubmit = useCallback((newPincode) => {
-    console.log("Setting pincode:", newPincode); // Debug log
     setPincode(newPincode);
   }, []);
 
   const handleBooking = useCallback(() => {
-    // Debug logs
-    console.log("Current values:", {
-      selectedDate,
-      selectedSlot,
-      pincode,
-      isButtonDisabled: !selectedDate || !selectedSlot || !pincode
-    });
-
     // Validation with specific error messages
     if (!selectedDate) {
       setBookingError("Please select a date");
@@ -190,11 +218,12 @@ const ProductBookingPage = ({ currentLocation }) => {
       pincode: pincode,
       imageUrl: item?.image
     };
+    
     // Navigate to checkout with booking details
     navigate('/checkout', { 
       state: { bookingDetails }
     });
-  }, [selectedDate, selectedSlot, pincode, id, item, navigate , locationPrice]);
+  }, [selectedDate, selectedSlot, pincode, id, item, navigate, locationPrice]);
 
   // Function to get validation status message
   const getValidationMessage = () => {
@@ -230,6 +259,7 @@ const ProductBookingPage = ({ currentLocation }) => {
     "3:00 PM",
     "4:00 PM",
   ];
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid lg:grid-cols-2 gap-8">
@@ -289,7 +319,7 @@ const ProductBookingPage = ({ currentLocation }) => {
                   <span className="mr-2">✓</span> Time slot selected
                 </div>
                 <div className={`flex items-center ${pincode ? 'text-green-600' : 'text-gray-400'}`}>
-                  <span className="mr-2">✓</span> Pincode submitted
+                  <span className="mr-2">✓</span> Pincode verified
                 </div>
               </div>
 

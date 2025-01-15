@@ -83,13 +83,11 @@ const getAllItems = async (req, res) => {
       isActive: true,
       prices: { $elemMatch: { city: location } } 
     };
-    console.log(categoryId, location);
 
     const items = await Item.find(query)
       .select("name description prices image _id") 
       .sort({ createdAt: -1 });
 
-    console.log(items);
     if (!items.length) {
       return res.status(404).json({ error: "Items not found" });
     }
