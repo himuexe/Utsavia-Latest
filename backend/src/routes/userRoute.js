@@ -19,7 +19,7 @@ router.put(
 
 router.get("/me", verifyToken, MyUserController.getCurrentUser);
 
-
+router.get("/check-profile", verifyToken, MyUserController.checkCurrentUser);
 
 
 module.exports = router;

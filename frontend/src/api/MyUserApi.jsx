@@ -1,23 +1,22 @@
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  export const signIn = async (formData) => {
-    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-  
-    const body = await response.json();
-    if (!response.ok) {
-      throw new Error(body.message);
-    }
-    return body;
-  };
-  
+export const signIn = async (formData) => {
+  const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error(body.message);
+  }
+  return body;
+};
+
 export const register = async (formData) => {
   const response = await fetch(`${API_BASE_URL}/api/user/register`, {
     method: "POST",
@@ -70,7 +69,6 @@ export const fetchCurrentUser = async () => {
 };
 
 export const updateUserProfile = async (formData) => {
-
   const requestBody = {
     phone: formData.phone || "",
     address: formData.address || "",
@@ -91,4 +89,22 @@ export const updateUserProfile = async (formData) => {
   }
 
   return response.json();
+};
+
+export const checkProfileCompletion = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/user/check-profile`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json();
+    throw new Error(errorBody.message || "Profile completion check failed");
+  }
+
+  const data = await response.json();
+  return data.isProfileComplete; 
 };

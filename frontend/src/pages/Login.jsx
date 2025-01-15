@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom"; 
+import { Link } from "react-router-dom"; 
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api/MyUserApi";
@@ -10,7 +10,6 @@ import { showToast } from "../store/appSlice";
 const SignIn = () => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = React.useState(false);
 
   const {
@@ -23,7 +22,6 @@ const SignIn = () => {
     onSuccess: async () => {
       dispatch(showToast({ message: 'Signed in successfully', type: 'SUCCESS' }));
       await queryClient.invalidateQueries("validateToken");
-      navigate("/");
     },
     onError: async (error) => {
       dispatch(showToast({ message: error.message, type: 'ERROR' }));

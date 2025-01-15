@@ -61,7 +61,6 @@ const Nav = () => {
         setIsProfilePanelOpen(false);
         setIsMenuOpen(false);
         dispatch(showToast({ message: 'Signed out successfully!', type: 'SUCCESS' }));
-        navigate("/");
       },
     });
   

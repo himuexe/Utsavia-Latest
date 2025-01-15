@@ -9,26 +9,27 @@ const createCurrentUser = async (req, res) => {
   }
 
   try {
-
     const existingUser = await User.findOne({
-      'authMethods.email': req.body.email
+      "authMethods.email": req.body.email,
     });
 
     if (existingUser) {
       const hasLocalAuth = existingUser.authMethods.some(
-        method => method.provider === 'local'
+        (method) => method.provider === "local"
       );
 
       if (hasLocalAuth) {
-        return res.status(400).json({ message: "User already exists with this email" });
+        return res
+          .status(400)
+          .json({ message: "User already exists with this email" });
       }
 
       const hashedPassword = await bcrypt.hash(req.body.password, 8);
-      
+
       existingUser.authMethods.push({
-        provider: 'local',
+        provider: "local",
         email: req.body.email,
-        password: hashedPassword
+        password: hashedPassword,
       });
 
       // Update user details if they weren't set before
@@ -38,13 +39,13 @@ const createCurrentUser = async (req, res) => {
       await existingUser.save();
 
       const token = jwt.sign(
-        { 
-          userId: existingUser.id,
-          provider: 'local'
-        }, 
-        process.env.JWT_SECRET_KEY, 
         {
-          expiresIn: "1d"
+          userId: existingUser.id,
+          provider: "local",
+        },
+        process.env.JWT_SECRET_KEY,
+        {
+          expiresIn: "1d",
         }
       );
 
@@ -55,7 +56,9 @@ const createCurrentUser = async (req, res) => {
         maxAge: 86400000,
       });
 
-      return res.status(200).send({ message: "Local authentication added successfully" });
+      return res
+        .status(200)
+        .send({ message: "Local authentication added successfully" });
     }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 8);
@@ -64,23 +67,25 @@ const createCurrentUser = async (req, res) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       primaryEmail: req.body.email,
-      authMethods: [{
-        provider: 'local',
-        email: req.body.email,
-        password: hashedPassword
-      }]
+      authMethods: [
+        {
+          provider: "local",
+          email: req.body.email,
+          password: hashedPassword,
+        },
+      ],
     });
 
     await newUser.save();
 
     const token = jwt.sign(
-      { 
-        userId: newUser.id,
-        provider: 'local'
-      }, 
-      process.env.JWT_SECRET_KEY, 
       {
-        expiresIn: "1d"
+        userId: newUser.id,
+        provider: "local",
+      },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "1d",
       }
     );
 
@@ -92,7 +97,6 @@ const createCurrentUser = async (req, res) => {
     });
 
     return res.status(200).send({ message: "User registered successfully" });
-
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Something went wrong" });
@@ -139,9 +143,28 @@ const updateCurrentUser = async (req, res) => {
     res.status(500).json({ message: "Error updating profile" });
   }
 };
+const checkCurrentUser = async (req, res) => {
+  const userId = req.userId;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User  not found" });
+    }
+    const isAddressComplete = user.address && user.address.trim() !== "";
+    const isPhoneComplete = user.phone && user.phone.trim() !== "";
+    const isProfileComplete = isAddressComplete && isPhoneComplete;
+    res.json({
+      isProfileComplete,
+    });
+  } catch (error) {
+    console.error("Profile completion check error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
-  module.exports = {
-    createCurrentUser ,
-    getCurrentUser,
-    updateCurrentUser
-  };
+module.exports = {
+  createCurrentUser,
+  getCurrentUser,
+  updateCurrentUser,
+  checkCurrentUser,
+};

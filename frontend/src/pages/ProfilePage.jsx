@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { setAddressValidity } from '../store/appSlice';
 import * as apiClient from "../api/MyUserApi";
 import { Edit, Save, X } from 'lucide-react';
 import { showToast } from "../store/appSlice";
 
 const UserProfile = () => {
   const [user, setUser ] = useState(null);
-  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -60,8 +59,9 @@ const UserProfile = () => {
       const updatedUser  = await apiClient.updateUserProfile(formData);
       setUser (updatedUser );
       setIsEditing(false);
+      const isComplete = await apiClient.checkProfileCompletion();
+      dispatch(setAddressValidity(isComplete === "" ? false : isComplete))
       dispatch(showToast({ message: 'Profile updated successfully', type: 'SUCCESS' }));
-      navigate("/");
     } catch (err) {
       setError('Failed to update profile. Please try again.');
       console.error('Error updating profile:', err);

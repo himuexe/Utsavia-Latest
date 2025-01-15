@@ -32,7 +32,6 @@ const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  console.log(selectedCity)
   const locationPrice = prices?.find(p => p.city === selectedCity)?.price;
 
   const handleSubmit = useCallback(async () => {
@@ -50,14 +49,10 @@ const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
 
     try {
       const data = await bookingClient.validatePincode(pincode);
-      console.log("API Response:", data); // Debug log
 
       if (data && data.Status === "Success" && data.PostOffice?.length > 0) {
         const pincodeDistrict = data.PostOffice[0].District.toLowerCase();
         const currentLocationNormalized = selectedCity.toLowerCase();
-
-        console.log("District:", pincodeDistrict); // Debug log
-        console.log("Current Location:", currentLocationNormalized); // Debug log
 
         if (pincodeDistrict.includes(currentLocationNormalized) || 
             currentLocationNormalized.includes(pincodeDistrict)) {

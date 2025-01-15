@@ -4,6 +4,7 @@ const initialState = {
   toast: undefined,
   isLoading: true,
   isLoggedIn: false,
+  isAddressValid: false,
   selectedCity: localStorage.getItem('selectedCity') || '',
 };
 
@@ -23,6 +24,9 @@ export const appSlice = createSlice({
     setLoggedIn: (state, action) => {
       state.isLoggedIn = action.payload;
     },
+    setAddressValidity: (state, action) => {
+      state.isAddressValid = action.payload;
+    },
     setSelectedCity: (state, action) => {
       state.selectedCity = action.payload;
       if (action.payload) {
@@ -39,6 +43,7 @@ export const {
   clearToast,
   setLoading,
   setLoggedIn,
+  setAddressValidity,
   setSelectedCity,
 } = appSlice.actions;
 
@@ -47,3 +52,4 @@ export const selectToast = (state) => state.app.toast;
 export const selectIsLoading = (state) => state.app.isLoading;
 export const selectIsLoggedIn = (state) => state.app.isLoggedIn;
 export const selectSelectedCity = (state) => state.app.selectedCity;
+export const selectIsAddressValid = (state) => state.app.isAddressValid; 
