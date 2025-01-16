@@ -36,11 +36,13 @@ const userRouter = require("./routes/userRoute");
 const authRouter = require("./routes/authRoute");
 const categoryRouter = require("./routes/categoryRoute");
 const bookingRouter = require("./routes/bookingRoute");
+const cartRoutes = require('./routes/cartRoute');
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/booking", bookingRouter);
+app.use('/api/cart', cartRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on Port:${PORT}`);

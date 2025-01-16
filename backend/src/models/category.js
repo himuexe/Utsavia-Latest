@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 
 const categorySchema = new mongoose.Schema({
@@ -11,7 +10,7 @@ const categorySchema = new mongoose.Schema({
   slug: {
     type: String,
     required: true,
-    unique: true
+    unique: true  // Keep this one, remove the explicit index
   },
   description: String,
   parentId: {
@@ -40,9 +39,8 @@ const categorySchema = new mongoose.Schema({
   timestamps: true
 });
 
-
+// Remove the slug index since it's already defined in the schema
 categorySchema.index({ parentId: 1 });
-categorySchema.index({ slug: 1 });
 categorySchema.index({ path: 1 });
 
 const Category = mongoose.model('Category', categorySchema);
