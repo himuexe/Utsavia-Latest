@@ -12,7 +12,7 @@ const CheckoutPage = () => {
   const { bookingDetails } = location.state || {};
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const isAddressValid = useSelector(selectIsAddressValid);
-
+  console.log(isAddressValid)
   if (!bookingDetails) {
     return null;
   }
@@ -81,7 +81,7 @@ const CheckoutPage = () => {
             <button
               className={`w-full font-happiness bg-gradient-to-r from-purple-600 to-pink -600 text-white py-3 rounded-lg font-semibold
                 hover:bg-purple-700 transition-colors duration-200 mt-6 shadow-lg ${
-                  !isLoggedIn ? "opacity-50 cursor-not-allowed" : ""
+                  !isLoggedIn || isAddressValid === false ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               onClick={() => {
                 if (isLoggedIn) {
@@ -89,7 +89,7 @@ const CheckoutPage = () => {
                   console.log("Processing payment...");
                 }
               }}
-              disabled={!isLoggedIn}
+              disabled={!isLoggedIn || isAddressValid === false}
             >
               Proceed to Payment
             </button>

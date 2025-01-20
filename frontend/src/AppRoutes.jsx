@@ -10,17 +10,22 @@ import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import { useSelector  } from "react-redux"; 
+import { useSelector } from "react-redux";
 import ProfilePage from "./pages/ProfilePage";
 import Theme from "./pages/Theme";
 import CitySelector from "./components/CitySelector";
 import ProductBookingPage from "./pages/ProductBookingPage";
 import CheckoutPage from "./pages/CheckOut";
-import { selectSelectedCity , selectIsLoading, selectIsLoggedIn } from "./store/appSlice";
+import CartPage from "./pages/CartPage";
+import {
+  selectSelectedCity,
+  selectIsLoading,
+  selectIsLoggedIn,
+} from "./store/appSlice";
 
 const ProtectedRoute = ({ children }) => {
   const isLoading = useSelector(selectIsLoading);
-  const isLoggedIn = useSelector(selectIsLoggedIn); 
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   if (isLoading) {
     return (
@@ -101,6 +106,16 @@ const AppRoutes = () => {
             <ProtectedRoute>
               <RegLayout>
                 <ProfilePage />
+              </RegLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <RegLayout>
+                <CartPage />
               </RegLayout>
             </ProtectedRoute>
           }

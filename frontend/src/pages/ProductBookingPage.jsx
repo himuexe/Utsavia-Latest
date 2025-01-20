@@ -1,10 +1,9 @@
-import React, { useState, useCallback , useEffect } from "react";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import * as apiClient from "../api/ItemApi";
-import * as bookingClient from "../api/BookingApi";
+import { Calendar, Clock } from "lucide-react";
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
+import * as apiClient from "../api/ItemApi";
 import {
   selectCartError,
   selectCartLoading,
@@ -13,184 +12,26 @@ import {
   addToCart,
   clearCartError,
 } from "../store/cartSlice";
-import { selectIsLoggedIn , showToast } from "../store/appSlice";
-// Custom Error Banner Component
-const ErrorBanner = ({ message }) => (
-  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-    <span className="block sm:inline">{message}</span>
-  </div>
-);
+import { selectIsLoggedIn, showToast } from "../store/appSlice";
+import ProductImageCard from "../components/product-booking/ProductImageCard";
+import PriceCard from "../components/product-booking/PriceCard";
+import ProductInfoCard from "../components/product-booking/ProductInfoCard";
+import TimeSlotSelector from "../components/product-booking/TimeSlotSelector";
+import ValidationStatus from "../components/product-booking/ValidationStatus";
 
-// Product Image Card Component
-const ProductImageCard = ({ imageUrl }) => (
-  <div className="bg-white rounded-xl shadow-lg p-4 h-full">
-    <img
-      src={imageUrl || "/api/placeholder/600/400"}
-      alt="Product"
-      className="w-full h-full object-cover rounded-lg"
-      onError={(e) => {
-        e.target.src = "/api/placeholder/600/400";
-      }}
-    />
-  </div>
-);
-
-// Price Card Component
-const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
-  const [pincode, setPincode] = useState("");
-  const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const locationPrice = prices?.find((p) => p.city === selectedCity)?.price;
-
-  const handleSubmit = useCallback(async () => {
-    if (!pincode.trim()) {
-      setError("Please enter a pincode");
-      return;
-    }
-    if (!/^\d{6}$/.test(pincode)) {
-      setError("Please enter a valid 6-digit pincode");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setError("");
-
-    try {
-      const data = await bookingClient.validatePincode(pincode);
-
-      if (data && data.Status === "Success" && data.PostOffice?.length > 0) {
-        const pincodeDistrict = data.PostOffice[0].District.toLowerCase();
-        const currentLocationNormalized = selectedCity.toLowerCase();
-
-        if (
-          pincodeDistrict.includes(currentLocationNormalized) ||
-          currentLocationNormalized.includes(pincodeDistrict)
-        ) {
-          setIsSubmitted(true);
-          onPincodeSubmit?.(pincode);
-        } else {
-          setError(
-            `This pincode is for ${data.PostOffice[0].District}, not for ${selectedCity}. Please enter a pincode for ${selectedCity}.`
-          );
-          setIsSubmitted(false);
-        }
-      } else {
-        setError("Invalid pincode. Please enter a valid pincode.");
-        setIsSubmitted(false);
-      }
-    } catch (err) {
-      console.error("Error validating pincode:", err);
-      setError("Unable to validate pincode. Please try again.");
-      setIsSubmitted(false);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [pincode, selectedCity, onPincodeSubmit]);
-
-  return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <span className="text-3xl font-bold text-slate-700 font-primary">
-            {locationPrice
-              ? `₹${locationPrice.toLocaleString()}`
-              : "Price unavailable for this location"}
-          </span>
-          <div className="relative flex-1 ml-4">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={pincode}
-                onChange={(e) => {
-                  setPincode(e.target.value.slice(0, 6));
-                  setError("");
-                  setIsSubmitted(false);
-                }}
-                placeholder="Enter Pincode"
-                disabled={isSubmitting}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-500 outline-none disabled:bg-gray-100"
-              />
-              <button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="bg-purple-600 font-happiness text-white px-4 py-2 rounded-lg hover:bg-purple-700 disabled:bg-purple-400"
-              >
-                {isSubmitting ? "Checking..." : "Submit"}
-              </button>
-            </div>
-            <MapPin
-              className="absolute right-24 top-2.5 text-gray-400"
-              size={20}
-            />
-          </div>
-        </div>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        {isSubmitted && !error && (
-          <p className="text-green-500 text-sm">
-            Pincode verified for {selectedCity}!
-          </p>
-        )}
-      </div>
-    </div>
-  );
-};
-// Product Info Card Component
-const ProductInfoCard = ({ name, description }) => (
-  <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-    <h2 className="text-xl font-bold mb-2 font-secondary">
-      {name || "Product Name Unavailable"}
-    </h2>
-    <p className="text-gray-600 font-happiness">
-      {description || "No description available"}
-    </p>
-  </div>
-);
-
-// Time Slot Selector Component
-const TimeSlotSelector = ({ slots = [], selectedSlot, onSelect }) => (
-  <div className="grid grid-cols-3 gap-2 mb-6">
-    {slots.length > 0 ? (
-      slots.map((slot) => (
-        <button
-          key={slot}
-          onClick={() => onSelect(slot)}
-          className={`p-2 rounded-lg text-sm ${
-            selectedSlot === slot
-              ? "bg-purple-600 text-white"
-              : "bg-white border hover:bg-purple-50"
-          }`}
-        >
-          {slot}
-        </button>
-      ))
-    ) : (
-      <p className="col-span-3 text-center text-gray-500">
-        No time slots available
-      </p>
-    )}
-  </div>
-);
-
-// Main Component
 const ProductBookingPage = ({ selectedCity }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [pincode, setPincode] = useState("");
-  const [bookingError, setBookingError] = useState("");
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const cartLoading = useSelector(selectCartLoading);
   const cartError = useSelector(selectCartError);
   const lastAddedItem = useSelector(selectLastAddedItem);
 
-  const {
-    data: item,
-    isLoading,
-    isError,
-  } = useQuery(
+  const { data: item, isLoading, isError } = useQuery(
     ["item", id, selectedCity],
     () => apiClient.getItem(id, selectedCity),
     {
@@ -198,31 +39,30 @@ const ProductBookingPage = ({ selectedCity }) => {
       staleTime: 300000,
       onError: (err) => {
         console.error("Failed to fetch item:", err);
+        dispatch(showToast({
+          message: "Failed to load item details. Please try again.",
+          type: "ERROR"
+        }));
       },
     }
   );
+
   useEffect(() => {
     if (cartError) {
-      dispatch(
-        showToast({
-          message: cartError,
-          type: "ERROR",
-        })
-      );
+      dispatch(showToast({
+        message: cartError,
+        type: "ERROR",
+      }));
       dispatch(clearCartError());
     }
   }, [cartError, dispatch]);
 
-  
-
   useEffect(() => {
     if (lastAddedItem) {
-      dispatch(
-        showToast({
-          message: "Item added to cart successfully",
-          type: "SUCCESS",
-        })
-      );
+      dispatch(showToast({
+        message: "Item added to cart successfully",
+        type: "SUCCESS",
+      }));
       dispatch(clearLastAddedItem());
     }
   }, [lastAddedItem, dispatch]);
@@ -230,24 +70,42 @@ const ProductBookingPage = ({ selectedCity }) => {
   const locationPrice = item?.prices?.find(
     (p) => p.city === selectedCity
   )?.price;
+
+  const handleDateChange = useCallback((e) => {
+    const selectedDate = e.target.value;
+    const today = new Date().toISOString().split("T")[0];
+
+    if (selectedDate < today) {
+      dispatch(showToast({
+        message: "Please select a future date",
+        type: "ERROR"
+      }));
+      setSelectedDate("");
+      return;
+    }
+
+    setSelectedDate(selectedDate);
+    setSelectedSlot(null);
+  }, [dispatch]);
+
+  const handlePincodeSubmit = useCallback((newPincode) => {
+    setPincode(newPincode);
+  }, []);
+
   const handleAddToCart = useCallback(async () => {
     if (!isLoggedIn) {
-      dispatch(
-        showToast({
-          message: "Please log in to add items to cart",
-          type: "error",
-        })
-      );
+      dispatch(showToast({
+        message: "Please log in to add items to cart",
+        type: "ERROR"
+      }));
       return;
     }
 
     if (!selectedDate || !selectedSlot || !pincode) {
-      dispatch(
-        showToast({
-          message: "Please complete all required fields",
-          type: "error",
-        })
-      );
+      dispatch(showToast({
+        message: "Please complete all required fields",
+        type: "ERROR"
+      }));
       return;
     }
 
@@ -274,41 +132,16 @@ const ProductBookingPage = ({ selectedCity }) => {
     locationPrice,
     selectedCity,
   ]);
-  const handleDateChange = useCallback((e) => {
-    const selectedDate = e.target.value;
-    const today = new Date().toISOString().split("T")[0];
-
-    if (selectedDate < today) {
-      setBookingError("Please select a future date");
-      setSelectedDate("");
-      return;
-    }
-
-    setBookingError("");
-    setSelectedDate(selectedDate);
-    setSelectedSlot(null);
-  }, []);
-
-  const handlePincodeSubmit = useCallback((newPincode) => {
-    setPincode(newPincode);
-  }, []);
 
   const handleBooking = useCallback(() => {
-    // Validation with specific error messages
-    if (!selectedDate) {
-      setBookingError("Please select a date");
-      return;
-    }
-    if (!selectedSlot) {
-      setBookingError("Please select a time slot");
-      return;
-    }
-    if (!pincode) {
-      setBookingError("Please enter and submit a pincode");
+    if (!selectedDate || !selectedSlot || !pincode) {
+      dispatch(showToast({
+        message: getValidationMessage(),
+        type: "ERROR"
+      }));
       return;
     }
 
-    // Create booking details object
     const bookingDetails = {
       itemId: id,
       itemName: item?.name,
@@ -319,13 +152,11 @@ const ProductBookingPage = ({ selectedCity }) => {
       imageUrl: item?.image,
     };
 
-    // Navigate to checkout with booking details
     navigate("/checkout", {
       state: { bookingDetails },
     });
-  }, [selectedDate, selectedSlot, pincode, id, item, navigate, locationPrice]);
+  }, [selectedDate, selectedSlot, pincode, id, item, navigate, locationPrice, dispatch]);
 
-  // Function to get validation status message
   const getValidationMessage = () => {
     if (!selectedDate) return "Please select a date";
     if (!selectedSlot) return "Please select a time slot";
@@ -346,7 +177,9 @@ const ProductBookingPage = ({ selectedCity }) => {
   if (isError) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <ErrorBanner message="Item not available at this location. Please try again later." />
+        <div className="text-center text-red-600">
+          Item not available at this location. Please try again later.
+        </div>
       </div>
     );
   }
@@ -400,50 +233,20 @@ const ProductBookingPage = ({ selectedCity }) => {
               onSelect={setSelectedSlot}
             />
 
-            {(bookingError || getValidationMessage()) && (
-              <div className="mb-4">
-                <ErrorBanner message={bookingError || getValidationMessage()} />
-              </div>
-            )}
-
             <div className="space-y-4">
-              {/* Validation Status */}
-              <div className="text-sm">
-                <div
-                  className={`flex items-center ${
-                    selectedDate ? "text-green-600" : "text-gray-400"
-                  }`}
-                >
-                  <span className="mr-2">✓</span> Date selected
-                </div>
-                <div
-                  className={`flex items-center ${
-                    selectedSlot ? "text-green-600" : "text-gray-400"
-                  }`}
-                >
-                  <span className="mr-2">✓</span> Time slot selected
-                </div>
-                <div
-                  className={`flex items-center ${
-                    pincode ? "text-green-600" : "text-gray-400"
-                  }`}
-                >
-                  <span className="mr-2">✓</span> Pincode verified
-                </div>
-              </div>
+              <ValidationStatus 
+                selectedDate={selectedDate}
+                selectedSlot={selectedSlot}
+                pincode={pincode}
+              />
+              
               <div className="space-y-4">
                 <button
                   onClick={handleAddToCart}
-                  disabled={
-                    !selectedDate ||
-                    !selectedSlot ||
-                    !pincode ||
-                    cartLoading ||
-                    !isLoggedIn
-                  }
+                  disabled={!selectedDate || !selectedSlot || !pincode || cartLoading || !isLoggedIn}
                   className="w-full bg-white border-2 border-purple-600 text-purple-600 py-3 rounded-lg font-semibold
-          hover:bg-purple-50 transition-colors duration-200 disabled:bg-gray-100 
-          disabled:border-gray-400 disabled:text-gray-400 disabled:cursor-not-allowed"
+                    hover:bg-purple-50 transition-colors duration-200 disabled:bg-gray-100 
+                    disabled:border-gray-400 disabled:text-gray-400 disabled:cursor-not-allowed"
                 >
                   {cartLoading
                     ? "Adding to Cart..."
@@ -455,8 +258,8 @@ const ProductBookingPage = ({ selectedCity }) => {
                   onClick={handleBooking}
                   disabled={!selectedDate || !selectedSlot || !pincode}
                   className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold
-                  hover:bg-purple-700 transition-colors duration-200 disabled:bg-gray-400 
-                  disabled:cursor-not-allowed"
+                    hover:bg-purple-700 transition-colors duration-200 disabled:bg-gray-400 
+                    disabled:cursor-not-allowed"
                 >
                   {!selectedDate || !selectedSlot || !pincode
                     ? `Complete Required Fields to Continue`

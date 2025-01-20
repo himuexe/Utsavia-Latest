@@ -34,7 +34,10 @@ export const addToCart = createAsyncThunk(
         body: JSON.stringify(itemDetails)
       });
       
-      if (!response.ok) throw new Error('Failed to add item to cart');
+      if (!response.ok) {
+        const errorData = await response.json(); 
+        throw new Error(errorData.message || "Failed to add item to cart");
+    }
       return response.json();
     } catch (error) {
       return rejectWithValue(error.message);
