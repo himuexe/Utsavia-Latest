@@ -3,12 +3,17 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const passport = require("passport");
 const mongoose = require("mongoose");
+const helmet = require("helmet");
+const morgan = require("morgan");
 require("dotenv").config();
 require("./config/passport");
 
 const app = express();
 const PORT = process.env.PORT || 9000;
 
+// Middleware
+app.use(helmet());
+app.use(morgan("combined"));
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -18,20 +23,27 @@ app.use(
   })
 );
 app.use(passport.initialize());
+
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong!" });
+  res.status(err.status || 500).json({ message: err.message || "Something went wrong!" });
 });
 
-mongoose
-  .connect(process.env.MONGODB_CONNECTION_STRING)
-  .then(() => {
+// Database connection
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
     console.log("Connected to Database");
-  })
-  .catch((err) => {
-    console.error("Connected to Database:", err);
-  });
+  } catch (err) {
+    console.error("Database connection error:", err);
+    process.exit(1); 
+  }
+};
 
+connectDB();
+
+// Routes
 const userRouter = require("./routes/userRoute");
 const authRouter = require("./routes/authRoute");
 const categoryRouter = require("./routes/categoryRoute");
@@ -44,6 +56,21 @@ app.use("/api/category", categoryRouter);
 app.use("/api/booking", bookingRouter);
 app.use('/api/cart', cartRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server running on Port:${PORT}`);
+// Start server
+const server = app.listen(PORT, () => {
+  console.log(`Server running on Port: ${PORT}`);
 });
+
+// Graceful shutdown
+const shutdown = () => {
+  server.close(() => {
+    console.log("Server closed");
+    mongoose.connection.close(() => {
+      console.log("Database connection closed");
+      process.exit(0);
+    });
+  });
+};
+
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);
