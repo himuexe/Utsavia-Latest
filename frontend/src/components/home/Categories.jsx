@@ -14,30 +14,34 @@ const categories = [
 
 const Categories = () => {
   return (
-    <div className="w-full bg-gradient-to-br from-purple-50 to-pink-50 py-8">
+    <div className="w-full bg-black py-12 border-t border-zinc-800">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-700 font-primary">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-white">
           Popular Categories
         </h2>
         
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {categories.map((category) => {
             const IconComponent = category.icon;
             return (
               <div
                 key={category.name}
-                className="flex flex-col items-center group cursor-pointer transition-transform transform hover:scale-105"
+                className="group cursor-pointer"
               >
-                <div className="w-16 h-16 rounded-full bg-white shadow-md flex items-center justify-center 
-                  group-hover:shadow-lg transition-all duration-300 border border-purple-200
-                  group-hover:bg-gradient-to-br group-hover:from-purple-500 group-hover:to-pink-500">
-                  <IconComponent 
-                    className="w-8 h-8 text-purple-500 group-hover:text-white transition-colors" 
-                  />
+                <div className="relative overflow-hidden rounded-lg md:rounded-2xl bg-zinc-900 
+                  transition-all duration-300 hover:scale-105 border border-zinc-800 
+                  hover:border-zinc-700 hover:shadow-lg hover:shadow-white/10 flex flex-col items-center justify-center py-6">
+                  <div className="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center 
+                    mb-4 group-hover:bg-white transition-all duration-300">
+                    <IconComponent 
+                      className="w-8 h-8 text-white group-hover:text-black transition-colors" 
+                    />
+                  </div>
+                  <span className="text-white text-sm md:text-base text-center 
+                    group-hover:text-zinc-300 transition-colors">
+                    {category.name}
+                  </span>
                 </div>
-                <span className="font-happiness mt-2 text-sm md:text-base text-gray-700 text-center group-hover:text-purple-600 transition-colors">
-                  {category.name}
-                </span>
               </div>
             );
           })}

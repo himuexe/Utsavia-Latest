@@ -6,21 +6,21 @@ import { Card, CardHeader, CardContent, CardFooter } from "../components/ui/Card
 import { MapPin } from "lucide-react";
 
 const ThemeSkeleton = () => (
-  <Card hover={false} className="h-[28rem]">
+  <Card hover={false} className="h-[28rem] bg-zinc-900 border border-zinc-800">
     <CardHeader>
-      <div className="aspect-[4/3] bg-gray-200 animate-pulse" />
+      <div className="aspect-[4/3] bg-zinc-800 animate-pulse" />
     </CardHeader>
     <CardContent>
       <div className="space-y-4">
-        <div className="h-4 bg-gray-200 rounded animate-pulse w-1/3" />
-        <div className="h-6 bg-gray-200 rounded animate-pulse w-3/4" />
-        <div className="h-4 bg-gray-200 rounded animate-pulse w-2/3" />
+        <div className="h-4 bg-zinc-800 rounded animate-pulse w-1/3" />
+        <div className="h-6 bg-zinc-800 rounded animate-pulse w-3/4" />
+        <div className="h-4 bg-zinc-800 rounded animate-pulse w-2/3" />
       </div>
     </CardContent>
     <CardFooter>
       <div className="flex items-center justify-between">
-        <div className="h-6 bg-gray-200 rounded animate-pulse w-1/4" />
-        <div className="h-10 bg-gray-200 rounded animate-pulse w-1/3" />
+        <div className="h-6 bg-zinc-800 rounded animate-pulse w-1/4" />
+        <div className="h-10 bg-zinc-800 rounded animate-pulse w-1/3" />
       </div>
     </CardFooter>
   </Card>
@@ -41,10 +41,11 @@ const ThemesPage = ({selectedCity }) => {
       staleTime: 300000,
     }
   );
+
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold bg-clip-text text-slate-700 font-primary mb-8">
+      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
+        <h1 className="text-3xl font-bold text-white mb-8">
           Loading Themes...
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -58,8 +59,8 @@ const ThemesPage = ({selectedCity }) => {
 
   if (isError) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-red-600 mb-8 font-primary">
+      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
+        <h1 className="text-3xl font-bold text-red-600 mb-8">
           Error: No Themes Found
         </h1>
       </div>
@@ -67,17 +68,17 @@ const ThemesPage = ({selectedCity }) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold bg-clip-text text-slate-700 font-primary mb-8">
+    <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
+      <h1 className="text-3xl font-bold text-white mb-8">
         All Themes
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {items.length > 0 ? (
           items.map((theme) => (
-            <Card key={theme._id} className="h-auto">
+            <Card key={theme._id} className="bg-zinc-900 border border-zinc-800 h-auto">
               <CardHeader>
-                <div className="aspect-[4/3] relative overflow-hidden rounded-lg shadow-md">
+                <div className="aspect-[4/3] relative overflow-hidden rounded-lg">
                   <img
                     src={theme.image}
                     alt={theme.name}
@@ -97,10 +98,10 @@ const ThemesPage = ({selectedCity }) => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-semibold text-gray-900 line-clamp-2 font-happiness">
+                  <h3 className="text-xl font-semibold text-white line-clamp-2">
                     {theme.name}
                   </h3>
-                  <p className="text-gray-600 text-sm line-clamp-2 font-secondary">
+                  <p className="text-zinc-400 text-sm line-clamp-2">
                     {theme.description ||
                       "Transform your special moments into unforgettable memories."}
                   </p>
@@ -108,14 +109,14 @@ const ThemesPage = ({selectedCity }) => {
               </CardContent>
               <CardFooter>
                 <div className="flex items-center justify-between w-full">
-                  <span className="text-xl font-bold bg-clip-text text-slate-700 font-happiness">
+                  <span className="text-xl font-bold text-purple-400">
                     ₹{theme.prices[0]?.price.toLocaleString() || "N/A"}
                   </span>
                   <button
                     onClick={() => navigate(`/info/${theme._id}`)}
-                    className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 
-              text-white rounded-xl hover:shadow-lg hover:shadow-purple-200
-              transition-all duration-300 font-medium font-happiness"
+                    className="px-4 py-2 bg-white text-black 
+                    rounded-xl hover:bg-zinc-200
+                    transition-all duration-300 font-medium"
                   >
                     View Details
                   </button>
@@ -124,7 +125,7 @@ const ThemesPage = ({selectedCity }) => {
             </Card>
           ))
         ) : (
-          <p>No themes available.</p>
+          <p className="text-zinc-400">No themes available.</p>
         )}
       </div>
     </div>

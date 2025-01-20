@@ -166,8 +166,8 @@ const ProductBookingPage = ({ selectedCity }) => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
+      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
+        <div className="text-center text-white">
           <div className="animate-pulse">Loading...</div>
         </div>
       </div>
@@ -176,7 +176,7 @@ const ProductBookingPage = ({ selectedCity }) => {
 
   if (isError) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
         <div className="text-center text-red-600">
           Item not available at this location. Please try again later.
         </div>
@@ -194,7 +194,7 @@ const ProductBookingPage = ({ selectedCity }) => {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="h-[400px] lg:h-auto">
           <ProductImageCard imageUrl={item?.image} />
@@ -208,10 +208,10 @@ const ProductBookingPage = ({ selectedCity }) => {
           />
           <ProductInfoCard name={item?.name} description={item?.description} />
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
             <div className="flex items-center gap-2 mb-4">
-              <Calendar className="text-purple-600" />
-              <span className="font-semibold">Select Date</span>
+              <Calendar className="text-purple-400" />
+              <span className="font-semibold text-white">Select Date</span>
             </div>
 
             <input
@@ -219,12 +219,13 @@ const ProductBookingPage = ({ selectedCity }) => {
               value={selectedDate}
               onChange={handleDateChange}
               min={new Date().toISOString().split("T")[0]}
-              className="w-full p-2 mb-6 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-500 outline-none"
+              className="w-full p-2 mb-6 bg-zinc-800 text-white border border-zinc-700 rounded-lg 
+              focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
 
             <div className="flex items-center gap-2 mb-4">
-              <Clock className="text-purple-600" />
-              <span className="font-semibold">Select Time Slot</span>
+              <Clock className="text-purple-400" />
+              <span className="font-semibold text-white">Select Time Slot</span>
             </div>
 
             <TimeSlotSelector
@@ -244,9 +245,9 @@ const ProductBookingPage = ({ selectedCity }) => {
                 <button
                   onClick={handleAddToCart}
                   disabled={!selectedDate || !selectedSlot || !pincode || cartLoading || !isLoggedIn}
-                  className="w-full bg-white border-2 border-purple-600 text-purple-600 py-3 rounded-lg font-semibold
-                    hover:bg-purple-50 transition-colors duration-200 disabled:bg-gray-100 
-                    disabled:border-gray-400 disabled:text-gray-400 disabled:cursor-not-allowed"
+                  className="w-full bg-white text-black py-3 rounded-lg font-semibold
+                    hover:bg-zinc-200 transition-colors duration-200 
+                    disabled:bg-zinc-700 disabled:text-zinc-400 disabled:cursor-not-allowed"
                 >
                   {cartLoading
                     ? "Adding to Cart..."
@@ -258,8 +259,8 @@ const ProductBookingPage = ({ selectedCity }) => {
                   onClick={handleBooking}
                   disabled={!selectedDate || !selectedSlot || !pincode}
                   className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold
-                    hover:bg-purple-700 transition-colors duration-200 disabled:bg-gray-400 
-                    disabled:cursor-not-allowed"
+                    hover:bg-purple-700 transition-colors duration-200 
+                    disabled:bg-zinc-700 disabled:cursor-not-allowed"
                 >
                   {!selectedDate || !selectedSlot || !pincode
                     ? `Complete Required Fields to Continue`

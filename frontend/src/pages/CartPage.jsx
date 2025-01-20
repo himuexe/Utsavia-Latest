@@ -14,11 +14,11 @@ import CartSummary from '../components/cart/CartSummary';
 const EmptyCart = () => (
   <div className="text-center py-12">
     <div className="text-6xl mb-4">🛒</div>
-    <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
-    <p className="text-gray-600 mb-6">Looks like you haven't added any items yet</p>
+    <h2 className="text-2xl font-bold mb-2 text-white">Your cart is empty</h2>
+    <p className="text-zinc-400 mb-6">Looks like you haven't added any items yet</p>
     <button
       onClick={() => window.history.back()}
-      className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+      className="bg-white text-black px-6 py-2 rounded-lg hover:bg-zinc-200 transition-colors"
     >
       Continue Shopping
     </button>
@@ -54,8 +54,8 @@ const CartPage = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
+      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
+        <div className="text-center text-white">
           <div className="animate-pulse">Loading your cart...</div>
         </div>
       </div>
@@ -64,7 +64,7 @@ const CartPage = () => {
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
         <div className="text-center text-red-600">
           {error}. Please try refreshing the page.
         </div>
@@ -74,14 +74,14 @@ const CartPage = () => {
 
   if (!cartItems.length) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
         <EmptyCart />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-black min-h-screen text-white">
       <h1 className="text-2xl font-bold mb-8">Shopping Cart</h1>
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
@@ -93,8 +93,8 @@ const CartPage = () => {
           <CartSummary items={cartItems} />
           <button
             onClick={handleCheckout}
-            className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold
-              hover:bg-purple-700 transition-colors duration-200"
+            className="w-full bg-white text-black py-3 rounded-lg font-semibold
+              hover:bg-zinc-200 transition-colors duration-200 hover:shadow-lg hover:shadow-purple-500/20"
           >
             Proceed to Checkout
           </button>

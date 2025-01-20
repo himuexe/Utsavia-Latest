@@ -37,25 +37,24 @@ const Register = () => {
   });
 
   return (
-    <div className="w-full max-w-md mx-auto bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-8 mt-8 border border-purple-100">
+    <div className="w-full max-w-md mx-auto bg-black rounded-2xl shadow-lg p-8 mt-8 border border-zinc-800">
       <form
         className="flex flex-col gap-4"
         onSubmit={onSubmit}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
       >
-        <h2 className="text-3xl font-bold text-center bg-clip-text text-slate-700 font-primary mb-6">
+        <h2 className="text-3xl font-bold text-center text-white mb-6">
           Create an Account
         </h2>
 
         <div className="flex gap-4">
           <div className="flex-1">
-            <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-zinc-400 mb-1">
               First Name
             </label>
             <input
-              className="w-full p-3 rounded-xl border border-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white/70 backdrop-blur-sm"
+              className="w-full p-3 rounded-xl border border-zinc-800 
+              focus:outline-none focus:ring-2 focus:ring-purple-600 
+              bg-zinc-900 text-white placeholder-zinc-500"
               placeholder="Enter your first name"
               {...register("firstName", { required: "This field is required" })}
             />
@@ -64,11 +63,13 @@ const Register = () => {
             )}
           </div>
           <div className="flex-1">
-            <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-zinc-400 mb-1">
               Last Name
             </label>
             <input
-              className="w-full p-3 rounded-xl border border-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white/70 backdrop-blur-sm"
+              className="w-full p-3 rounded-xl border border-zinc-800 
+              focus:outline-none focus:ring-2 focus:ring-purple-600 
+              bg-zinc-900 text-white placeholder-zinc-500"
               placeholder="Enter your last name"
               {...register("lastName", { required: "This field is required" })}
             />
@@ -79,12 +80,14 @@ const Register = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-zinc-400 mb-1">
             Email
           </label>
           <input
             type="email"
-            className="w-full p-3 rounded-xl border border-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white/70 backdrop-blur-sm"
+            className="w-full p-3 rounded-xl border border-zinc-800 
+            focus:outline-none focus:ring-2 focus:ring-purple-600 
+            bg-zinc-900 text-white placeholder-zinc-500"
             placeholder="Enter your email"
             {...register("email", { required: "This field is required" })}
           />
@@ -94,13 +97,15 @@ const Register = () => {
         </div>
 
         <div className="mb-4 relative">
-          <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-zinc-400 mb-1">
             Password
           </label>
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
-              className="w-full p-3 rounded-xl border border-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white/70 backdrop-blur-sm pr-10"
+              className="w-full p-3 rounded-xl border border-zinc-800 
+              focus:outline-none focus:ring-2 focus:ring-purple-600 
+              bg-zinc-900 text-white placeholder-zinc-500 pr-10"
               placeholder="Enter your password"
               {...register("password", {
                 required: "This field is required",
@@ -113,7 +118,7 @@ const Register = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-purple-500 transition-colors"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -124,13 +129,15 @@ const Register = () => {
         </div>
 
         <div className="mb-4 relative">
-          <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-zinc-400 mb-1">
             Confirm Password
           </label>
           <div className="relative">
             <input
               type={showConfirmPassword ? "text" : "password"}
-              className="w-full p-3 rounded-xl border border-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white/70 backdrop-blur-sm pr-10"
+              className="w-full p-3 rounded-xl border border-zinc-800 
+              focus:outline-none focus:ring-2 focus:ring-purple-600 
+              bg-zinc-900 text-white placeholder-zinc-500 pr-10"
               placeholder="Confirm your password"
               {...register("confirmPassword", {
                 validate: (val) => {
@@ -145,7 +152,7 @@ const Register = () => {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-purple-500 transition-colors"
             >
               {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -157,7 +164,9 @@ const Register = () => {
 
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white p-3 rounded-xl hover:opacity-90 transition-opacity shadow-lg font-happiness shadow-purple-200"
+          className="w-full bg-white text-black p-3 rounded-xl 
+          hover:bg-zinc-200 transition-colors 
+          hover:shadow-lg hover:shadow-purple-500/20"
         >
           Create Account
         </button>

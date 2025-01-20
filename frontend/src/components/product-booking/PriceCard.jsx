@@ -71,38 +71,42 @@ const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
   }, [pincode, selectedCity, onPincodeSubmit, dispatch]);
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <span className="text-3xl font-bold text-slate-700 font-primary">
-            {locationPrice ? `₹${locationPrice.toLocaleString()}` : "Price unavailable for this location"}
-          </span>
-          <div className="relative flex-1 ml-4">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={pincode}
-                onChange={(e) => {
-                  setPincode(e.target.value.slice(0, 6));
-                  setIsSubmitted(false);
-                }}
-                placeholder="Enter Pincode"
-                disabled={isSubmitting}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-500 outline-none disabled:bg-gray-100"
-              />
-              <button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="bg-purple-600 font-happiness text-white px-4 py-2 rounded-lg hover:bg-purple-700 disabled:bg-purple-400"
-              >
-                {isSubmitting ? "Checking..." : "Submit"}
-              </button>
-            </div>
-            <MapPin className="absolute right-24 top-2.5 text-gray-400" size={20} />
+    <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-6">
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-between items-center">
+        <span className="text-3xl font-bold text-purple-400">
+          {locationPrice ? `₹${locationPrice.toLocaleString()}` : "Price unavailable for this location"}
+        </span>
+        <div className="relative flex-1 ml-4">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={pincode}
+              onChange={(e) => {
+                setPincode(e.target.value.slice(0, 6));
+                setIsSubmitted(false);
+              }}
+              placeholder="Enter Pincode"
+              disabled={isSubmitting}
+              className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-700 rounded-lg 
+              focus:outline-none focus:ring-2 focus:ring-purple-600 
+              disabled:bg-zinc-700 disabled:text-zinc-400"
+            />
+            <button
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              className="bg-white text-black px-4 py-2 rounded-lg 
+              hover:bg-zinc-200 transition-colors
+              disabled:bg-zinc-700 disabled:text-zinc-400"
+            >
+              {isSubmitting ? "Checking..." : "Submit"}
+            </button>
           </div>
+          <MapPin className="absolute right-24 top-2.5 text-zinc-400" size={20} />
         </div>
       </div>
     </div>
+  </div>
   );
 };
 

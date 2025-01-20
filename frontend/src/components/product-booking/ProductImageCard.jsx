@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ProductImageCard = ({ imageUrl }) => (
-  <div className="bg-white rounded-xl shadow-lg p-4 h-full">
+  <div className="bg-black rounded-xl shadow-lg p-4 h-full">
     <img
       src={imageUrl || "/api/placeholder/600/400"}
       alt="Product"

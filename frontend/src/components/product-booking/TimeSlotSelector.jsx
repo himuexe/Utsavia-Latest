@@ -10,14 +10,14 @@ const TimeSlotSelector = ({ slots = [], selectedSlot, onSelect }) => (
           className={`p-2 rounded-lg text-sm ${
             selectedSlot === slot
               ? "bg-purple-600 text-white"
-              : "bg-white border hover:bg-purple-50"
+              : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
           }`}
         >
           {slot}
         </button>
       ))
     ) : (
-      <p className="col-span-3 text-center text-gray-500">
+      <p className="col-span-3 text-center text-zinc-500">
         No time slots available
       </p>
     )}

@@ -37,26 +37,24 @@ const SignIn = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-8 mt-8 border border-purple-100">
+    <div className="w-full max-w-md mx-auto bg-black rounded-2xl shadow-lg p-8 mt-8 border border-zinc-800">
       <form
         className="flex flex-col gap-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
         onSubmit={onSubmit}
       >
-        <h2 className="text-3xl font-bold bg-clip-text text-slate-700 font-primary text-center">
+        <h2 className="text-3xl font-bold text-white text-center mb-4">
           Welcome Back
         </h2>
 
         <div className="mb-4">
-          <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-zinc-400 mb-1">
             Email
           </label>
           <input
             type="email"
             placeholder="Enter your email"
-            className="w-full p-3 rounded-xl border border-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white/70 backdrop-blur-sm"
+            className="w-full p-3 rounded-xl border border-zinc-800 focus:outline-none focus:ring-2 focus:ring-purple-600 
+            bg-zinc-900 text-white placeholder-zinc-500"
             {...register("email", { required: "This field is required" })}
           />
           {errors.email && (
@@ -65,14 +63,15 @@ const SignIn = () => {
         </div>
 
         <div className="mb-4 relative">
-          <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-zinc-400 mb-1">
             Password
           </label>
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
-              className="w-full p-3 rounded-xl border border-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white/70 backdrop-blur-sm pr-10"
+              className="w-full p-3 rounded-xl border border-zinc-800 focus:outline-none focus:ring-2 focus:ring-purple-600 
+              bg-zinc-900 text-white placeholder-zinc-500 pr-10"
               {...register("password", {
                 required: "This field is required",
                 minLength: {
@@ -84,7 +83,7 @@ const SignIn = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple-600 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-purple-500 transition-colors"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -95,32 +94,36 @@ const SignIn = () => {
         </div>
 
         <div className="flex items-center justify-between mb-4">
-        <Link 
+          <Link 
             to="/register" 
-            className="text-sm text-gray-600 hover:text-purple-600 
-              transition-colors flex items-center gap-1 font-happiness"
+            className="text-sm text-zinc-400 hover:text-purple-500 
+              transition-colors flex items-center gap-1"
           >
             <Heart className="w-4 h-4" />
             Create Account
           </Link>
           <button
             type="submit"
-            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-purple-200"
+            className="bg-white text-black px-6 py-2 rounded-xl 
+            hover:bg-zinc-200 transition-colors 
+            hover:shadow-lg hover:shadow-purple-500/20"
           >
             Login
           </button>
         </div>
 
         <div className="relative flex items-center gap-4 mb-4">
-          <div className="flex-grow border-t border-purple-100"></div>
-          <span className="text-gray-500 text-sm">or</span>
-          <div className="flex-grow border-t border-purple-100"></div>
+          <div className="flex-grow border-t border-zinc-800"></div>
+          <span className="text-zinc-500 text-sm">or</span>
+          <div className="flex-grow border-t border-zinc-800"></div>
         </div>
 
         <button
           type="button"
           onClick={handleGoogleSignIn}
-          className="w-full flex items-center justify-center gap-2 bg-white/70 backdrop-blur-sm border border-purple-100 p-3 rounded-xl hover:bg-white/80 transition-all"
+          className="w-full flex items-center justify-center gap-2 
+          bg-zinc-900 border border-zinc-800 text-white p-3 rounded-xl 
+          hover:bg-zinc-800 transition-all"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path

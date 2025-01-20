@@ -5,9 +5,10 @@ import {  useDispatch } from 'react-redux';
 import { setSelectedCity } from '../../store/appSlice';
 
 const CitySelector = ({ onClose, isOpen }) => {
-  if (!isOpen) return null; 
+  if (!isOpen) return null;
   const dispatch = useDispatch();
-  const { selectedCity, cities,  } = useCitySelector();
+  const { selectedCity, cities } = useCitySelector();
+  
   const handleCitySelection = (city) => {
     dispatch(setSelectedCity(city));
     onClose();
@@ -15,21 +16,21 @@ const CitySelector = ({ onClose, isOpen }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="fixed inset-0 bg-black opacity-50" onClick={onClose} />
-      <div className="max-w-2xl mx-auto p-6 bg-sky-50 rounded-2xl shadow-lg border border-purple-200 z-10">
+      <div className="fixed inset-0 bg-black/90" onClick={onClose} />
+      <div className="max-w-2xl mx-auto p-6 bg-black rounded-2xl shadow-lg border border-zinc-800 z-10">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold bg-clip-text text-slate-700 font-primary">
+          <h2 className="text-2xl font-bold text-white font-primary">
             Select Your City
           </h2>
           <button 
             onClick={onClose}
-            className="p-1 hover:bg-white/50 rounded-full transition-colors"
+            className="p-1 hover:bg-zinc-900 rounded-full transition-colors"
           >
-            <X className="w-6 h-6 text-gray-600 hover:text-purple-600" />
+            <X className=" w-6 text-white hover:text-purple-300" />
           </button>
         </div>
         
-        <p className="text-slate-600 mb-6 font-secondary">
+        <p className="text-white mb-6 font-secondary">
           Find more than 3000 decorations, gifts, and surprises!
         </p>
         
@@ -41,8 +42,8 @@ const CitySelector = ({ onClose, isOpen }) => {
               className={`
                 p-3 rounded-xl text-sm font-medium transition-all
                 ${selectedCity === city 
-                  ? 'bg-white text-purple-700 border border-purple-400' 
-                  : 'bg-sky-50 backdrop-blur-sm border border-purple-200 text-slate-700 hover:bg-white hover:text-purple-700 hover:border-purple-400 font-happiness'
+                  ? 'bg-white text-black border border-white' 
+                  : 'bg-zinc-900 border border-zinc-800 text-white hover:bg-white hover:text-black font-happiness'
                 }
               `}
             >

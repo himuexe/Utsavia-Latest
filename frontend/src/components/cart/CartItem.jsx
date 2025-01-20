@@ -23,7 +23,7 @@ const CartItem = ({ item }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-4">
+    <div className="bg-zinc-900 rounded-lg border border-zinc-800 p-4 mb-4">
       <div className="flex items-center gap-4">
         <div className="w-24 h-24">
           <img
@@ -36,8 +36,8 @@ const CartItem = ({ item }) => {
           />
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-800">{item.itemName}</h3>
-          <div className="mt-1 space-y-1 text-sm text-gray-600">
+          <h3 className="text-lg font-semibold text-white">{item.itemName}</h3>
+          <div className="mt-1 space-y-1 text-sm text-zinc-400">
             <p>Date: {new Date(item.date).toLocaleDateString()}</p>
             <p>Time: {item.timeSlot}</p>
             <p>Location: {item.city}</p>
@@ -45,10 +45,10 @@ const CartItem = ({ item }) => {
           </div>
         </div>
         <div className="flex flex-col items-end gap-4">
-          <span className="text-xl font-bold text-purple-600">₹{item.price.toLocaleString()}</span>
+          <span className="text-xl font-bold text-purple-400">₹{item.price.toLocaleString()}</span>
           <button
             onClick={handleRemove}
-            className="text-red-500 hover:text-red-700 transition-colors"
+            className="text-zinc-400 hover:text-red-500 transition-colors"
             aria-label="Remove item"
           >
             <Trash2 size={20} />

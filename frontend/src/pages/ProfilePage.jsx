@@ -6,7 +6,7 @@ import { Edit, Save, X } from 'lucide-react';
 import { showToast } from "../store/appSlice";
 
 const UserProfile = () => {
-  const [user, setUser ] = useState(null);
+  const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -20,15 +20,15 @@ const UserProfile = () => {
     address: '',
   });
 
-  const  dispatch  = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const loadUserData = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const userData = await apiClient.fetchCurrentUser ();
-        setUser (userData);
+        const userData = await apiClient.fetchCurrentUser();
+        setUser(userData);
         setFormData(userData);
       } catch (err) {
         setError('Failed to load user profile. Please try again later.');
@@ -56,8 +56,8 @@ const UserProfile = () => {
     setValidationError(null); 
 
     try {
-      const updatedUser  = await apiClient.updateUserProfile(formData);
-      setUser (updatedUser );
+      const updatedUser = await apiClient.updateUserProfile(formData);
+      setUser(updatedUser);
       setIsEditing(false);
       const isComplete = await apiClient.checkProfileCompletion();
       dispatch(setAddressValidity(isComplete === "" ? false : isComplete))
@@ -65,7 +65,7 @@ const UserProfile = () => {
     } catch (err) {
       setError('Failed to update profile. Please try again.');
       console.error('Error updating profile:', err);
-      dispatch(showToast({ message: 'Failed to update profile', type: 'ERROR' }));;
+      dispatch(showToast({ message: 'Failed to update profile', type: 'ERROR' }));
     } finally {
       setIsSaving(false);
     }
@@ -73,32 +73,28 @@ const UserProfile = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="text-purple-700 text-xl">Loading...</div>
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="text-purple-400 text-xl">Loading...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex items-center justify-center min-h-screen bg-black">
         <div className="text-red-500 text-xl">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg shadow-md p-6 mt-4">
-      <div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="container"
-      >
+    <div className="w-full max-w-2xl mx-auto bg-black rounded-lg border border-zinc-800 shadow-lg p-6 mt-4">
+      <div className="container">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-slate-700 mb-2 font-primary">
+          <h1 className="text-2xl font-bold text-white mb-2">
             {isEditing ? 'Edit Your Profile' : 'Your Profile'}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-zinc-400">
             Update your personal information
           </p>
         </div>
@@ -110,7 +106,7 @@ const UserProfile = () => {
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-zinc-400 mb-1">
                 First Name
               </label>
               <input
@@ -118,12 +114,13 @@ const UserProfile = () => {
                 name="firstName"
                 value={formData.firstName}
                 disabled
-                className="w-full p-2 border rounded-lg text-gray-600 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 rounded-lg text-zinc-300 bg-zinc-900 border border-zinc-800 
+                focus:outline-none focus:ring-2 focus:ring-purple-600"
               />
             </div>
 
             <div>
-              <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-zinc-400 mb-1">
                 Last Name
               </label>
               <input
@@ -131,24 +128,25 @@ const UserProfile = () => {
                 name="lastName"
                 value={formData.lastName}
                 disabled
-                className="w-full p-2 border rounded-lg text-gray-600 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 rounded-lg text-zinc-300 bg-zinc-900 border border-zinc-800 
+                focus:outline-none focus:ring-2 focus:ring-purple-600"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-zinc-400 mb-1">
                 Email
               </label>
               <input
                 type="email"
                 value={user.primaryEmail}
                 disabled
-                className="w-full p-2 border rounded-lg bg-gray-100 text-gray-600"
+                className="w-full p-2 rounded-lg bg-zinc-900 text-zinc-300 border border-zinc-800"
               />
             </div>
 
             <div>
-              <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-zinc-400 mb-1">
                 Phone
               </label>
               <input
@@ -157,12 +155,14 @@ const UserProfile = () => {
                 value={formData.phone}
                 onChange={handleInputChange}
                 disabled={!isEditing}
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 rounded-lg bg-zinc-900 text-white border border-zinc-800
+                focus:outline-none focus:ring-2 focus:ring-purple-600
+                disabled:text-zinc-500"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block font-secondary text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-zinc-400 mb-1">
                 Address
               </label>
               <textarea
@@ -171,7 +171,9 @@ const UserProfile = () => {
                 onChange={handleInputChange}
                 disabled={!isEditing}
                 rows="4"
-                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full p-2 rounded-lg bg-zinc-900 text-white border border-zinc-800
+                focus:outline-none focus:ring-2 focus:ring-purple-600 
+                disabled:text-zinc-500 resize-none"
               />
             </div>
           </div>
@@ -181,7 +183,9 @@ const UserProfile = () => {
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg  transition-colors flex items-center gap-2 font-happiness"
+                className="bg-white text-black px-4 py-2 rounded-lg 
+                transition-colors flex items-center gap-2 
+                hover:bg-zinc-200 hover:shadow-lg hover:shadow-purple-500/20"
               >
                 <Edit size={20} />
                 Edit Profile
@@ -194,7 +198,8 @@ const UserProfile = () => {
                     setIsEditing(false);
                     setFormData(user);
                   }}
-                  className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2 font-happiness"
+                  className="bg-zinc-800 text-white px-4 py-2 rounded-lg 
+                  hover:bg-zinc-700 transition-colors flex items-center gap-2"
                 >
                   <X size={20} />
                   Cancel
@@ -202,10 +207,13 @@ const UserProfile = () => {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg  transition-colors flex items-center gap-2 disabled:opacity-50 font-happiness"
+                  className="bg-white text-black px-4 py-2 rounded-lg 
+                  transition-colors flex items-center gap-2 
+                  disabled:opacity-50 hover:bg-zinc-200 
+                  hover:shadow-lg hover:shadow-purple-500/20"
                 >
                   <Save size={20} />
-                  {isSaving ? 'Saving...' : 'Save Changes'}
+                 {isSaving ? 'Saving...' : 'Save Changes'}
                 </button>
               </>
             )}

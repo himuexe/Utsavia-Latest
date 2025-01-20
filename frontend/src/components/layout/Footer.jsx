@@ -23,11 +23,11 @@ const FooterLink = ({ children, href, icon: Icon }) => (
       transition: { duration: 0.3 },
     }}
     whileTap={{ scale: 0.95 }}
-    className="flex items-center gap-2 text-slate-700 hover:text-purple-700 
-    transition-all duration-300 group font-happiness "
+    className="flex items-center gap-2 text-white hover:text-purple-300 
+    transition-all duration-300 group font-happiness"
   >
     {Icon && (
-      <Icon className="w-4 h-4 text-purple-700 group-hover:text-pink-600 transition-colors" />
+      <Icon className="w-4 h-4 text-purple-400 group-hover:text-pink-300 transition-colors" />
     )}
     {children}
   </motion.a>
@@ -52,7 +52,7 @@ const SocialIcon = ({ Icon, href, label }) => {
       onHoverEnd={() => setIsHovered(false)}
     >
       <Icon
-        className="w-6 h-6 text-slate-700 hover:text-purple-700 
+        className="w-6 h-6 text-white hover:text-purple-300 
         transition-all duration-300"
       />
       <AnimatePresence>
@@ -62,8 +62,7 @@ const SocialIcon = ({ Icon, href, label }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             className="absolute -top-10 left-1/2 transform -translate-x-1/2 
-              bg-gradient-to-r from-purple-600 to-pink-600 
-              text-white text-xs px-3 py-1 rounded-full shadow-lg"
+              bg-white text-black text-xs px-3 py-1 rounded-full shadow-lg"
           >
             {label}
           </motion.div>
@@ -72,6 +71,7 @@ const SocialIcon = ({ Icon, href, label }) => {
     </motion.a>
   );
 };
+
 
 const Footer = () => {
   const containerVariants = {
@@ -126,31 +126,23 @@ const Footer = () => {
       whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
       variants={containerVariants}
-      className="bg-sky-50 text-slate-700  
-         py-16 px-6 overflow-hidden relative border-t border-purple-100"
+      className="bg-black text-white py-16 px-6 overflow-hidden relative border-t border-zinc-800"
       aria-label="Utsavia Footer"
     >
-
-
       <div className="container mx-auto max-w-6xl grid md:grid-cols-4 gap-8 relative z-10">
-        {/* Company Branding */}
         <motion.div variants={itemVariants} className="md:col-span-1 space-y-4">
-           <CompanyLogo />
-          <p className="text-gray-600 text-sm leading-relaxed flex items-center gap-2 font-primary">
-            <Sparkles className="w-4 h-4 text-purple-600 " />
+          <CompanyLogo />
+          <p className="text-white/80 text-sm leading-relaxed flex items-center gap-2 font-primary">
+            <Sparkles className="w-4 h-4 text-purple-400" />
             Crafting Unforgettable Experiences
           </p>
         </motion.div>
 
-        {/* Quick Links */}
         <motion.div variants={itemVariants} className="md:col-span-1">
-          <h3
-            className="text-xl font-semibold mb-4 bg-clip-text text-transparent 
-            bg-gradient-to-r from-purple-600 to-pink-600 font-secondary"
-          >
+          <h3 className="text-xl font-semibold mb-4 text-white font-secondary">
             Explore
           </h3>
-          <nav className="space-y-3 ">
+          <nav className="space-y-3">
             <FooterLink  href="/events" icon={Calendar}>
               Upcoming Events
             </FooterLink>
@@ -168,10 +160,7 @@ const Footer = () => {
 
         {/* Contact Information */}
         <motion.div variants={itemVariants} className="md:col-span-1">
-          <h3
-            className="text-xl font-semibold mb-4 bg-clip-text text-transparent 
-            bg-gradient-to-r from-purple-600 to-pink-600"
-          >
+          <h3 className="text-xl font-semibold mb-4 text-white">
             Connect
           </h3>
           <div className="space-y-3">
@@ -185,14 +174,8 @@ const Footer = () => {
         </motion.div>
 
         {/* Social Media */}
-        <motion.div
-          variants={itemVariants}
-          className="md:col-span-1 flex flex-col space-y-4"
-        >
-          <h3
-            className="text-xl font-semibold mb-4 bg-clip-text text-transparent 
-            bg-gradient-to-r from-purple-600 to-pink-600"
-          >
+        <motion.div variants={itemVariants} className="md:col-span-1 flex flex-col space-y-4">
+          <h3 className="text-xl font-semibold mb-4 text-white">
             Follow Us
           </h3>
           <div className="flex space-x-6">
@@ -206,23 +189,17 @@ const Footer = () => {
       {/* Footer Bottom */}
       <motion.div
         variants={itemVariants}
-        className="mt-12 pt-6 border-t border-purple-100 
-          text-center text-gray-700 text-sm relative z-10"
+        className="mt-12 pt-6 border-t border-zinc-800 
+          text-center text-white/80 text-sm relative z-10"
       >
         <p className="flex items-center justify-center gap-2 font-secondary">
           © {new Date().getFullYear()} Utsavia Technologies Pvt. Ltd.
         </p>
         <div className="mt-2 space-x-4 font-secondary">
-          <a
-            href="/privacy"
-            className="hover:text-purple-700 transition-colors text-slate-700"
-          >
+          <a href="/privacy" className="hover:text-purple-300 transition-colors">
             Privacy Policy
           </a>
-          <a
-            href="/terms"
-            className="hover:text-purple-700 transition-colors text-slate-700"
-          >
+          <a href="/terms" className="hover:text-purple-300 transition-colors">
             Terms of Service
           </a>
         </div>
