@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import C1 from "../assets/C1.jpg";
-import C2 from "../assets/C2.jpg";
-import C3 from "../assets/C3.jpg";
-import C4 from "../assets/C4.jpg";
+import C1 from "../../assets/C1.jpg";
+import C2 from "../../assets/C2.jpg";
+import C3 from "../../assets/C3.jpg";
+import C4 from "../../assets/C4.jpg";
 
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);

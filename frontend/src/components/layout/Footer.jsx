@@ -13,7 +13,7 @@ import {
   Linkedin,
   Sparkles,
 } from "lucide-react";
-import CompanyLogo from "../components/ui/CompanyLogo";
+import CompanyLogo from "../ui/CompanyLogo";
 
 const FooterLink = ({ children, href, icon: Icon }) => (
   <motion.a

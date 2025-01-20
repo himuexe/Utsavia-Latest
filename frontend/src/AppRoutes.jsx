@@ -4,6 +4,7 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+import Loading from "./components/ui/Loading";
 import Layout from "./layouts/Layout";
 import RegLayout from "./layouts/RegLayout";
 import Contact from "./pages/Contact";
@@ -13,7 +14,7 @@ import Register from "./pages/Register";
 import { useSelector } from "react-redux";
 import ProfilePage from "./pages/ProfilePage";
 import Theme from "./pages/Theme";
-import CitySelector from "./components/CitySelector";
+import CitySelector from "./components/ui/CitySelector";
 import ProductBookingPage from "./pages/ProductBookingPage";
 import CheckoutPage from "./pages/CheckOut";
 import CartPage from "./pages/CartPage";
@@ -29,9 +30,7 @@ const ProtectedRoute = ({ children }) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-purple-600 text-xl">Loading...</div>
-      </div>
+        <Loading/>
     );
   }
 

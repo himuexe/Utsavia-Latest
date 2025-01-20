@@ -1,8 +1,8 @@
 import React from 'react';
 import { X } from 'lucide-react';
-import useCitySelector from '../hooks/useCitySelector'; 
+import useCitySelector from '../../hooks/useCitySelector'; 
 import {  useDispatch } from 'react-redux';
-import { setSelectedCity } from '../store/appSlice';
+import { setSelectedCity } from '../../store/appSlice';
 
 const CitySelector = ({ onClose, isOpen }) => {
   if (!isOpen) return null; 

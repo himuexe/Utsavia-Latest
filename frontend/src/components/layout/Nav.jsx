@@ -17,12 +17,12 @@ import {
   showToast, 
   selectIsLoggedIn,
   selectSelectedCity,
-} from '../store/appSlice';
-import CitySelector from "./CitySelector";
-import * as apiClient from "../api/MyUserApi";
-import NavigationButton from "./ui/NavigationButton";
-import CompanyLogo from "./ui/CompanyLogo";
-import LocationDisplay from "./ui/LocationDisplay";
+} from '../../store/appSlice';
+import CitySelector from "../ui/CitySelector";
+import * as apiClient from "../../api/MyUserApi";
+import NavigationButton from "../ui/NavigationButton";
+import CompanyLogo from "../ui/CompanyLogo";
+import LocationDisplay from "../ui/LocationDisplay";
 
 const SidePanel = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;

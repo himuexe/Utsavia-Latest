@@ -1,6 +1,6 @@
-import CategoriesNav from "../components/CategoriesNav";
-import Footer from "../components/Footer";
-import Nav from "../components/Nav";
+import CategoriesNav from "../components/layout/CategoriesNav";
+import Footer from "../components/layout/Footer";
+import Nav from "../components/layout/Nav";
 const Layout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-sky-50 ">

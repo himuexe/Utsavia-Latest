@@ -1,7 +1,7 @@
-import SearchBar from '../components/SearchBar';
-import Categories from '../components/Categories';
-import Carousel from '../components/Carousel';
-import Hero from '../components/Hero';
+import SearchBar from '../components/home/SearchBar';
+import Categories from '../components/home/Categories';
+import Carousel from '../components/home/Carousel';
+import Hero from '../components/home/Hero';
 const Home = () => {
   return (
     <div>
