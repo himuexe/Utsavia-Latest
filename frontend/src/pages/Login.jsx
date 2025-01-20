@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; 
+import { Link , useLocation, useNavigate } from "react-router-dom"; 
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api/MyUserApi";
@@ -10,6 +10,8 @@ import { showToast } from "../store/appSlice";
 const SignIn = () => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = React.useState(false);
 
   const {
@@ -22,12 +24,24 @@ const SignIn = () => {
     onSuccess: async () => {
       dispatch(showToast({ message: 'Signed in successfully', type: 'SUCCESS' }));
       await queryClient.invalidateQueries("validateToken");
+      
+      // Check if we have booking details in the state
+      if (location.state?.bookingDetails) {
+        // If we have booking details, go directly to checkout
+        navigate("/checkout", {
+          state: { bookingDetails: location.state.bookingDetails },
+          replace: true
+        });
+      } else {
+        // Otherwise, go to the saved location or home
+        const from = location.state?.from?.pathname || "/";
+        navigate(from, { replace: true });
+      }
     },
     onError: async (error) => {
       dispatch(showToast({ message: error.message, type: 'ERROR' }));
     },
   });
-
   const onSubmit = handleSubmit((data) => {
     mutation.mutate(data);
   });
@@ -96,6 +110,7 @@ const SignIn = () => {
         <div className="flex items-center justify-between mb-4">
           <Link 
             to="/register" 
+            state={location.state}
             className="text-sm text-zinc-400 hover:text-purple-500 
               transition-colors flex items-center gap-1"
           >

@@ -3,13 +3,14 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api/MyUserApi";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , useLocation , Link } from "react-router-dom";
 import { Eye, EyeOff } from 'lucide-react';
 import { showToast } from "../store/appSlice";
 
 const Register = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -25,7 +26,19 @@ const Register = () => {
     onSuccess: async () => {
       dispatch(showToast({ message: 'Signed up successfully', type: 'SUCCESS' }));
       await queryClient.invalidateQueries("validateToken");
-      navigate("/");
+      
+      // Check if we have booking details in the state
+      if (location.state?.bookingDetails) {
+        // If we have booking details, go directly to checkout
+        navigate("/checkout", {
+          state: { bookingDetails: location.state.bookingDetails },
+          replace: true
+        });
+      } else {
+        // Otherwise, go to the saved location or home
+        const from = location.state?.from?.pathname || "/";
+        navigate(from, { replace: true });
+      }
     },
     onError: (error) => {
       dispatch(showToast({ message: error.message, type: 'ERROR' }));
@@ -170,6 +183,23 @@ const Register = () => {
         >
           Create Account
         </button>
+        <div className="flex items-center justify-between mb-4">
+          <Link 
+            to="/login"
+            state={location.state} // Preserve the state when going back to login
+            className="text-sm text-zinc-400 hover:text-purple-500 transition-colors"
+          >
+            Already have an account? Sign in
+          </Link>
+          <button
+            type="submit"
+            className="bg-white text-black px-6 py-2 rounded-xl 
+            hover:bg-zinc-200 transition-colors 
+            hover:shadow-lg hover:shadow-purple-500/20"
+          >
+            Create Account
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate , useLocation} from "react-router-dom";
 import { Calendar, Clock } from "lucide-react";
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +22,7 @@ import ValidationStatus from "../components/product-booking/ValidationStatus";
 const ProductBookingPage = ({ selectedCity }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [pincode, setPincode] = useState("");
@@ -152,10 +153,22 @@ const ProductBookingPage = ({ selectedCity }) => {
       imageUrl: item?.image,
     };
 
+    if (!isLoggedIn) {
+      // Save only the booking details in state
+      navigate("/login", {
+        state: { 
+          bookingDetails,
+          from: '/checkout' // Explicitly set target
+        }
+      });
+      return;
+    }
+
     navigate("/checkout", {
       state: { bookingDetails },
     });
-  }, [selectedDate, selectedSlot, pincode, id, item, navigate, locationPrice, dispatch]);
+  }, [selectedDate, selectedSlot, pincode, id, item, navigate, locationPrice, dispatch, isLoggedIn]);
+
 
   const getValidationMessage = () => {
     if (!selectedDate) return "Please select a date";

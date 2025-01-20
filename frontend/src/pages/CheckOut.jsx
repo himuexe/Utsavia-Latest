@@ -20,7 +20,7 @@ const CheckoutPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {!isLoggedIn ? (
+        {/* {!isLoggedIn ? (
           <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl shadow-lg p-6 border border-purple-200">
             <div className="">
               <h1 className="text-3xl font-bold text-slate-700 font-primary mb-6">
@@ -40,7 +40,7 @@ const CheckoutPage = () => {
               <ProfilePage />
             </div>
           </div>
-        ) : null}
+        ) : null} */}
 
         {/* Right Column: Checkout Summary */}
         <div className="bg-white rounded-xl shadow-lg p-6 border border-purple-200">

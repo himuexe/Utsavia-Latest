@@ -3,6 +3,8 @@ import {
   Route,
   Routes,
   Navigate,
+  useLocation,
+  useNavigate
 } from "react-router-dom";
 import Loading from "./components/ui/Loading";
 import Layout from "./layouts/Layout";
@@ -20,21 +22,19 @@ import CheckoutPage from "./pages/CheckOut";
 import CartPage from "./pages/CartPage";
 import {
   selectSelectedCity,
-  selectIsLoading,
   selectIsLoggedIn,
 } from "./store/appSlice";
 
-const ProtectedRoute = ({ children }) => {
-  const isLoading = useSelector(selectIsLoading);
+const AuthWrapper = ({ children }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
-
-  if (isLoading) {
-    return (
-        <Loading/>
-    );
+  const location = useLocation();
+  
+  if (!isLoggedIn) {
+    // Save the attempted URL in state
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
-
-  return isLoggedIn ? children : <Navigate to="/login" replace />;
+  
+  return children;
 };
 
 const AppRoutes = () => {
@@ -102,29 +102,31 @@ const AppRoutes = () => {
         <Route
           path="/profile"
           element={
-            <ProtectedRoute>
+            <AuthWrapper>
               <RegLayout>
                 <ProfilePage />
               </RegLayout>
-            </ProtectedRoute>
+            </AuthWrapper>
           }
         />
         <Route
           path="/cart"
           element={
-            <ProtectedRoute>
+            <AuthWrapper>
               <RegLayout>
                 <CartPage />
               </RegLayout>
-            </ProtectedRoute>
+            </AuthWrapper>
           }
         />
         <Route
           path="/checkout"
           element={
-            <RegLayout>
-              <CheckoutPage />
-            </RegLayout>
+            <AuthWrapper>
+              <RegLayout>
+                <CheckoutPage />
+              </RegLayout>
+            </AuthWrapper>
           }
         />
         <Route path="*" element={<Navigate to="/" />} />
