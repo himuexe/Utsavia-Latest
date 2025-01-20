@@ -36,11 +36,11 @@ const addToCart = async (req, res) => {
             timeSlot
         });
 
-        // if (existingCartItem) {
-        //     return res.status(400).json({ 
-        //         message: 'Item already exists in cart for this time slot' 
-        //     });
-        // }
+        if (existingCartItem) {
+            return res.status(400).json({ 
+                message: 'Item already exists in cart for this time slot' 
+            });
+        }
 
         // Create new cart item
         const cartItem = new Cart({
