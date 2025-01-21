@@ -5,7 +5,8 @@ import {
   fetchCartItems, 
   selectCartItems, 
   selectCartLoading, 
-  selectCartError 
+  selectCartError ,
+  setCheckoutDetails
 } from '../store/cartSlice';
 import { showToast } from '../store/appSlice';
 import CartItem from '../components/cart/CartItem';
@@ -49,6 +50,11 @@ const CartPage = () => {
       }));
       return;
     }
+    dispatch(setCheckoutDetails({
+      type: 'cart',
+      bookingDetails: null
+    }));
+    
     navigate('/checkout');
   };
 

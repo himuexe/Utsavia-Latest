@@ -4,7 +4,7 @@ import {
   Routes,
   Navigate,
   useLocation,
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 import Loading from "./components/ui/Loading";
 import Layout from "./layouts/Layout";
@@ -20,22 +20,28 @@ import CitySelector from "./components/ui/CitySelector";
 import ProductBookingPage from "./pages/ProductBookingPage";
 import CheckoutPage from "./pages/CheckOut";
 import CartPage from "./pages/CartPage";
-import {
-  selectSelectedCity,
-  selectIsLoggedIn,
-} from "./store/appSlice";
+import { selectSelectedCity, selectIsLoggedIn } from "./store/appSlice";
 
 const AuthWrapper = ({ children }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const location = useLocation();
-  
+
   if (!isLoggedIn) {
-    // Save the attempted URL in state
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    // Save the attempted URL and all state in navigation
+    return <Navigate 
+      to="/login" 
+      state={{ 
+        from: location.pathname,
+        checkoutState: location.state // Preserve the checkout state
+      }} 
+      replace 
+    />;
   }
   
   return children;
 };
+
+
 
 const AppRoutes = () => {
   const selectedCity = useSelector(selectSelectedCity);

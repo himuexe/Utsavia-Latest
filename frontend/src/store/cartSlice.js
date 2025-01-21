@@ -44,7 +44,25 @@ export const addToCart = createAsyncThunk(
     }
   }
 );
-
+export const clearCartFromServer = createAsyncThunk(
+  'cart/clearCartFromServer',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/cart/clear`, {
+        method: 'DELETE',
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      
+      if (!response.ok) throw new Error('Failed to clear cart');
+      return true;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 export const removeFromCart = createAsyncThunk(
   'cart/removeItem',
   async (cartItemId, { rejectWithValue }) => {
@@ -71,7 +89,9 @@ const cartSlice = createSlice({
     items: [],
     loading: false,
     error: null,
-    lastAddedItem: null
+    lastAddedItem: null,
+    checkoutType: null,  // 'cart' or 'direct'
+    bookingDetails: null // for direct checkout
   },
   reducers: {
     clearCartError: (state) => {
@@ -79,10 +99,24 @@ const cartSlice = createSlice({
     },
     clearLastAddedItem: (state) => {
       state.lastAddedItem = null;
-    }
+    },
+    setCheckoutDetails: (state, action) => {
+      state.checkoutType = action.payload.type;
+      state.bookingDetails = action.payload.bookingDetails;
+    },
+    clearCheckoutDetails: (state) => {
+      state.checkoutType = null;
+      state.bookingDetails = null;
+    },
+    clearCart: (state) => {
+      state.items = [];
+      state.error = null;
+      state.lastAddedItem = null;
+    },
   },
   extraReducers: (builder) => {
     builder
+
       // Fetch cart items
       .addCase(fetchCartItems.pending, (state) => {
         state.loading = true;
@@ -122,11 +156,30 @@ const cartSlice = createSlice({
       .addCase(removeFromCart.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(clearCartFromServer.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(clearCartFromServer.fulfilled, (state) => {
+        state.loading = false;
+        state.items = [];
+        state.lastAddedItem = null;
+      })
+      .addCase(clearCartFromServer.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   }
 });
 
-export const { clearCartError, clearLastAddedItem } = cartSlice.actions;
+export const { 
+  clearCartError, 
+  clearLastAddedItem, 
+  clearCart,
+  setCheckoutDetails,
+  clearCheckoutDetails 
+} = cartSlice.actions;
 
 // Selectors
 export const selectCartItems = (state) => state.cart.items;
@@ -134,5 +187,7 @@ export const selectCartLoading = (state) => state.cart.loading;
 export const selectCartError = (state) => state.cart.error;
 export const selectLastAddedItem = (state) => state.cart.lastAddedItem;
 export const selectCartItemsCount = (state) => state.cart.items.length;
+export const selectCheckoutType = (state) => state.cart.checkoutType;
+export const selectBookingDetails = (state) => state.cart.bookingDetails;
 
 export default cartSlice.reducer;

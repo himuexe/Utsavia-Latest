@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   toast: undefined,
   isLoading: true,
-  isLoggedIn: false,
+  isLoggedIn: true,
   isAddressValid: false,
   selectedCity: localStorage.getItem('selectedCity') || '',
 };

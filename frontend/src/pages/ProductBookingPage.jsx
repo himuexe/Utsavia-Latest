@@ -11,6 +11,7 @@ import {
   clearLastAddedItem,
   addToCart,
   clearCartError,
+  setCheckoutDetails
 } from "../store/cartSlice";
 import { selectIsLoggedIn, showToast } from "../store/appSlice";
 import ProductImageCard from "../components/product-booking/ProductImageCard";
@@ -163,6 +164,10 @@ const ProductBookingPage = ({ selectedCity }) => {
       });
       return;
     }
+    dispatch(setCheckoutDetails({
+      type: 'direct',
+      bookingDetails
+    }));
 
     navigate("/checkout", {
       state: { bookingDetails },
