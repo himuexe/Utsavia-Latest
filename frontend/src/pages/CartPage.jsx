@@ -50,6 +50,11 @@ const CartPage = () => {
       }));
       return;
     }
+
+    // Save cart items to localStorage
+    localStorage.setItem('checkoutType', 'cart');
+    localStorage.setItem('bookingDetails', JSON.stringify(null));
+
     dispatch(setCheckoutDetails({
       type: 'cart',
       bookingDetails: null
@@ -57,7 +62,7 @@ const CartPage = () => {
     
     navigate('/checkout');
   };
-
+  
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 bg-black min-h-screen">

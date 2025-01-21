@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useQuery } from "react-query";
 import * as apiClient from "../api/MyUserApi";
@@ -13,20 +13,17 @@ import {
   selectCartItems,
   selectCheckoutType,
   selectBookingDetails,
+  setCheckoutDetails,
 } from "../store/cartSlice";
 import AddressForm from "../components/checkout/AddressForm";
 import AddressDisplay from "../components/checkout/AddressDisplay";
 
-
-
-
 const CheckoutPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
 
-  // Get cart items from Redux
+  // Get cart items and checkout details from Redux
   const cartItems = useSelector(selectCartItems);
   const checkoutType = useSelector(selectCheckoutType);
   const bookingDetails = useSelector(selectBookingDetails);
@@ -35,20 +32,46 @@ const CheckoutPage = () => {
   const isAddressValid = useSelector(selectIsAddressValid);
 
   useEffect(() => {
-    // Check if we have valid checkout data
-    const hasValidCheckout = 
-      (checkoutType === 'direct' && bookingDetails) || 
-      (checkoutType === 'cart' && cartItems.length > 0);
-    
-    if (!hasValidCheckout) {
+    // Load checkout details from localStorage
+    const savedCheckoutType = localStorage.getItem('checkoutType');
+    const savedBookingDetails = JSON.parse(localStorage.getItem('bookingDetails'));
+
+    if (savedCheckoutType === 'cart') {
+      // For cart checkout, ensure cart items are available
+      if (cartItems.length === 0) {
+        dispatch(showToast({ 
+          message: 'No items to checkout', 
+          type: 'ERROR' 
+        }));
+        navigate('/');
+      }
+    } else if (savedCheckoutType === 'direct') {
+      // For direct checkout, ensure booking details are available
+      if (!savedBookingDetails) {
+        dispatch(showToast({ 
+          message: 'No items to checkout', 
+          type: 'ERROR' 
+        }));
+        navigate('/');
+      } else {
+        // Set booking details in Redux store
+        dispatch(setCheckoutDetails({
+          type: 'direct',
+          bookingDetails: savedBookingDetails,
+        }));
+      }
+    } else {
+      // No valid checkout data
       dispatch(showToast({ 
         message: 'No items to checkout', 
         type: 'ERROR' 
       }));
       navigate('/');
-      return;
     }
-  }, [checkoutType, bookingDetails, cartItems, navigate, dispatch]);
+  }, [cartItems, navigate, dispatch]);
+
+  const isCartCheckout = checkoutType === 'cart';
+  const isDirectCheckout = checkoutType === 'direct';
 
   const { data: userProfile, isLoading, error, refetch: refetchProfile } = useQuery(
     "currentUser",
@@ -88,7 +111,7 @@ const CheckoutPage = () => {
     );
   }
 
-  const total = checkoutType === 'cart'
+  const total = isCartCheckout
     ? cartItems.reduce((sum, item) => sum + item.price, 0)
     : bookingDetails?.price || 0;
 
@@ -129,7 +152,7 @@ const CheckoutPage = () => {
           </h2>
 
           <div className="space-y-4">
-            {checkoutType === 'cart' ? (
+            {isCartCheckout && (
               // Cart checkout summary
               <>
                 {cartItems.map((item) => (
@@ -144,7 +167,9 @@ const CheckoutPage = () => {
                   </div>
                 ))}
               </>
-            ) : bookingDetails && (
+            )}
+
+            {isDirectCheckout && bookingDetails && (
               // Single item checkout summary
               <>
                 <div className="flex justify-between p-4 border-b border-zinc-800">

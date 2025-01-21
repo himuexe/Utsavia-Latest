@@ -164,6 +164,9 @@ const ProductBookingPage = ({ selectedCity }) => {
       });
       return;
     }
+    localStorage.setItem('checkoutType', 'direct');
+  localStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+
     dispatch(setCheckoutDetails({
       type: 'direct',
       bookingDetails
