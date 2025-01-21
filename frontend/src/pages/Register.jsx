@@ -191,14 +191,6 @@ const Register = () => {
           >
             Already have an account? Sign in
           </Link>
-          <button
-            type="submit"
-            className="bg-white text-black px-6 py-2 rounded-xl 
-            hover:bg-zinc-200 transition-colors 
-            hover:shadow-lg hover:shadow-purple-500/20"
-          >
-            Create Account
-          </button>
         </div>
       </form>
     </div>

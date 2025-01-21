@@ -159,7 +159,7 @@ const ProductBookingPage = ({ selectedCity }) => {
       navigate("/login", {
         state: { 
           bookingDetails,
-          from: '/checkout' // Explicitly set target
+          fromBooking: true // Explicitly set target
         }
       });
       return;
