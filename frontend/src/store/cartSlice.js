@@ -24,13 +24,19 @@ export const addToCart = createAsyncThunk(
   'cart/addItem',
   async (itemDetails, { rejectWithValue }) => {
     try {
+      // Ensure the date is in YYYY-MM-DD format
+      const formattedItemDetails = {
+        ...itemDetails,
+        date: itemDetails.date.split('T')[0], // Remove time component if present
+      };
+
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/cart/add`, {
         method: 'POST',
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(itemDetails),
+        body: JSON.stringify(formattedItemDetails),
       });
 
       if (!response.ok) {
@@ -125,10 +131,14 @@ const cartSlice = createSlice({
     setCheckoutDetails: (state, action) => {
       state.checkoutType = action.payload.type;
       state.bookingDetails = action.payload.bookingDetails;
+      localStorage.setItem('checkoutType', action.payload.type);
+      localStorage.setItem('bookingDetails', JSON.stringify(action.payload.bookingDetails));
     },
     clearCheckoutDetails: (state) => {
       state.checkoutType = null;
       state.bookingDetails = null;
+      localStorage.removeItem('checkoutType');
+      localStorage.removeItem('bookingDetails');
     },
     clearCart: (state) => {
       state.items = [];

@@ -114,7 +114,7 @@ const CheckoutPage = () => {
   const total = isCartCheckout
     ? cartItems.reduce((sum, item) => sum + item.price, 0)
     : bookingDetails?.price || 0;
-
+  console.log(bookingDetails);
   return (
     <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -160,7 +160,7 @@ const CheckoutPage = () => {
                     <div className="flex flex-col">
                       <span className="text-white">{item.itemName}</span>
                       <span className="text-zinc-400 text-sm">
-                        {item.date} - {item.timeSlot}
+                      {new Date(item.date).toLocaleDateString()} - {item.timeSlot}
                       </span>
                     </div>
                     <span className="text-white">₹{item.price.toLocaleString()}</span>
