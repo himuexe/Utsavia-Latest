@@ -4,7 +4,6 @@ import {
   Routes,
   Navigate,
   useLocation,
-  useNavigate,
 } from "react-router-dom";
 import PaymentSuccessPage from "./pages/PaymentSuccess";
 import Layout from "./layouts/Layout";
@@ -20,6 +19,7 @@ import CitySelector from "./components/ui/CitySelector";
 import ProductBookingPage from "./pages/ProductBookingPage";
 import CheckoutPage from "./pages/CheckOut";
 import CartPage from "./pages/CartPage";
+import MyBookingsPage from "./pages/MyBookingPage";
 import { selectSelectedCity, selectIsLoggedIn } from "./store/appSlice";
 
 const AuthWrapper = ({ children }) => {
@@ -28,20 +28,20 @@ const AuthWrapper = ({ children }) => {
 
   if (!isLoggedIn) {
     // Save the attempted URL and all state in navigation
-    return <Navigate 
-      to="/login" 
-      state={{ 
-        from: location.pathname,
-        checkoutState: location.state // Preserve the checkout state
-      }} 
-      replace 
-    />;
+    return (
+      <Navigate
+        to="/login"
+        state={{
+          from: location.pathname,
+          checkoutState: location.state, // Preserve the checkout state
+        }}
+        replace
+      />
+    );
   }
-  
+
   return children;
 };
-
-
 
 const AppRoutes = () => {
   const selectedCity = useSelector(selectSelectedCity);
@@ -135,11 +135,26 @@ const AppRoutes = () => {
             </AuthWrapper>
           }
         />
-        <Route path="/payment-success" element={            <AuthWrapper>
+        <Route
+          path="/payment-success"
+          element={
+            <AuthWrapper>
               <RegLayout>
                 <PaymentSuccessPage />
               </RegLayout>
-            </AuthWrapper>} />
+            </AuthWrapper>
+          }
+        />
+        <Route
+          path="/mybookings"
+          element={
+            <AuthWrapper>
+              <RegLayout>
+                <MyBookingsPage />
+              </RegLayout>
+            </AuthWrapper>
+          }
+        />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

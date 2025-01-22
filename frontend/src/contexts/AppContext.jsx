@@ -38,11 +38,9 @@ function AppContent({ children }) {
       if (isLoggedIn) {
         try {
           const isComplete = await apiClient.checkProfileCompletion();
-          console.log("isComplete:", isComplete);
           setIsAddressValid(isComplete === "" ? false : isComplete);
           dispatch(setAddressValidity(isComplete === "" ? false : isComplete)); // Dispatch to store if needed
         } catch (error) {
-          console.error("Error checking profile completion:", error);
           setIsAddressValid(false); // Handle error case
           dispatch(setAddressValidity(false)); // Dispatch to store if needed
         }

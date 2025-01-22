@@ -81,14 +81,14 @@ const Nav = () => {
         to="/profile"
         className="w-full flex items-center gap-3 px-4 py-3 text-white hover:bg-white hover:text-black rounded-xl transition-all font-medium text-base"
       >
-        Your Profile
+        Profile
       </NavigationButton>
       <NavigationButton
         icon={Gift}
-        to="/orders"
+        to="/mybookings"
         className="w-full flex items-center gap-3 px-4 py-3 text-white hover:bg-white hover:text-black rounded-xl transition-all font-medium text-base"
       >
-        Your Events
+        My Events
       </NavigationButton>
       <NavigationButton
         icon={ShoppingCart}
@@ -193,7 +193,7 @@ const Nav = () => {
       <SidePanel
         isOpen={isProfilePanelOpen && !isMenuOpen}
         onClose={() => setIsProfilePanelOpen(false)}
-        title="Your Account"
+        title="My Account"
       >
         <div className="space-y-4">{navigationItems}</div>
       </SidePanel>
