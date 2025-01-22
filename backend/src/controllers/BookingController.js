@@ -28,14 +28,18 @@ const validatePincode = async (req, res) => {
 
 const createPayment = async (req, res) => {
   try {
-    const { amount, currency = 'usd' } = req.body;
+    const { amount, currency = 'inr' } = req.body;
 
-    // Create a PaymentIntent
+    // Use req.userId instead of req.user.id
+    if (!req.userId) {
+      return res.status(401).json({ error: "Unauthorized: User not authenticated" });
+    }
+
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Convert to cents and ensure integer
+      amount: Math.round(amount * 100), // Convert to cents
       currency,
       metadata: {
-        userId: req.user._id.toString(), // Add user ID for reference
+        userId: req.userId.toString(), // Use req.userId here
       }
     });
 
@@ -46,11 +50,11 @@ const createPayment = async (req, res) => {
     console.error('Payment Intent Error:', error);
     res.status(500).json({ error: error.message });
   }
-}
+};
 
-const webHook =async (req, res) => {
+const webHook = async (req, res) => {
   const sig = req.headers['stripe-signature'];
-  
+
   try {
     const event = stripe.webhooks.constructEvent(
       req.body,
@@ -61,13 +65,20 @@ const webHook =async (req, res) => {
     switch (event.type) {
       case 'payment_intent.succeeded':
         const paymentIntent = event.data.object;
-        // Here you can update your booking/order status
-        // You can access the user ID from paymentIntent.metadata.userId
+        const userId = paymentIntent.metadata.userId;
+
+        // Update booking/order status in your database
+        // Example: await BookingModel.updateOne({ userId }, { status: 'paid' });
+        console.log(`Payment succeeded for user ${userId}`);
         break;
 
       case 'payment_intent.payment_failed':
         const failedPayment = event.data.object;
+        const failedUserId = failedPayment.metadata.userId;
+
         // Handle failed payment
+        // Example: await BookingModel.updateOne({ userId: failedUserId }, { status: 'failed' });
+        console.log(`Payment failed for user ${failedUserId}`);
         break;
     }
 
@@ -76,6 +87,6 @@ const webHook =async (req, res) => {
     console.error('Webhook Error:', err.message);
     res.status(400).send(`Webhook Error: ${err.message}`);
   }
-}
+};
 
 module.exports = {validatePincode , createPayment , webHook};

@@ -6,7 +6,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import Loading from "./components/ui/Loading";
+import PaymentSuccessPage from "./pages/PaymentSuccess";
 import Layout from "./layouts/Layout";
 import RegLayout from "./layouts/RegLayout";
 import Contact from "./pages/Contact";
@@ -135,6 +135,11 @@ const AppRoutes = () => {
             </AuthWrapper>
           }
         />
+        <Route path="/payment-success" element={            <AuthWrapper>
+              <RegLayout>
+                <PaymentSuccessPage />
+              </RegLayout>
+            </AuthWrapper>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

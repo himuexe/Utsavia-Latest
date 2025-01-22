@@ -1,106 +1,53 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useQuery } from "react-query";
-import * as apiClient from "../api/MyUserApi";
-import { 
-  selectIsLoggedIn, 
-  selectIsAddressValid, 
-  showToast, 
-  setAddressValidity 
-} from "../store/appSlice";
-import { 
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useQuery } from 'react-query';
+import { Elements } from '@stripe/react-stripe-js';
+import * as apiClient from '../api/MyUserApi';
+import {
   selectCartItems,
   selectCheckoutType,
   selectBookingDetails,
-  setCheckoutDetails,
-} from "../store/cartSlice";
-import AddressForm from "../components/checkout/AddressForm";
-import AddressDisplay from "../components/checkout/AddressDisplay";
+} from '../store/cartSlice';
+import { selectIsAddressValid ,selectIsLoggedIn, } from '../store/appSlice';
+import { useCheckout } from '../hooks/useCheckout';
+import  AddressForm  from '../components/checkout/AddressForm';
+import  AddressDisplay  from '../components/checkout/AddressDisplay';
+import  PaymentForm  from '../components/checkout/PaymentForm';
+import  OrderSummaryItem  from '../components/checkout/OrderSummaryItem';
+import  CheckoutButton  from '../components/checkout/CheckoutButton';
+import  Loading from '../components/ui/Loading';
+import { motion } from 'framer-motion';
 
 const CheckoutPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
-
-  // Get cart items and checkout details from Redux
+  
+  // Selectors
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const isAddressValid = useSelector(selectIsAddressValid);
   const cartItems = useSelector(selectCartItems);
   const checkoutType = useSelector(selectCheckoutType);
   const bookingDetails = useSelector(selectBookingDetails);
 
-  const isLoggedIn = useSelector(selectIsLoggedIn);
-  const isAddressValid = useSelector(selectIsAddressValid);
+  // Custom hook for checkout logic
+  const { 
+    paymentState, 
+    stripePromise, 
+    handleProceedToPayment, 
+    handlePaymentSuccess 
+  } = useCheckout(cartItems, checkoutType, bookingDetails);
 
-  useEffect(() => {
-    // Load checkout details from localStorage
-    const savedCheckoutType = localStorage.getItem('checkoutType');
-    const savedBookingDetails = JSON.parse(localStorage.getItem('bookingDetails'));
+  // Profile data query
+  const {
+    data: userProfile,
+    isLoading,
+    error,
+    refetch: refetchProfile,
+  } = useQuery('currentUser', apiClient.fetchCurrentUser, {
+    enabled: isLoggedIn,
+    retry: 2
+  });
 
-    if (savedCheckoutType === 'cart') {
-      // For cart checkout, ensure cart items are available
-      if (cartItems.length === 0) {
-        dispatch(showToast({ 
-          message: 'No items to checkout', 
-          type: 'ERROR' 
-        }));
-        navigate('/');
-      }
-    } else if (savedCheckoutType === 'direct') {
-      // For direct checkout, ensure booking details are available
-      if (!savedBookingDetails) {
-        dispatch(showToast({ 
-          message: 'No items to checkout', 
-          type: 'ERROR' 
-        }));
-        navigate('/');
-      } else {
-        // Set booking details in Redux store
-        dispatch(setCheckoutDetails({
-          type: 'direct',
-          bookingDetails: savedBookingDetails,
-        }));
-      }
-    } else {
-      // No valid checkout data
-      dispatch(showToast({ 
-        message: 'No items to checkout', 
-        type: 'ERROR' 
-      }));
-      navigate('/');
-    }
-  }, [cartItems, navigate, dispatch]);
-
-  const isCartCheckout = checkoutType === 'cart';
-  const isDirectCheckout = checkoutType === 'direct';
-
-  const { data: userProfile, isLoading, error, refetch: refetchProfile } = useQuery(
-    "currentUser",
-    apiClient.fetchCurrentUser,
-    {
-      enabled: isLoggedIn,
-      retry: 2,
-      onSuccess: (data) => {
-        const hasValidAddress = !!(data?.phone && data?.address);
-        dispatch(setAddressValidity(hasValidAddress));
-      },
-      onError: (error) => {
-        dispatch(showToast({ 
-          message: error?.message || 'Failed to fetch user profile', 
-          type: 'ERROR' 
-        }));
-        dispatch(setAddressValidity(false));
-      },
-    }
-  );
-
-  if (isLoading) {
-    return (
-      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
-        <div className="text-center text-white">Loading...</div>
-      </div>
-    );
-  }
-
+  if (isLoading) return <Loading />;
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
@@ -111,109 +58,129 @@ const CheckoutPage = () => {
     );
   }
 
-  const total = isCartCheckout
+  const total = checkoutType === 'cart'
     ? cartItems.reduce((sum, item) => sum + item.price, 0)
     : bookingDetails?.price || 0;
-  console.log(bookingDetails);
+
   return (
-    <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-black to-zinc-900 min-h-screen">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-8"
+      >
         {/* Address Section */}
-        <div className="space-y-6">
-          <h1 className="text-3xl font-bold text-white mb-6">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="space-y-6"
+        >
+          <h1 className="text-4xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
             Delivery Information
           </h1>
-          
+
           {isAddressValid && !isEditing ? (
-            <AddressDisplay 
-              userProfile={userProfile} 
+            <AddressDisplay
+              userProfile={userProfile}
               onEdit={() => setIsEditing(true)}
             />
           ) : (
-            <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
+            <div className="bg-zinc-900/50 backdrop-blur-lg rounded-2xl border border-zinc-800/50 p-6 shadow-xl">
               <h2 className="text-xl font-semibold text-white mb-4">
-                {isEditing ? "Edit Delivery Details" : "Enter Delivery Details"}
+                {isEditing ? 'Edit Delivery Details' : 'Enter Delivery Details'}
               </h2>
-              <AddressForm 
+              <AddressForm
                 initialData={userProfile}
                 onSuccess={() => {
                   refetchProfile();
                   setIsEditing(false);
-                }} 
+                }}
               />
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Order Summary Section */}
-        <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
-          <h2 className="text-2xl font-bold text-white mb-6">
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="bg-zinc-900/50 backdrop-blur-lg rounded-2xl border border-zinc-800/50 p-6 shadow-xl"
+        >
+          <h2 className="text-3xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
             Order Summary
           </h2>
 
           <div className="space-y-4">
-            {isCartCheckout && (
-              // Cart checkout summary
-              <>
-                {cartItems.map((item) => (
-                  <div key={item._id} className="flex justify-between p-4 border-b border-zinc-800">
-                    <div className="flex flex-col">
-                      <span className="text-white">{item.itemName}</span>
-                      <span className="text-zinc-400 text-sm">
+            {checkoutType === 'cart' && cartItems.map((item) => (
+              <OrderSummaryItem
+                key={item._id}
+                label={
+                  <div className="flex flex-col">
+                    <span>{item.itemName}</span>
+                    <span className="text-sm">
                       {new Date(item.date).toLocaleDateString()} - {item.timeSlot}
-                      </span>
-                    </div>
-                    <span className="text-white">₹{item.price.toLocaleString()}</span>
+                    </span>
                   </div>
-                ))}
-              </>
-            )}
+                }
+                value={`₹${item.price.toLocaleString()}`}
+              />
+            ))}
 
-            {isDirectCheckout && bookingDetails && (
-              // Single item checkout summary
+            {checkoutType === 'direct' && bookingDetails && (
               <>
-                <div className="flex justify-between p-4 border-b border-zinc-800">
-                  <span className="text-zinc-400">Item:</span>
-                  <span className="text-white">{bookingDetails.itemName}</span>
-                </div>
-                <div className="flex justify-between p-4 border-b border-zinc-800">
-                  <span className="text-zinc-400">Date:</span>
-                  <span className="text-white">{bookingDetails.date}</span>
-                </div>
-                <div className="flex justify-between p-4 border-b border-zinc-800">
-                  <span className="text-zinc-400">Time:</span>
-                  <span className="text-white">{bookingDetails.timeSlot}</span>
-                </div>
+                <OrderSummaryItem
+                  label="Item"
+                  value={bookingDetails.itemName}
+                />
+                <OrderSummaryItem
+                  label="Date"
+                  value={bookingDetails.date}
+                />
+                <OrderSummaryItem
+                  label="Time"
+                  value={bookingDetails.timeSlot}
+                />
               </>
             )}
 
-            {/* Total Amount */}
-            <div className="flex justify-between p-4 text-lg font-bold">
-              <span className="text-white">Total Amount:</span>
-              <span className="text-purple-400">
-                ₹{total.toLocaleString()}
-              </span>
-            </div>
+            <OrderSummaryItem
+              label="Total Amount"
+              value={`₹${total.toLocaleString()}`}
+              type="total"
+            />
 
-            {/* Payment Button */}
-            <button
-              className="w-full bg-white text-black py-3 rounded-xl font-semibold
-                hover:bg-zinc-200 transition-colors duration-200 
-                disabled:bg-zinc-700 disabled:text-zinc-400 disabled:cursor-not-allowed"
-              
-              disabled={!isLoggedIn || !isAddressValid || isEditing}
-            >
-              {!isLoggedIn 
-                ? "Please Log In to Continue"
-                : !isAddressValid 
-                ? "Please Add Delivery Address"
-                : isEditing
-                ? "Please Save Address to Continue"
-                : "Proceed to Payment"}
-            </button>
+            {paymentState.showPayment && paymentState.clientSecret ? (
+              <div className="mt-6">
+                <Elements
+                  stripe={stripePromise}
+                  options={{
+                    clientSecret: paymentState.clientSecret,
+                    appearance: {
+                      theme: 'night',
+                      variables: {
+                        colorPrimary: '#9333ea',
+                      },
+                    },
+                  }}
+                >
+                  <PaymentForm 
+                    amount={total} 
+                    onSuccess={handlePaymentSuccess} 
+                  />
+                </Elements>
+              </div>
+            ) : (
+              <CheckoutButton
+                isLoggedIn={isLoggedIn}
+                isAddressValid={isAddressValid}
+                isEditing={isEditing}
+                isProcessing={paymentState.isProcessing}
+                onClick={() => handleProceedToPayment(total)}
+              />
+            )}
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
