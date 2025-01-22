@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
-import * as bookingApi from '../api/bookingApi';
+import * as bookingApi from "../api/BookingApi";
 import { showToast } from '../store/appSlice';
 import { clearCart } from '../store/cartSlice';
 
