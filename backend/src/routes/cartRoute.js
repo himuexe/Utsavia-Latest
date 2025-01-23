@@ -9,7 +9,8 @@ router.use(verifyToken);
 
 router.get('/', cartController.getCartItems);
 router.post('/add', cartController.addToCart);
-router.delete('/:cartItemId', cartController.removeFromCart);
 router.delete('/clear', cartController.clearCart);
+router.delete('/:cartItemId', cartController.removeFromCart);
+
 
 module.exports = router;

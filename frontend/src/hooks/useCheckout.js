@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
 import * as paymentApi from "../api/PaymentApi";
 import { showToast } from '../store/appSlice';
-import { clearCart } from '../store/cartSlice';
+import { clearCart, clearCartFromServer } from '../store/cartSlice';
 import * as bookingApi from '../api/BookingApi';
 
 const key = import.meta.env.VITE_APP_STRIPE_PUBLISHABLE_KEY;
@@ -25,7 +25,7 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
       const savedBookingDetails = JSON.parse(localStorage.getItem('bookingDetails'));
 
       if (savedCheckoutType === 'cart' && cartItems.length === 0) {
-        handleCheckoutError('No items in cart');
+        // handleCheckoutError('No items in cart');
       } else if (savedCheckoutType === 'direct' && !savedBookingDetails) {
         handleCheckoutError('No booking details found');
       }
@@ -75,6 +75,7 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
       setPaymentState(prev => ({ ...prev, isProcessing: false }));
     }
   };
+
   const handlePaymentSuccess = async (paymentIntentId) => {
     try {
       const items = checkoutType === 'cart' ? cartItems : [bookingDetails];
@@ -91,17 +92,22 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
       console.log("Booking created:", booking);
 
       if (checkoutType === 'cart') {
+        // Clear cart from local storage and Redux state
         dispatch(clearCart());
+
+        // Clear cart from the server
+        await dispatch(clearCartFromServer()).unwrap();
       }
 
       navigate('/payment-success');
     } catch (error) {
       dispatch(showToast({
-        message: 'Payment recorded but booking creation failed',
+        message: 'Payment recorded but booking creation or cart clearing failed',
         type: 'ERROR',
       }));
     }
   };
+
   return {
     paymentState,
     stripePromise,

@@ -86,7 +86,8 @@ const removeFromCart = async (req, res) => {
 
  const clearCart = async (req, res) => {
     try {
-        await Cart.deleteMany({ userId: req.userId });
+        const userId = req.userId;
+        await Cart.deleteMany({ userId: userId });
         res.json({ message: 'Cart cleared successfully' });
     } catch (error) {
         console.error('Error clearing cart:', error);

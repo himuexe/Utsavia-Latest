@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import { useQuery } from 'react-query';
 import { Elements } from '@stripe/react-stripe-js';
@@ -16,6 +16,7 @@ import  PaymentForm  from '../components/checkout/PaymentForm';
 import  OrderSummaryItem  from '../components/checkout/OrderSummaryItem';
 import  CheckoutButton  from '../components/checkout/CheckoutButton';
 import  Loading from '../components/ui/Loading';
+import { useNavigate } from 'react-router-dom'; 
 import { motion } from 'framer-motion';
 
 const CheckoutPage = () => {
@@ -23,10 +24,21 @@ const CheckoutPage = () => {
   
   // Selectors
   const isLoggedIn = useSelector(selectIsLoggedIn);
+  const navigate = useNavigate(); 
   const isAddressValid = useSelector(selectIsAddressValid);
   const cartItems = useSelector(selectCartItems);
   const checkoutType = useSelector(selectCheckoutType);
   const bookingDetails = useSelector(selectBookingDetails);
+
+  useEffect(() => {
+    if (checkoutType === 'direct' && !bookingDetails) {
+      // Redirect to home page or another appropriate page
+      navigate('/');
+    } else if (checkoutType === 'cart' && cartItems.length === 0) {
+      // Redirect to the cart page if the cart is empty
+      navigate('/cart');
+    }
+  }, [checkoutType, bookingDetails, cartItems, navigate]);
 
   // Custom hook for checkout logic
   const { 
