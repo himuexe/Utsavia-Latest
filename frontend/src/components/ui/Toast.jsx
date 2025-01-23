@@ -14,16 +14,16 @@ const Toast = ({ message, type, onClose }) => {
 
   const toastStyles = {
     SUCCESS: {
-      background: "bg-green-500", 
+      background: "bg-[#4ECDC4]", // Turquoise for success
       icon: <CheckCircle className="mr-2 text-white" />,
     },
     ERROR: {
-      background: "bg-red-500", 
+      background: "bg-[#FF6B6B]", // Coral Pink for error
       icon: <XCircle className="mr-2 text-white" />,
     },
   };
 
-  const { background, icon } = toastStyles[type] || toastStyles.ERROR; 
+  const { background, icon } = toastStyles[type] || toastStyles.ERROR;
   const styles = `
     fixed top-5 right-5 z-50 p-4 
     text-white text-lg font-semibold 

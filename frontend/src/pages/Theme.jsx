@@ -6,31 +6,31 @@ import { Card, CardHeader, CardContent, CardFooter } from "../components/ui/Card
 import { MapPin } from "lucide-react";
 
 const ThemeSkeleton = () => (
-  <Card hover={false} className="h-[28rem] bg-zinc-900 border border-zinc-800">
+  <Card hover={false} className="h-[28rem] bg-[#F9F9F9] border border-[#F0F0F0]">
     <CardHeader>
-      <div className="aspect-[4/3] bg-zinc-800 animate-pulse" />
+      <div className="aspect-[4/3] bg-[#F0F0F0] animate-pulse" />
     </CardHeader>
     <CardContent>
       <div className="space-y-4">
-        <div className="h-4 bg-zinc-800 rounded animate-pulse w-1/3" />
-        <div className="h-6 bg-zinc-800 rounded animate-pulse w-3/4" />
-        <div className="h-4 bg-zinc-800 rounded animate-pulse w-2/3" />
+        <div className="h-4 bg-[#F0F0F0] rounded animate-pulse w-1/3" />
+        <div className="h-6 bg-[#F0F0F0] rounded animate-pulse w-3/4" />
+        <div className="h-4 bg-[#F0F0F0] rounded animate-pulse w-2/3" />
       </div>
     </CardContent>
     <CardFooter>
       <div className="flex items-center justify-between">
-        <div className="h-6 bg-zinc-800 rounded animate-pulse w-1/4" />
-        <div className="h-10 bg-zinc-800 rounded animate-pulse w-1/3" />
+        <div className="h-6 bg-[#F0F0F0] rounded animate-pulse w-1/4" />
+        <div className="h-10 bg-[#F0F0F0] rounded animate-pulse w-1/3" />
       </div>
     </CardFooter>
   </Card>
 );
 
-const ThemesPage = ({selectedCity }) => {
+const ThemesPage = ({ selectedCity }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const {
-    data: { items } = { items: [] }, 
+    data: { items } = { items: [] },
     isLoading,
     isError,
   } = useQuery(
@@ -44,8 +44,8 @@ const ThemesPage = ({selectedCity }) => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
-        <h1 className="text-3xl font-bold text-white mb-8">
+      <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
+        <h1 className="text-3xl font-bold text-[#2D3436] mb-8">
           Loading Themes...
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -59,8 +59,8 @@ const ThemesPage = ({selectedCity }) => {
 
   if (isError) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
-        <h1 className="text-3xl font-bold text-red-600 mb-8">
+      <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
+        <h1 className="text-3xl font-bold text-[#FF6B6B] mb-8">
           Error: No Themes Found
         </h1>
       </div>
@@ -68,15 +68,15 @@ const ThemesPage = ({selectedCity }) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
-      <h1 className="text-3xl font-bold text-white mb-8">
+    <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
+      <h1 className="text-3xl font-bold text-[#2D3436] mb-8">
         All Themes
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {items.length > 0 ? (
           items.map((theme) => (
-            <Card key={theme._id} className="bg-zinc-900 border border-zinc-800 h-auto">
+            <Card key={theme._id} className="bg-[#F9F9F9] border border-[#F0F0F0] h-auto">
               <CardHeader>
                 <div className="aspect-[4/3] relative overflow-hidden rounded-lg">
                   <img
@@ -98,10 +98,10 @@ const ThemesPage = ({selectedCity }) => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-semibold text-white line-clamp-2">
+                  <h3 className="text-xl font-semibold text-[#2D3436] line-clamp-2">
                     {theme.name}
                   </h3>
-                  <p className="text-zinc-400 text-sm line-clamp-2">
+                  <p className="text-[#2D3436]/80 text-sm line-clamp-2">
                     {theme.description ||
                       "Transform your special moments into unforgettable memories."}
                   </p>
@@ -109,13 +109,13 @@ const ThemesPage = ({selectedCity }) => {
               </CardContent>
               <CardFooter>
                 <div className="flex items-center justify-between w-full">
-                  <span className="text-xl font-bold text-purple-400">
+                  <span className="text-xl font-bold text-[#FF6B6B]">
                     ₹{theme.prices[0]?.price.toLocaleString() || "N/A"}
                   </span>
                   <button
                     onClick={() => navigate(`/info/${theme._id}`)}
-                    className="px-4 py-2 bg-white text-black 
-                    rounded-xl hover:bg-zinc-200
+                    className="px-4 py-2 bg-[#FF6B6B] text-white 
+                    rounded-xl hover:bg-[#FF6B6B]/90
                     transition-all duration-300 font-medium"
                   >
                     View Details
@@ -125,7 +125,7 @@ const ThemesPage = ({selectedCity }) => {
             </Card>
           ))
         ) : (
-          <p className="text-zinc-400">No themes available.</p>
+          <p className="text-[#2D3436]/80">No themes available.</p>
         )}
       </div>
     </div>

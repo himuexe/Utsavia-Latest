@@ -55,41 +55,41 @@ const SignIn = () => {
   const isFromBooking = location.state?.fromBooking;
 
   return (
-    <div className="w-full max-w-md mx-auto bg-black rounded-2xl shadow-lg p-8 mt-8 border border-zinc-800">
+    <div className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg p-8 mt-8 border border-[#F0F0F0]">
       <form
         className="flex flex-col gap-4"
         onSubmit={onSubmit}
       >
-        <h2 className="text-3xl font-bold text-white text-center mb-4">
+        <h2 className="text-3xl font-bold text-[#2D3436] text-center mb-4">
           Welcome Back
         </h2>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-zinc-400 mb-1">
+          <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
             Email
           </label>
           <input
             type="email"
             placeholder="Enter your email"
-            className="w-full p-3 rounded-xl border border-zinc-800 focus:outline-none focus:ring-2 focus:ring-purple-600 
-            bg-zinc-900 text-white placeholder-zinc-500"
+            className="w-full p-3 rounded-xl border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+            bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50"
             {...register("email", { required: "This field is required" })}
           />
           {errors.email && (
-            <span className="text-red-500 text-sm mt-1">{errors.email.message}</span>
+            <span className="text-[#FF6B6B] text-sm mt-1">{errors.email.message}</span>
           )}
         </div>
 
         <div className="mb-4 relative">
-          <label className="block text-sm font-medium text-zinc-400 mb-1">
+          <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
             Password
           </label>
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
-              className="w-full p-3 rounded-xl border border-zinc-800 focus:outline-none focus:ring-2 focus:ring-purple-600 
-              bg-zinc-900 text-white placeholder-zinc-500 pr-10"
+              className="w-full p-3 rounded-xl border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+              bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50 pr-10"
               {...register("password", {
                 required: "This field is required",
                 minLength: {
@@ -101,13 +101,13 @@ const SignIn = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-purple-500 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#2D3436]/50 hover:text-[#FF6B6B] transition-colors"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
           {errors.password && (
-            <span className="text-red-500 text-sm mt-1">{errors.password.message}</span>
+            <span className="text-[#FF6B6B] text-sm mt-1">{errors.password.message}</span>
           )}
         </div>
 
@@ -115,7 +115,7 @@ const SignIn = () => {
           <Link 
             to="/register" 
             state={location.state}
-            className="text-sm text-zinc-400 hover:text-purple-500 
+            className="text-sm text-[#2D3436]/80 hover:text-[#FF6B6B] 
               transition-colors flex items-center gap-1"
           >
             <Heart className="w-4 h-4" />
@@ -123,9 +123,9 @@ const SignIn = () => {
           </Link>
           <button
             type="submit"
-            className="bg-white text-black px-6 py-2 rounded-xl 
-            hover:bg-zinc-200 transition-colors 
-            hover:shadow-lg hover:shadow-purple-500/20"
+            className="bg-[#FF6B6B] text-white px-6 py-2 rounded-xl 
+            hover:bg-[#FF6B6B]/90 transition-colors 
+            hover:shadow-lg hover:shadow-[#FF6B6B]/20"
           >
             Login
           </button>
@@ -135,17 +135,17 @@ const SignIn = () => {
         {!isFromBooking && (
           <>
             <div className="relative flex items-center gap-4 mb-4">
-              <div className="flex-grow border-t border-zinc-800"></div>
-              <span className="text-zinc-500 text-sm">or</span>
-              <div className="flex-grow border-t border-zinc-800"></div>
+              <div className="flex-grow border-t border-[#F0F0F0]"></div>
+              <span className="text-[#2D3436]/50 text-sm">or</span>
+              <div className="flex-grow border-t border-[#F0F0F0]"></div>
             </div>
 
             <button
               type="button"
               onClick={handleGoogleSignIn}
               className="w-full flex items-center justify-center gap-2 
-              bg-zinc-900 border border-zinc-800 text-white p-3 rounded-xl 
-              hover:bg-zinc-800 transition-all"
+              bg-[#F9F9F9] border border-[#F0F0F0] text-[#2D3436] p-3 rounded-xl 
+              hover:bg-[#F0F0F0] transition-all"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path

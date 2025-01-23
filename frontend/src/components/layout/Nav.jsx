@@ -30,20 +30,20 @@ const SidePanel = ({ isOpen, onClose, title, children }) => {
   return (
     <>
       <div
-        className="fixed inset-0 bg-black/90 backdrop-blur-sm z-40"
+        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
         onClick={onClose}
       />
-      <div className="fixed top-0 right-0 w-80 h-full bg-black z-50 shadow-2xl p-8 flex flex-col border-l border-zinc-800">
+      <div className="fixed top-0 right-0 w-80 h-full bg-white z-50 shadow-2xl p-8 flex flex-col border-l border-[#FF6B6B]">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-white">{title}</h2>
+          <h2 className="text-2xl font-bold text-[#2D3436]">{title}</h2>
           <button
             onClick={onClose}
-            className="text-white hover:text-purple-300 transition-colors"
+            className="text-[#2D3436] hover:text-[#FF6B6B] transition-colors"
           >
             <X className="h-6 w-6" />
           </button>
         </div>
-        <div className="space-y-4 text-white">{children}</div>
+        <div className="space-y-4 text-[#2D3436]">{children}</div>
       </div>
     </>
   );
@@ -79,28 +79,28 @@ const Nav = () => {
       <NavigationButton
         icon={User}
         to="/profile"
-        className="w-full flex items-center gap-3 px-4 py-3 text-white hover:bg-white hover:text-black rounded-xl transition-all font-medium text-base"
+        className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
       >
         Profile
       </NavigationButton>
       <NavigationButton
         icon={Gift}
         to="/mybookings"
-        className="w-full flex items-center gap-3 px-4 py-3 text-white hover:bg-white hover:text-black rounded-xl transition-all font-medium text-base"
+        className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
       >
         My Events
       </NavigationButton>
       <NavigationButton
         icon={ShoppingCart}
         to="/cart"
-        className="w-full flex items-center gap-3 px-4 py-3 text-white hover:bg-white hover:text-black rounded-xl transition-all font-medium text-base"
+        className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
       >
         Cart Items
       </NavigationButton>
       <NavigationButton
         icon={Settings}
         to="/settings"
-        className="w-full flex items-center gap-3 px-4 py-3 text-white hover:bg-white hover:text-black rounded-xl transition-all font-medium text-base"
+        className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
       >
         Settings
       </NavigationButton>
@@ -108,7 +108,7 @@ const Nav = () => {
         icon={LogOut}
         onClick={handleSignOut}
         isLoading={signOutMutation.isLoading}
-        className="w-full flex items-center gap-3 px-4 py-3 text-white hover:bg-white hover:text-black rounded-xl transition-all font-medium text-base"
+        className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
       >
         Sign Out
       </NavigationButton>
@@ -117,61 +117,61 @@ const Nav = () => {
     <NavigationButton
       icon={User}
       to="/login"
-      className="w-full flex items-center gap-3 px-4 py-3 text-white hover:bg-white hover:text-black rounded-xl transition-all font-medium text-base"
+      className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
     >
       Login
     </NavigationButton>
   );
 
   return (
-    <header className="bg-black py-4 px-6 sticky top-0 z-40 shadow-md select-none border-b border-zinc-800">
+    <header className="bg-white py-4 px-6 sticky top-0 z-40 shadow-md select-none border-b border-[#F0F0F0]">
       <div className="container mx-auto flex justify-between items-center">
         <CompanyLogo onClick={() => navigate("/")} />
-        <nav className="hidden md:flex space-x-4 items-center font-secondary text-white">
+        <nav className="hidden md:flex space-x-4 items-center font-secondary text-[#2D3436]">
           <LocationDisplay
             selectedCity={selectedCity}
             onChange={() => setIsCitySelectorOpen(true)}
           />
-          <div className="h-6 w-px bg-zinc-800 mx-2" />
+          <div className="h-6 w-px bg-[#F0F0F0] mx-2" />
           <NavigationButton
             icon={CalendarHeart}
             to="/events"
-            className="flex items-center gap-2 px-4 py-2  hover:bg-white hover:text-black rounded-xl transition-all font-medium text-base"
+            className="flex items-center gap-2 px-4 py-2 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
           >
             Browse Events
           </NavigationButton>
           <NavigationButton
             icon={Clock}
             to="/last-minute"
-            className="flex items-center gap-2 px-4 py-2 hover:bg-white hover:text-black rounded-xl transition-all font-medium text-base"
+            className="flex items-center gap-2 px-4 py-2 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
           >
             Last Minute
           </NavigationButton>
           {isLoggedIn ? (
             <button
               onClick={() => setIsProfilePanelOpen(true)}
-              className="p-3 rounded-xl hover:bg-white hover:text-black transition-all duration-300 group"
+              className="p-3 rounded-xl hover:bg-[#FF6B6B] hover:text-white transition-all duration-300 group"
             >
-              <User className="w-6 h-6 text-white group-hover:text-black" />
+              <User className="w-6 h-6 text-[#2D3436] group-hover:text-white" />
             </button>
           ) : (
             <NavigationButton
               icon={User}
               to="/login"
-              className="flex items-center gap-2 px-4 py-2 hover:bg-white hover:text-black rounded-xl transition-all font-medium text-base"
+              className="flex items-center gap-2 px-4 py-2 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
             >
               Login
             </NavigationButton>
           )}
         </nav>
         <button
-          className="md:hidden p-3 rounded-xl hover:bg-white hover:text-black transition-all duration-300 group"
+          className="md:hidden p-3 rounded-xl hover:bg-[#FF6B6B] hover:text-white transition-all duration-300 group"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? (
-            <X className="w-6 h-6 text-white group-hover:text-black" />
+            <X className="w-6 h-6 text-[#2D3436] group-hover:text-white" />
           ) : (
-            <Menu className="w-6 h-6 text-white group-hover:text-black" />
+            <Menu className="w-6 h-6 text-[#2D3436] group-hover:text-white" />
           )}
         </button>
       </div>

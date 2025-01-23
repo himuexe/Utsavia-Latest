@@ -12,7 +12,7 @@ const PaymentForm = ({ amount, onSuccess }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     if (!stripe || !elements) {
       return;
     }
@@ -39,9 +39,9 @@ const PaymentForm = ({ amount, onSuccess }) => {
 
       if (confirmError) {
         setError(confirmError.message);
-        dispatch(showToast({ 
-          message: confirmError.message, 
-          type: 'ERROR' 
+        dispatch(showToast({
+          message: confirmError.message,
+          type: 'ERROR',
         }));
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
         // Call the onSuccess callback with the paymentIntent ID
@@ -49,9 +49,9 @@ const PaymentForm = ({ amount, onSuccess }) => {
       }
     } catch (err) {
       setError('Payment failed. Please try again.');
-      dispatch(showToast({ 
-        message: 'Payment failed. Please try again.', 
-        type: 'ERROR' 
+      dispatch(showToast({
+        message: 'Payment failed. Please try again.',
+        type: 'ERROR',
       }));
     } finally {
       setProcessing(false);
@@ -62,18 +62,18 @@ const PaymentForm = ({ amount, onSuccess }) => {
     <form onSubmit={handleSubmit} className="space-y-6">
       <PaymentElement />
       {error && (
-        <div className="text-red-500 text-sm bg-red-100/10 p-3 rounded-lg">
+        <div className="text-[#FF6B6B] text-sm bg-[#FF6B6B]/10 p-3 rounded-lg">
           {error}
         </div>
       )}
       <button
         type="submit"
         disabled={!stripe || processing}
-        className="w-full bg-purple-600 text-white py-3 rounded-xl font-semibold
-          hover:bg-purple-700 transition-colors duration-200 
-          disabled:bg-purple-800 disabled:cursor-not-allowed"
+        className="w-full bg-[#FF6B6B] text-white py-3 rounded-xl font-semibold
+          hover:bg-[#FF6B6B]/90 transition-colors duration-200 
+          disabled:bg-[#F0F0F0] disabled:text-[#666] disabled:cursor-not-allowed"
       >
-        {processing ? "Processing..." : `Pay ₹${amount.toLocaleString()}`}
+        {processing ? 'Processing...' : `Pay ₹${amount.toLocaleString()}`}
       </button>
     </form>
   );

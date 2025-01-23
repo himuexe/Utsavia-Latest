@@ -4,9 +4,9 @@ import { format } from 'date-fns';
 const BookingDetailsModal = ({ booking, onClose, onUpdateStatus }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-zinc-900/50 backdrop-blur-lg rounded-2xl border border-zinc-800/50 p-6 shadow-xl w-full max-w-2xl">
-        <h2 className="text-2xl font-bold text-white mb-4">Booking Details</h2>
-        <div className="space-y-4 text-white">
+      <div className="bg-white rounded-2xl border border-[#F0F0F0] p-6 shadow-xl w-full max-w-2xl">
+        <h2 className="text-2xl font-bold text-[#2D3436] mb-4">Booking Details</h2>
+        <div className="space-y-4 text-[#666]">
           <p>
             <span className="font-medium">Booking ID:</span> {booking._id}
           </p>
@@ -15,10 +15,10 @@ const BookingDetailsModal = ({ booking, onClose, onUpdateStatus }) => {
             <span
               className={`${
                 booking.status === 'paid'
-                  ? 'text-green-400'
+                  ? 'text-green-500'
                   : booking.status === 'pending'
-                  ? 'text-yellow-400'
-                  : 'text-red-400'
+                  ? 'text-[#FFD166]'
+                  : 'text-[#FF6B6B]'
               }`}
             >
               {booking.status}
@@ -46,13 +46,13 @@ const BookingDetailsModal = ({ booking, onClose, onUpdateStatus }) => {
         <div className="mt-6 flex justify-end space-x-4">
           <button
             onClick={onClose}
-            className="bg-zinc-700 text-white px-4 py-2 rounded-lg hover:bg-zinc-800 transition"
+            className="bg-[#F0F0F0] text-[#2D3436] px-4 py-2 rounded-lg hover:bg-[#F0F0F0]/90 transition"
           >
             Close
           </button>
           <button
             onClick={() => onUpdateStatus('cancelled')}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+            className="bg-[#FF6B6B] text-white px-4 py-2 rounded-lg hover:bg-[#FF6B6B]/90 transition"
           >
             Cancel Booking
           </button>

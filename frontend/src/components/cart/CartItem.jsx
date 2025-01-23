@@ -10,20 +10,24 @@ const CartItem = ({ item }) => {
   const handleRemove = async () => {
     try {
       await dispatch(removeFromCart(item._id)).unwrap();
-      dispatch(showToast({
-        message: "Item removed from cart",
-        type: "SUCCESS"
-      }));
+      dispatch(
+        showToast({
+          message: "Item removed from cart",
+          type: "SUCCESS",
+        })
+      );
     } catch (error) {
-      dispatch(showToast({
-        message: "Failed to remove item from cart",
-        type: "ERROR"
-      }));
+      dispatch(
+        showToast({
+          message: "Failed to remove item from cart",
+          type: "ERROR",
+        })
+      );
     }
   };
 
   return (
-    <div className="bg-zinc-900 rounded-lg border border-zinc-800 p-4 mb-4">
+    <div className="bg-white rounded-lg border border-[#F0F0F0] p-4 mb-4 shadow-lg hover:shadow-xl transition-shadow duration-200">
       <div className="flex items-center gap-4">
         <div className="w-24 h-24">
           <img
@@ -36,8 +40,8 @@ const CartItem = ({ item }) => {
           />
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-white">{item.itemName}</h3>
-          <div className="mt-1 space-y-1 text-sm text-zinc-400">
+          <h3 className="text-lg font-semibold text-[#2D3436]">{item.itemName}</h3>
+          <div className="mt-1 space-y-1 text-sm text-[#666]">
             <p>Date: {new Date(item.date).toLocaleDateString()}</p>
             <p>Time: {item.timeSlot}</p>
             <p>Location: {item.city}</p>
@@ -45,10 +49,10 @@ const CartItem = ({ item }) => {
           </div>
         </div>
         <div className="flex flex-col items-end gap-4">
-          <span className="text-xl font-bold text-purple-400">₹{item.price.toLocaleString()}</span>
+          <span className="text-xl font-bold text-[#FF6B6B]">₹{item.price.toLocaleString()}</span>
           <button
             onClick={handleRemove}
-            className="text-zinc-400 hover:text-red-500 transition-colors"
+            className="text-[#666] hover:text-[#FF6B6B] transition-colors"
             aria-label="Remove item"
           >
             <Trash2 size={20} />

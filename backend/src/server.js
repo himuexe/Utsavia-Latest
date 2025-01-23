@@ -12,8 +12,8 @@ const app = express();
 const PORT = process.env.PORT || 9000;
 
 // Middleware
-// app.use(helmet());
-// app.use(morgan("combined"));
+app.use(helmet());
+app.use(morgan("combined"));
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -37,11 +37,32 @@ const connectDB = async () => {
     console.log("Connected to Database");
   } catch (err) {
     console.error("Database connection error:", err);
-    process.exit(1); 
+    process.exit(1);
   }
 };
 
 connectDB();
+
+// Health Check Route
+app.get("/api/health", async (req, res) => {
+  try {
+    // Check database connection
+    await mongoose.connection.db.admin().ping();
+    res.status(200).json({
+      status: "healthy",
+      message: "Server and database are running smoothly.",
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("Health check failed:", error);
+    res.status(500).json({
+      status: "unhealthy",
+      message: "Server or database is not functioning properly.",
+      error: error.message,
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
 
 // Routes
 const userRouter = require("./routes/userRoute");

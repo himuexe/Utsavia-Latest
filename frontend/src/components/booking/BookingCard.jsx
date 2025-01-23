@@ -7,21 +7,21 @@ const BookingCard = ({ booking, onViewDetails, onUpdateStatus }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-zinc-900/50 backdrop-blur-lg rounded-2xl border border-zinc-800/50 p-6 shadow-xl"
+      className="bg-white rounded-2xl border border-[#F0F0F0] p-6 shadow-lg hover:shadow-xl transition-shadow"
     >
-      <h2 className="text-xl font-semibold text-white mb-4">
+      <h2 className="text-xl font-semibold text-[#2D3436] mb-4">
         Booking ID: {booking._id}
       </h2>
-      <div className="space-y-2 text-white">
+      <div className="space-y-2 text-[#666]">
         <p>
           <span className="font-medium">Status:</span>{' '}
           <span
             className={`${
               booking.status === 'paid'
-                ? 'text-green-400'
+                ? 'text-green-500'
                 : booking.status === 'pending'
-                ? 'text-yellow-400'
-                : 'text-red-400'
+                ? 'text-[#FFD166]'
+                : 'text-[#FF6B6B]'
             }`}
           >
             {booking.status}
@@ -40,7 +40,7 @@ const BookingCard = ({ booking, onViewDetails, onUpdateStatus }) => {
           <ul className="list-disc list-inside">
             {booking.items.map((item, index) => (
               <li key={index}>
-                {item.name} - {new Date(item.date).toLocaleDateString()}  ({item.timeSlot})
+                {item.name} - {new Date(item.date).toLocaleDateString()} ({item.timeSlot})
               </li>
             ))}
           </ul>
@@ -48,13 +48,13 @@ const BookingCard = ({ booking, onViewDetails, onUpdateStatus }) => {
         <div className="mt-4 flex space-x-4">
           <button
             onClick={onViewDetails}
-            className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition"
+            className="bg-[#FF6B6B] text-white px-4 py-2 rounded-lg hover:bg-[#FF6B6B]/90 transition"
           >
             View Details
           </button>
           <button
             onClick={() => onUpdateStatus('cancelled')}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+            className="bg-[#2D3436] text-white px-4 py-2 rounded-lg hover:bg-[#2D3436]/90 transition"
           >
             Cancel Booking
           </button>

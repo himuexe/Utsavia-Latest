@@ -14,9 +14,9 @@ const categories = [
 
 const Categories = () => {
   return (
-    <div className="w-full bg-black py-12 border-t border-zinc-800">
+    <div className="w-full bg-white py-12 border-t border-[#F0F0F0]">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-white">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-[#2D3436]">
           Popular Categories
         </h2>
         
@@ -28,17 +28,17 @@ const Categories = () => {
                 key={category.name}
                 className="group cursor-pointer"
               >
-                <div className="relative overflow-hidden rounded-lg md:rounded-2xl bg-zinc-900 
-                  transition-all duration-300 hover:scale-105 border border-zinc-800 
-                  hover:border-zinc-700 hover:shadow-lg hover:shadow-white/10 flex flex-col items-center justify-center py-6">
-                  <div className="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center 
-                    mb-4 group-hover:bg-white transition-all duration-300">
+                <div className="relative overflow-hidden rounded-lg md:rounded-2xl bg-[#F9F9F9] 
+                  transition-all duration-300 hover:scale-105 border border-[#F0F0F0] 
+                  hover:border-[#FF6B6B] hover:shadow-lg hover:shadow-[#FF6B6B]/10 flex flex-col items-center justify-center py-6">
+                  <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center 
+                    mb-4 group-hover:bg-[#FF6B6B] transition-all duration-300">
                     <IconComponent 
-                      className="w-8 h-8 text-white group-hover:text-black transition-colors" 
+                      className="w-8 h-8 text-[#2D3436] group-hover:text-white transition-colors" 
                     />
                   </div>
-                  <span className="text-white text-sm md:text-base text-center 
-                    group-hover:text-zinc-300 transition-colors">
+                  <span className="text-[#2D3436] text-sm md:text-base text-center 
+                    group-hover:text-[#FF6B6B] transition-colors">
                     {category.name}
                   </span>
                 </div>

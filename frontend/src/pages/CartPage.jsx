@@ -1,25 +1,26 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { 
-  fetchCartItems, 
-  selectCartItems, 
-  selectCartLoading, 
-  selectCartError ,
-  setCheckoutDetails
+import {
+  fetchCartItems,
+  selectCartItems,
+  selectCartLoading,
+  selectCartError,
+  setCheckoutDetails,
 } from '../store/cartSlice';
 import { showToast } from '../store/appSlice';
 import CartItem from '../components/cart/CartItem';
 import CartSummary from '../components/cart/CartSummary';
+import Loading from '../components/ui/Loading';
 
 const EmptyCart = () => (
   <div className="text-center py-12">
     <div className="text-6xl mb-4">🛒</div>
-    <h2 className="text-2xl font-bold mb-2 text-white">Your cart is empty</h2>
-    <p className="text-zinc-400 mb-6">Looks like you haven't added any items yet</p>
+    <h2 className="text-2xl font-bold mb-2 text-[#2D3436]">Your cart is empty</h2>
+    <p className="text-[#666] mb-6">Looks like you haven't added any items yet</p>
     <button
       onClick={() => window.history.back()}
-      className="bg-white text-black px-6 py-2 rounded-lg hover:bg-zinc-200 transition-colors"
+      className="bg-[#FF6B6B] text-white px-6 py-2 rounded-lg hover:bg-[#FF6B6B]/90 transition-colors"
     >
       Continue Shopping
     </button>
@@ -35,19 +36,23 @@ const CartPage = () => {
 
   useEffect(() => {
     dispatch(fetchCartItems()).catch((error) => {
-      dispatch(showToast({
-        message: "Failed to load cart items",
-        type: "ERROR"
-      }));
+      dispatch(
+        showToast({
+          message: "Failed to load cart items",
+          type: "ERROR",
+        })
+      );
     });
   }, [dispatch]);
 
   const handleCheckout = () => {
     if (cartItems.length === 0) {
-      dispatch(showToast({
-        message: "Please add items to cart before checkout",
-        type: "ERROR"
-      }));
+      dispatch(
+        showToast({
+          message: "Please add items to cart before checkout",
+          type: "ERROR",
+        })
+      );
       return;
     }
 
@@ -55,28 +60,26 @@ const CartPage = () => {
     localStorage.setItem('checkoutType', 'cart');
     localStorage.setItem('bookingDetails', JSON.stringify(null));
 
-    dispatch(setCheckoutDetails({
-      type: 'cart',
-      bookingDetails: null
-    }));
-    
+    dispatch(
+      setCheckoutDetails({
+        type: 'cart',
+        bookingDetails: null,
+      })
+    );
+
     navigate('/checkout');
   };
-  
+
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
-        <div className="text-center text-white">
-          <div className="animate-pulse">Loading your cart...</div>
-        </div>
-      </div>
+      <Loading/>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
-        <div className="text-center text-red-600">
+      <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
+        <div className="text-center text-[#FF6B6B]">
           {error}. Please try refreshing the page.
         </div>
       </div>
@@ -85,14 +88,14 @@ const CartPage = () => {
 
   if (!cartItems.length) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
+      <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
         <EmptyCart />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-black min-h-screen text-white">
+    <div className="container mx-auto px-4 py-8 bg-white min-h-screen text-[#2D3436]">
       <h1 className="text-2xl font-bold mb-8">Shopping Cart</h1>
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
@@ -104,8 +107,8 @@ const CartPage = () => {
           <CartSummary items={cartItems} />
           <button
             onClick={handleCheckout}
-            className="w-full bg-white text-black py-3 rounded-lg font-semibold
-              hover:bg-zinc-200 transition-colors duration-200 hover:shadow-lg hover:shadow-purple-500/20"
+            className="w-full bg-[#FF6B6B] text-white py-3 rounded-lg font-semibold
+              hover:bg-[#FF6B6B]/90 transition-colors duration-200 hover:shadow-lg hover:shadow-[#FF6B6B]/20"
           >
             Proceed to Checkout
           </button>

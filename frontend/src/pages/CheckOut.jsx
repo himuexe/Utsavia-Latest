@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useQuery } from 'react-query';
 import { Elements } from '@stripe/react-stripe-js';
@@ -8,23 +8,23 @@ import {
   selectCheckoutType,
   selectBookingDetails,
 } from '../store/cartSlice';
-import { selectIsAddressValid ,selectIsLoggedIn, } from '../store/appSlice';
+import { selectIsAddressValid, selectIsLoggedIn } from '../store/appSlice';
 import { useCheckout } from '../hooks/useCheckout';
-import  AddressForm  from '../components/checkout/AddressForm';
-import  AddressDisplay  from '../components/checkout/AddressDisplay';
-import  PaymentForm  from '../components/checkout/PaymentForm';
-import  OrderSummaryItem  from '../components/checkout/OrderSummaryItem';
-import  CheckoutButton  from '../components/checkout/CheckoutButton';
-import  Loading from '../components/ui/Loading';
-import { useNavigate } from 'react-router-dom'; 
+import AddressForm from '../components/checkout/AddressForm';
+import AddressDisplay from '../components/checkout/AddressDisplay';
+import PaymentForm from '../components/checkout/PaymentForm';
+import OrderSummaryItem from '../components/checkout/OrderSummaryItem';
+import CheckoutButton from '../components/checkout/CheckoutButton';
+import Loading from '../components/ui/Loading';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const CheckoutPage = () => {
   const [isEditing, setIsEditing] = useState(false);
-  
+
   // Selectors
   const isLoggedIn = useSelector(selectIsLoggedIn);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const isAddressValid = useSelector(selectIsAddressValid);
   const cartItems = useSelector(selectCartItems);
   const checkoutType = useSelector(selectCheckoutType);
@@ -41,11 +41,11 @@ const CheckoutPage = () => {
   }, [checkoutType, bookingDetails, cartItems, navigate]);
 
   // Custom hook for checkout logic
-  const { 
-    paymentState, 
-    stripePromise, 
-    handleProceedToPayment, 
-    handlePaymentSuccess 
+  const {
+    paymentState,
+    stripePromise,
+    handleProceedToPayment,
+    handlePaymentSuccess,
   } = useCheckout(cartItems, checkoutType, bookingDetails);
 
   // Profile data query
@@ -56,38 +56,39 @@ const CheckoutPage = () => {
     refetch: refetchProfile,
   } = useQuery('currentUser', apiClient.fetchCurrentUser, {
     enabled: isLoggedIn,
-    retry: 2
+    retry: 2,
   });
 
   if (isLoading) return <Loading />;
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
-        <div className="text-center text-red-500">
+      <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
+        <div className="text-center text-[#FF6B6B]">
           Error loading profile. Please try again.
         </div>
       </div>
     );
   }
 
-  const total = checkoutType === 'cart'
-    ? cartItems.reduce((sum, item) => sum + item.price, 0)
-    : bookingDetails?.price || 0;
+  const total =
+    checkoutType === 'cart'
+      ? cartItems.reduce((sum, item) => sum + item.price, 0)
+      : bookingDetails?.price || 0;
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-black to-zinc-900 min-h-screen">
-      <motion.div 
+    <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="grid grid-cols-1 md:grid-cols-2 gap-8"
       >
         {/* Address Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="space-y-6"
         >
-          <h1 className="text-4xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+          <h1 className="text-4xl font-bold text-[#2D3436] mb-6">
             Delivery Information
           </h1>
 
@@ -97,8 +98,8 @@ const CheckoutPage = () => {
               onEdit={() => setIsEditing(true)}
             />
           ) : (
-            <div className="bg-zinc-900/50 backdrop-blur-lg rounded-2xl border border-zinc-800/50 p-6 shadow-xl">
-              <h2 className="text-xl font-semibold text-white mb-4">
+            <div className="bg-white rounded-2xl border border-[#F0F0F0] p-6 shadow-lg">
+              <h2 className="text-xl font-semibold text-[#2D3436] mb-4">
                 {isEditing ? 'Edit Delivery Details' : 'Enter Delivery Details'}
               </h2>
               <AddressForm
@@ -113,45 +114,37 @@ const CheckoutPage = () => {
         </motion.div>
 
         {/* Order Summary Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-zinc-900/50 backdrop-blur-lg rounded-2xl border border-zinc-800/50 p-6 shadow-xl"
+          className="bg-white rounded-2xl border border-[#F0F0F0] p-6 shadow-lg"
         >
-          <h2 className="text-3xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+          <h2 className="text-3xl font-bold text-[#2D3436] mb-6">
             Order Summary
           </h2>
 
           <div className="space-y-4">
-            {checkoutType === 'cart' && cartItems.map((item) => (
-              <OrderSummaryItem
-                key={item._id}
-                label={
-                  <div className="flex flex-col">
-                    <span>{item.itemName}</span>
-                    <span className="text-sm">
-                      {new Date(item.date).toLocaleDateString()} - {item.timeSlot}
-                    </span>
-                  </div>
-                }
-                value={`₹${item.price.toLocaleString()}`}
-              />
-            ))}
+            {checkoutType === 'cart' &&
+              cartItems.map((item) => (
+                <OrderSummaryItem
+                  key={item._id}
+                  label={
+                    <div className="flex flex-col">
+                      <span>{item.itemName}</span>
+                      <span className="text-sm">
+                        {new Date(item.date).toLocaleDateString()} - {item.timeSlot}
+                      </span>
+                    </div>
+                  }
+                  value={`₹${item.price.toLocaleString()}`}
+                />
+              ))}
 
             {checkoutType === 'direct' && bookingDetails && (
               <>
-                <OrderSummaryItem
-                  label="Item"
-                  value={bookingDetails.itemName}
-                />
-                <OrderSummaryItem
-                  label="Date"
-                  value={bookingDetails.date}
-                />
-                <OrderSummaryItem
-                  label="Time"
-                  value={bookingDetails.timeSlot}
-                />
+                <OrderSummaryItem label="Item" value={bookingDetails.itemName} />
+                <OrderSummaryItem label="Date" value={bookingDetails.date} />
+                <OrderSummaryItem label="Time" value={bookingDetails.timeSlot} />
               </>
             )}
 
@@ -170,15 +163,12 @@ const CheckoutPage = () => {
                     appearance: {
                       theme: 'night',
                       variables: {
-                        colorPrimary: '#9333ea',
+                        colorPrimary: '#FF6B6B',
                       },
                     },
                   }}
                 >
-                  <PaymentForm 
-                    amount={total} 
-                    onSuccess={handlePaymentSuccess} 
-                  />
+                  <PaymentForm amount={total} onSuccess={handlePaymentSuccess} />
                 </Elements>
               </div>
             ) : (

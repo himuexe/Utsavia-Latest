@@ -9,15 +9,15 @@ const TimeSlotSelector = ({ slots = [], selectedSlot, onSelect }) => (
           onClick={() => onSelect(slot)}
           className={`p-2 rounded-lg text-sm ${
             selectedSlot === slot
-              ? "bg-purple-600 text-white"
-              : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
-          }`}
+              ? "bg-[#FF6B6B] text-white" // Coral Pink for selected slot
+              : "bg-[#F0F0F0] text-[#2D3436] hover:bg-[#FFD166]" // Light Gray for unselected, Pastel Yellow on hover
+          } transition-colors duration-200`} // Smooth transition for hover effects
         >
           {slot}
         </button>
       ))
     ) : (
-      <p className="col-span-3 text-center text-zinc-500">
+      <p className="col-span-3 text-center text-[#666]"> {/* Subtle gray for no slots message */}
         No time slots available
       </p>
     )}

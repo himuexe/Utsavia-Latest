@@ -3,7 +3,7 @@ import Footer from "../components/layout/Footer";
 import Nav from "../components/layout/Nav";
 const Layout = ({ children }) => {
   return (
-    <div className="flex flex-col min-h-screen text-white bg-black">
+    <div className="flex flex-col min-h-screen ">
       <Nav />
       <CategoriesNav/>
       <div className="container mx-auto py-10 flex-1">{children}</div>

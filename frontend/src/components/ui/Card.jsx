@@ -4,9 +4,9 @@ const Card = ({ children, className = "", hover = true }) => {
   return (
     <div
       className={`
-        bg-zinc-900 rounded-lg overflow-hidden
-        border border-zinc-800
-        ${hover ? 'hover:border-purple-600 hover:-translate-y-1' : 'shadow-md'}
+        bg-white rounded-lg overflow-hidden
+        border border-[#F0F0F0]
+        ${hover ? 'hover:border-[#FF6B6B] hover:-translate-y-1' : 'shadow-md'}
         transform transition-all duration-300
         ${className} min-h-[28rem]
       `}
@@ -18,8 +18,8 @@ const Card = ({ children, className = "", hover = true }) => {
 
 const CardHeader = ({ children, className = "" }) => {
   return (
-    <div className={`bg-zinc-800 p-4 border-b border-zinc-700 ${className}`}>
-      <h2 className="text-lg font-semibold text-white">{children}</h2>
+    <div className={`bg-[#F9F9F9] p-4 border-b border-[#F0F0F0] ${className}`}>
+      <h2 className="text-lg font-semibold text-[#2D3436]">{children}</h2>
     </div>
   );
 };
@@ -34,7 +34,7 @@ const CardContent = ({ children, className = "" }) => {
 
 const CardFooter = ({ children, className = "" }) => {
   return (
-    <div className={`px-6 pb-6 pt-4 border-t border-zinc-800 ${className}`}>
+    <div className={`px-6 pb-6 pt-4 border-t border-[#F0F0F0] ${className}`}>
       <div className="flex items-center justify-between">
         {children}
       </div>

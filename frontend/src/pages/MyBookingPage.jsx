@@ -54,8 +54,8 @@ const MyBookingsPage = () => {
   if (isLoading) return <Loading />;
   if (isError) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
-        <div className="text-center text-red-500">
+      <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
+        <div className="text-center text-[#FF6B6B]">
           Error fetching bookings: {error.message}
         </div>
       </div>
@@ -63,18 +63,18 @@ const MyBookingsPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-black to-zinc-900 min-h-screen">
+    <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="space-y-8"
       >
-        <h1 className="text-4xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+        <h1 className="text-4xl font-bold text-[#2D3436] mb-6">
           My Bookings
         </h1>
 
         {bookings?.length === 0 ? (
-          <div className="text-center text-white">
+          <div className="text-center text-[#666]">
             <p>No bookings found.</p>
             <p>Start by booking a product or service!</p>
           </div>

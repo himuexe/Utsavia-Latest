@@ -1,11 +1,11 @@
 import React from 'react';
 
-export const CheckoutButton = ({ 
-  isLoggedIn, 
-  isAddressValid, 
-  isEditing, 
-  isProcessing, 
-  onClick 
+export const CheckoutButton = ({
+  isLoggedIn,
+  isAddressValid,
+  isEditing,
+  isProcessing,
+  onClick,
 }) => {
   const getButtonText = () => {
     if (!isLoggedIn) return 'Please Log In to Continue';
@@ -17,10 +17,10 @@ export const CheckoutButton = ({
 
   return (
     <button
-      className="w-full bg-gradient-to-r from-purple-600 to-purple-800 text-white py-4 rounded-xl font-semibold
-        hover:from-purple-700 hover:to-purple-900 transition-all duration-300 shadow-lg
+      className="w-full bg-[#FF6B6B] text-white py-4 rounded-xl font-semibold
+        hover:bg-[#FF6B6B]/90 transition-all duration-300 shadow-lg
         transform hover:scale-[1.02] active:scale-[0.98]
-        disabled:from-zinc-700 disabled:to-zinc-800 disabled:text-zinc-400 disabled:cursor-not-allowed
+        disabled:bg-[#F0F0F0] disabled:text-[#666] disabled:cursor-not-allowed
         disabled:transform-none"
       onClick={onClick}
       disabled={!isLoggedIn || !isAddressValid || isEditing || isProcessing}

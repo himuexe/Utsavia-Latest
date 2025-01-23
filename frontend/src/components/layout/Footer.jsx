@@ -23,11 +23,11 @@ const FooterLink = ({ children, href, icon: Icon }) => (
       transition: { duration: 0.3 },
     }}
     whileTap={{ scale: 0.95 }}
-    className="flex items-center gap-2 text-white hover:text-purple-300 
+    className="flex items-center gap-2 text-[#2D3436] hover:text-[#FF6B6B] 
     transition-all duration-300 group font-happiness"
   >
     {Icon && (
-      <Icon className="w-4 h-4 text-purple-400 group-hover:text-pink-300 transition-colors" />
+      <Icon className="w-4 h-4 text-[#4ECDC4] group-hover:text-[#FF6B6B] transition-colors" />
     )}
     {children}
   </motion.a>
@@ -52,7 +52,7 @@ const SocialIcon = ({ Icon, href, label }) => {
       onHoverEnd={() => setIsHovered(false)}
     >
       <Icon
-        className="w-6 h-6 text-white hover:text-purple-300 
+        className="w-6 h-6 text-[#2D3436] hover:text-[#FF6B6B] 
         transition-all duration-300"
       />
       <AnimatePresence>
@@ -62,7 +62,7 @@ const SocialIcon = ({ Icon, href, label }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             className="absolute -top-10 left-1/2 transform -translate-x-1/2 
-              bg-white text-black text-xs px-3 py-1 rounded-full shadow-lg"
+              bg-white text-[#2D3436] text-xs px-3 py-1 rounded-full shadow-lg"
           >
             {label}
           </motion.div>
@@ -71,7 +71,6 @@ const SocialIcon = ({ Icon, href, label }) => {
     </motion.a>
   );
 };
-
 
 const Footer = () => {
   const containerVariants = {
@@ -121,29 +120,31 @@ const Footer = () => {
   ];
 
   return (
-    <motion.footer
+    <footer
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
       variants={containerVariants}
-      className="bg-black text-white py-16 px-6 overflow-hidden relative border-t border-zinc-800"
+      className="bg-[#F9F9F9] text-[#2D3436] py-16 px-6 overflow-hidden relative border-t border-[#F0F0F0]"
       aria-label="Utsavia Footer"
     >
       <div className="container mx-auto max-w-6xl grid md:grid-cols-4 gap-8 relative z-10">
+        {/* Company Logo and Tagline */}
         <motion.div variants={itemVariants} className="md:col-span-1 space-y-4">
           <CompanyLogo />
-          <p className="text-white/80 text-sm leading-relaxed flex items-center gap-2 font-primary">
-            <Sparkles className="w-4 h-4 text-purple-400" />
+          <p className="text-[#2D3436]/80 text-sm leading-relaxed flex items-center gap-2 font-primary">
+            <Sparkles className="w-4 h-4 text-[#FF6B6B]" />
             Crafting Unforgettable Experiences
           </p>
         </motion.div>
 
+        {/* Explore Links */}
         <motion.div variants={itemVariants} className="md:col-span-1">
-          <h3 className="text-xl font-semibold mb-4 text-white font-secondary">
+          <h3 className="text-xl font-semibold mb-4 text-[#2D3436] font-secondary">
             Explore
           </h3>
           <nav className="space-y-3">
-            <FooterLink  href="/events" icon={Calendar}>
+            <FooterLink href="/events" icon={Calendar}>
               Upcoming Events
             </FooterLink>
             <FooterLink href="/categories" icon={Music}>
@@ -160,7 +161,7 @@ const Footer = () => {
 
         {/* Contact Information */}
         <motion.div variants={itemVariants} className="md:col-span-1">
-          <h3 className="text-xl font-semibold mb-4 text-white">
+          <h3 className="text-xl font-semibold mb-4 text-[#2D3436] font-secondary">
             Connect
           </h3>
           <div className="space-y-3">
@@ -175,7 +176,7 @@ const Footer = () => {
 
         {/* Social Media */}
         <motion.div variants={itemVariants} className="md:col-span-1 flex flex-col space-y-4">
-          <h3 className="text-xl font-semibold mb-4 text-white">
+          <h3 className="text-xl font-semibold mb-4 text-[#2D3436] font-secondary">
             Follow Us
           </h3>
           <div className="flex space-x-6">
@@ -189,22 +190,22 @@ const Footer = () => {
       {/* Footer Bottom */}
       <motion.div
         variants={itemVariants}
-        className="mt-12 pt-6 border-t border-zinc-800 
-          text-center text-white/80 text-sm relative z-10"
+        className="mt-12 pt-6 border-t border-[#F0F0F0] 
+          text-center text-[#2D3436]/80 text-sm relative z-10"
       >
         <p className="flex items-center justify-center gap-2 font-secondary">
           © {new Date().getFullYear()} Utsavia Technologies Pvt. Ltd.
         </p>
         <div className="mt-2 space-x-4 font-secondary">
-          <a href="/privacy" className="hover:text-purple-300 transition-colors">
+          <a href="/privacy" className="hover:text-[#FF6B6B] transition-colors">
             Privacy Policy
           </a>
-          <a href="/terms" className="hover:text-purple-300 transition-colors">
+          <a href="/terms" className="hover:text-[#FF6B6B] transition-colors">
             Terms of Service
           </a>
         </div>
       </motion.div>
-    </motion.footer>
+    </footer>
   );
 };
 

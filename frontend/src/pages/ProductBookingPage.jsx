@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useParams, useNavigate , useLocation} from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Calendar, Clock } from "lucide-react";
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,7 @@ import {
   clearLastAddedItem,
   addToCart,
   clearCartError,
-  setCheckoutDetails
+  setCheckoutDetails,
 } from "../store/cartSlice";
 import { selectIsLoggedIn, showToast } from "../store/appSlice";
 import ProductImageCard from "../components/product-booking/ProductImageCard";
@@ -19,6 +19,7 @@ import PriceCard from "../components/product-booking/PriceCard";
 import ProductInfoCard from "../components/product-booking/ProductInfoCard";
 import TimeSlotSelector from "../components/product-booking/TimeSlotSelector";
 import ValidationStatus from "../components/product-booking/ValidationStatus";
+import Loading from "../components/ui/Loading";
 
 const ProductBookingPage = ({ selectedCity }) => {
   const { id } = useParams();
@@ -41,54 +42,63 @@ const ProductBookingPage = ({ selectedCity }) => {
       staleTime: 300000,
       onError: (err) => {
         console.error("Failed to fetch item:", err);
-        dispatch(showToast({
-          message: "Failed to load item details. Please try again.",
-          type: "ERROR"
-        }));
+        dispatch(
+          showToast({
+            message: "Failed to load item details. Please try again.",
+            type: "ERROR",
+          })
+        );
       },
     }
   );
 
   useEffect(() => {
     if (cartError) {
-      dispatch(showToast({
-        message: cartError,
-        type: "ERROR",
-      }));
+      dispatch(
+        showToast({
+          message: cartError,
+          type: "ERROR",
+        })
+      );
       dispatch(clearCartError());
     }
   }, [cartError, dispatch]);
 
   useEffect(() => {
     if (lastAddedItem) {
-      dispatch(showToast({
-        message: "Item added to cart successfully",
-        type: "SUCCESS",
-      }));
+      dispatch(
+        showToast({
+          message: "Item added to cart successfully",
+          type: "SUCCESS",
+        })
+      );
       dispatch(clearLastAddedItem());
     }
   }, [lastAddedItem, dispatch]);
 
-  const locationPrice = item?.prices?.find(
-    (p) => p.city === selectedCity
-  )?.price;
+  const locationPrice = item?.prices?.find((p) => p.city === selectedCity)?.price;
 
-  const handleDateChange = useCallback((e) => {
-    const selectedDate = e.target.value;
-    const today = new Date().toISOString().split("T")[0];
+  const handleDateChange = useCallback(
+    (e) => {
+      const selectedDate = e.target.value;
+      const today = new Date().toISOString().split("T")[0];
 
-    if (selectedDate < today) {
-      dispatch(showToast({
-        message: "Please select a future date",
-        type: "ERROR"
-      }));
-      setSelectedDate("");
-      return;
-    }
+      if (selectedDate < today) {
+        dispatch(
+          showToast({
+            message: "Please select a future date",
+            type: "ERROR",
+          })
+        );
+        setSelectedDate("");
+        return;
+      }
 
-    setSelectedDate(selectedDate);
-    setSelectedSlot(null);
-  }, [dispatch]);
+      setSelectedDate(selectedDate);
+      setSelectedSlot(null);
+    },
+    [dispatch]
+  );
 
   const handlePincodeSubmit = useCallback((newPincode) => {
     setPincode(newPincode);
@@ -96,18 +106,22 @@ const ProductBookingPage = ({ selectedCity }) => {
 
   const handleAddToCart = useCallback(async () => {
     if (!isLoggedIn) {
-      dispatch(showToast({
-        message: "Please log in to add items to cart",
-        type: "ERROR"
-      }));
+      dispatch(
+        showToast({
+          message: "Please log in to add items to cart",
+          type: "ERROR",
+        })
+      );
       return;
     }
 
     if (!selectedDate || !selectedSlot || !pincode) {
-      dispatch(showToast({
-        message: "Please complete all required fields",
-        type: "ERROR"
-      }));
+      dispatch(
+        showToast({
+          message: "Please complete all required fields",
+          type: "ERROR",
+        })
+      );
       return;
     }
 
@@ -137,10 +151,12 @@ const ProductBookingPage = ({ selectedCity }) => {
 
   const handleBooking = useCallback(() => {
     if (!selectedDate || !selectedSlot || !pincode) {
-      dispatch(showToast({
-        message: getValidationMessage(),
-        type: "ERROR"
-      }));
+      dispatch(
+        showToast({
+          message: getValidationMessage(),
+          type: "ERROR",
+        })
+      );
       return;
     }
 
@@ -157,26 +173,37 @@ const ProductBookingPage = ({ selectedCity }) => {
     if (!isLoggedIn) {
       // Save only the booking details in state
       navigate("/login", {
-        state: { 
+        state: {
           bookingDetails,
-          fromBooking: true // Explicitly set target
-        }
+          fromBooking: true, // Explicitly set target
+        },
       });
       return;
     }
-    localStorage.setItem('checkoutType', 'direct');
-  localStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+    localStorage.setItem("checkoutType", "direct");
+    localStorage.setItem("bookingDetails", JSON.stringify(bookingDetails));
 
-    dispatch(setCheckoutDetails({
-      type: 'direct',
-      bookingDetails
-    }));
+    dispatch(
+      setCheckoutDetails({
+        type: "direct",
+        bookingDetails,
+      })
+    );
 
     navigate("/checkout", {
       state: { bookingDetails },
     });
-  }, [selectedDate, selectedSlot, pincode, id, item, navigate, locationPrice, dispatch, isLoggedIn]);
-
+  }, [
+    selectedDate,
+    selectedSlot,
+    pincode,
+    id,
+    item,
+    navigate,
+    locationPrice,
+    dispatch,
+    isLoggedIn,
+  ]);
 
   const getValidationMessage = () => {
     if (!selectedDate) return "Please select a date";
@@ -186,19 +213,13 @@ const ProductBookingPage = ({ selectedCity }) => {
   };
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
-        <div className="text-center text-white">
-          <div className="animate-pulse">Loading...</div>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
-        <div className="text-center text-red-600">
+      <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
+        <div className="text-center text-[#FF6B6B]">
           Item not available at this location. Please try again later.
         </div>
       </div>
@@ -215,7 +236,7 @@ const ProductBookingPage = ({ selectedCity }) => {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-black min-h-screen">
+    <div className="container mx-auto px-4 py-8 min-h-screen bg-white">
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="h-[400px] lg:h-auto">
           <ProductImageCard imageUrl={item?.image} />
@@ -229,10 +250,10 @@ const ProductBookingPage = ({ selectedCity }) => {
           />
           <ProductInfoCard name={item?.name} description={item?.description} />
 
-          <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
+          <div className="bg-white rounded-xl border border-[#F0F0F0] p-6 shadow-lg">
             <div className="flex items-center gap-2 mb-4">
-              <Calendar className="text-purple-400" />
-              <span className="font-semibold text-white">Select Date</span>
+              <Calendar className="text-[#FF6B6B]" />
+              <span className="font-semibold text-[#2D3436]">Select Date</span>
             </div>
 
             <input
@@ -240,13 +261,13 @@ const ProductBookingPage = ({ selectedCity }) => {
               value={selectedDate}
               onChange={handleDateChange}
               min={new Date().toISOString().split("T")[0]}
-              className="w-full p-2 mb-6 bg-zinc-800 text-white border border-zinc-700 rounded-lg 
-              focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full p-2 mb-6 bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] rounded-lg 
+              focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
             />
 
             <div className="flex items-center gap-2 mb-4">
-              <Clock className="text-purple-400" />
-              <span className="font-semibold text-white">Select Time Slot</span>
+              <Clock className="text-[#FF6B6B]" />
+              <span className="font-semibold text-[#2D3436]">Select Time Slot</span>
             </div>
 
             <TimeSlotSelector
@@ -256,19 +277,25 @@ const ProductBookingPage = ({ selectedCity }) => {
             />
 
             <div className="space-y-4">
-              <ValidationStatus 
+              <ValidationStatus
                 selectedDate={selectedDate}
                 selectedSlot={selectedSlot}
                 pincode={pincode}
               />
-              
+
               <div className="space-y-4">
                 <button
                   onClick={handleAddToCart}
-                  disabled={!selectedDate || !selectedSlot || !pincode || cartLoading || !isLoggedIn}
-                  className="w-full bg-white text-black py-3 rounded-lg font-semibold
-                    hover:bg-zinc-200 transition-colors duration-200 
-                    disabled:bg-zinc-700 disabled:text-zinc-400 disabled:cursor-not-allowed"
+                  disabled={
+                    !selectedDate ||
+                    !selectedSlot ||
+                    !pincode ||
+                    cartLoading ||
+                    !isLoggedIn
+                  }
+                  className="w-full bg-[#FF6B6B] text-white py-3 rounded-lg font-semibold
+                    hover:bg-[#FF6B6B]/90 transition-colors duration-200 
+                    disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50 disabled:cursor-not-allowed"
                 >
                   {cartLoading
                     ? "Adding to Cart..."
@@ -279,9 +306,9 @@ const ProductBookingPage = ({ selectedCity }) => {
                 <button
                   onClick={handleBooking}
                   disabled={!selectedDate || !selectedSlot || !pincode}
-                  className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold
-                    hover:bg-purple-700 transition-colors duration-200 
-                    disabled:bg-zinc-700 disabled:cursor-not-allowed"
+                  className="w-full bg-[#FFD166] text-[#2D3436] py-3 rounded-lg font-semibold
+                    hover:bg-[#FFD166]/90 transition-colors duration-200 
+                    disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50 disabled:cursor-not-allowed"
                 >
                   {!selectedDate || !selectedSlot || !pincode
                     ? `Complete Required Fields to Continue`

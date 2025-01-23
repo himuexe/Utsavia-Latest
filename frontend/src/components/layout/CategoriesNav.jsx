@@ -32,7 +32,7 @@ const CategoriesNav = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full bg-black shadow-md hidden md:block border-b border-zinc-800">
+    <div className="w-full bg-white shadow-md hidden md:block border-b border-[#F0F0F0]">
       <div className="container mx-auto">
         <nav className="relative">
           <ul className="flex justify-between px-4">
@@ -43,7 +43,7 @@ const CategoriesNav = () => {
                 onMouseEnter={() => setHoveredCategory(category)}
                 onMouseLeave={() => setHoveredCategory(null)}
               >
-                <button className="font-secondary flex items-center gap-1 px-4 py-2 text-white hover:text-purple-300 transition-colors rounded-lg hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-purple-400">
+                <button className="font-secondary flex items-center gap-1 px-4 py-2 text-[#2D3436] hover:text-[#FF6B6B] transition-colors rounded-lg hover:bg-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]">
                   {category}
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
@@ -53,7 +53,7 @@ const CategoriesNav = () => {
                 </button>
 
                 <div
-                  className={`absolute left-0 mt-1 w-48 bg-zinc-900 rounded-lg shadow-lg border border-zinc-800 overflow-hidden transition-all duration-200 ${
+                  className={`absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-[#F0F0F0] overflow-hidden transition-all duration-200 ${
                     hoveredCategory === category
                       ? 'opacity-100 visible translate-y-0 z-40'
                       : 'opacity-0 invisible translate-y-2'
@@ -64,7 +64,7 @@ const CategoriesNav = () => {
                       <a
                         key={subCategory}
                         href="#"
-                        className="font-happiness block px-4 py-2 text-white hover:bg-white hover:text-black transition-colors"
+                        className="font-happiness block px-4 py-2 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white transition-colors"
                       >
                         {subCategory}
                       </a>

@@ -11,7 +11,7 @@ const UserProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
-  const [validationError, setValidationError] = useState(null); 
+  const [validationError, setValidationError] = useState(null);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -53,14 +53,14 @@ const UserProfile = () => {
     e.preventDefault();
     setIsSaving(true);
     setError(null);
-    setValidationError(null); 
+    setValidationError(null);
 
     try {
       const updatedUser = await apiClient.updateUserProfile(formData);
       setUser(updatedUser);
       setIsEditing(false);
       const isComplete = await apiClient.checkProfileCompletion();
-      dispatch(setAddressValidity(isComplete === "" ? false : isComplete))
+      dispatch(setAddressValidity(isComplete === "" ? false : isComplete));
       dispatch(showToast({ message: 'Profile updated successfully', type: 'SUCCESS' }));
     } catch (err) {
       setError('Failed to update profile. Please try again.');
@@ -73,40 +73,40 @@ const UserProfile = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="text-purple-400 text-xl">Loading...</div>
+      <div className="flex items-center justify-center min-h-screen bg-white">
+        <div className="text-[#FF6B6B] text-xl">Loading...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="text-red-500 text-xl">{error}</div>
+      <div className="flex items-center justify-center min-h-screen bg-white">
+        <div className="text-[#FF6B6B] text-xl">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto bg-black rounded-lg border border-zinc-800 shadow-lg p-6 mt-4">
+    <div className="w-full max-w-2xl mx-auto bg-white rounded-lg border border-[#F0F0F0] shadow-lg p-6 mt-4">
       <div className="container">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white mb-2">
+          <h1 className="text-2xl font-bold text-[#2D3436] mb-2">
             {isEditing ? 'Edit Your Profile' : 'Your Profile'}
           </h1>
-          <p className="text-zinc-400">
+          <p className="text-[#2D3436]/80">
             Update your personal information
           </p>
         </div>
 
         {validationError && (
-          <div className="mb-4 text-red-500">{validationError}</div>
+          <div className="mb-4 text-[#FF6B6B]">{validationError}</div>
         )}
 
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-zinc-400 mb-1">
+              <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
                 First Name
               </label>
               <input
@@ -114,13 +114,13 @@ const UserProfile = () => {
                 name="firstName"
                 value={formData.firstName}
                 disabled
-                className="w-full p-2 rounded-lg text-zinc-300 bg-zinc-900 border border-zinc-800 
-                focus:outline-none focus:ring-2 focus:ring-purple-600"
+                className="w-full p-2 rounded-lg text-[#2D3436] bg-[#F9F9F9] border border-[#F0F0F0] 
+                focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-400 mb-1">
+              <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
                 Last Name
               </label>
               <input
@@ -128,25 +128,25 @@ const UserProfile = () => {
                 name="lastName"
                 value={formData.lastName}
                 disabled
-                className="w-full p-2 rounded-lg text-zinc-300 bg-zinc-900 border border-zinc-800 
-                focus:outline-none focus:ring-2 focus:ring-purple-600"
+                className="w-full p-2 rounded-lg text-[#2D3436] bg-[#F9F9F9] border border-[#F0F0F0] 
+                focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-zinc-400 mb-1">
+              <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
                 Email
               </label>
               <input
                 type="email"
                 value={user.primaryEmail}
                 disabled
-                className="w-full p-2 rounded-lg bg-zinc-900 text-zinc-300 border border-zinc-800"
+                className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0]"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-400 mb-1">
+              <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
                 Phone
               </label>
               <input
@@ -155,14 +155,14 @@ const UserProfile = () => {
                 value={formData.phone}
                 onChange={handleInputChange}
                 disabled={!isEditing}
-                className="w-full p-2 rounded-lg bg-zinc-900 text-white border border-zinc-800
-                focus:outline-none focus:ring-2 focus:ring-purple-600
-                disabled:text-zinc-500"
+                className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0]
+                focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]
+                disabled:text-[#2D3436]/50"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-zinc-400 mb-1">
+              <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
                 Address
               </label>
               <textarea
@@ -171,9 +171,9 @@ const UserProfile = () => {
                 onChange={handleInputChange}
                 disabled={!isEditing}
                 rows="4"
-                className="w-full p-2 rounded-lg bg-zinc-900 text-white border border-zinc-800
-                focus:outline-none focus:ring-2 focus:ring-purple-600 
-                disabled:text-zinc-500 resize-none"
+                className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0]
+                focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+                disabled:text-[#2D3436]/50 resize-none"
               />
             </div>
           </div>
@@ -183,9 +183,9 @@ const UserProfile = () => {
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="bg-white text-black px-4 py-2 rounded-lg 
+                className="bg-[#FF6B6B] text-white px-4 py-2 rounded-lg 
                 transition-colors flex items-center gap-2 
-                hover:bg-zinc-200 hover:shadow-lg hover:shadow-purple-500/20"
+                hover:bg-[#FF6B6B]/90 hover:shadow-lg hover:shadow-[#FF6B6B]/20"
               >
                 <Edit size={20} />
                 Edit Profile
@@ -198,8 +198,8 @@ const UserProfile = () => {
                     setIsEditing(false);
                     setFormData(user);
                   }}
-                  className="bg-zinc-800 text-white px-4 py-2 rounded-lg 
-                  hover:bg-zinc-700 transition-colors flex items-center gap-2"
+                  className="bg-[#F0F0F0] text-[#2D3436] px-4 py-2 rounded-lg 
+                  hover:bg-[#F0F0F0]/90 transition-colors flex items-center gap-2"
                 >
                   <X size={20} />
                   Cancel
@@ -207,13 +207,13 @@ const UserProfile = () => {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="bg-white text-black px-4 py-2 rounded-lg 
+                  className="bg-[#FF6B6B] text-white px-4 py-2 rounded-lg 
                   transition-colors flex items-center gap-2 
-                  disabled:opacity-50 hover:bg-zinc-200 
-                  hover:shadow-lg hover:shadow-purple-500/20"
+                  disabled:opacity-50 hover:bg-[#FF6B6B]/90 
+                  hover:shadow-lg hover:shadow-[#FF6B6B]/20"
                 >
                   <Save size={20} />
-                 {isSaving ? 'Saving...' : 'Save Changes'}
+                  {isSaving ? 'Saving...' : 'Save Changes'}
                 </button>
               </>
             )}
