@@ -1,38 +1,21 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const validatePincode = async (pincode) => {
-  const response = await fetch(`${API_BASE_URL}/api/booking/pincode/${pincode}`, {
-    method: "GET",
+export const createBooking = async (bookingData) => {
+  const response = await fetch(`${API_BASE_URL}/api/booking`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     credentials: "include",
-    headers: { "Content-Type": "application/json" }
+    body: JSON.stringify(bookingData),
   });
-  if (!response.ok) throw new Error("Failed to fetch location");
+  if (!response.ok) throw new Error("Failed to create booking");
   return response.json();
 };
 
-export const createPaymentIntent = async (paymentData) => {
-  const response = await fetch(`${API_BASE_URL}/api/booking/create-payment-intent`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify(paymentData)
+export const getUserBookings = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/booking/user`, {
+    method: "GET",
+    credentials: "include",
   });
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to create payment intent');
-  }
-  return response.json();
-};
-export const createBooking = async (bookingData) => {
-  const response = await fetch(`${API_BASE_URL}/api/booking/create`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify(bookingData)
-  });
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to create booking');
-  }
+  if (!response.ok) throw new Error("Failed to fetch bookings");
   return response.json();
 };

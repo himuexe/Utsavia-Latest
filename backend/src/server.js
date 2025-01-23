@@ -12,8 +12,8 @@ const app = express();
 const PORT = process.env.PORT || 9000;
 
 // Middleware
-app.use(helmet());
-app.use(morgan("combined"));
+// app.use(helmet());
+// app.use(morgan("combined"));
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -48,11 +48,13 @@ const userRouter = require("./routes/userRoute");
 const authRouter = require("./routes/authRoute");
 const categoryRouter = require("./routes/categoryRoute");
 const bookingRouter = require("./routes/bookingRoute");
+const paymentRouter = require("./routes/paymentRoute");
 const cartRoutes = require('./routes/cartRoute');
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/payment", paymentRouter);
 app.use("/api/booking", bookingRouter);
 app.use('/api/cart', cartRoutes);
 

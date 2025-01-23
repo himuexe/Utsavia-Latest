@@ -1,92 +1,81 @@
-const stripe = require('../config/stripe');
-const validatePincode = async (req, res) => {
-  const { pincode } = req.params;
+const Booking = require("../models/booking");
 
-  // Validate pincode format
-  if (!/^\d{6}$/.test(pincode)) {
-    return res.status(400).json({ error: "Invalid pincode format. Please provide a 6-digit pincode." });
-  }
-
-  try {
-    const response = await fetch(`http://postalpincode.in/api/pincode/${pincode}`);
-
-    // Check if the response is OK (status code 200)
-    if (!response.ok) {
-      return res.status(response.status).json({ error: "Failed to fetch data from the external API." });
+// Create a new booking
+const createBooking = async (req, res) => {
+    try {
+      const { items, totalAmount, paymentIntentId } = req.body;
+      const userId = req.userId;
+  
+      const newBooking = new Booking({
+        userId,
+        items,
+        totalAmount,
+        paymentIntentId,
+        status: "paid", // Set status to "paid" after successful payment
+      });
+  
+      await newBooking.save();
+      res.status(201).json(newBooking);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      res.status(500).json({ error: "Failed to create booking" });
     }
-
-    const data = await response.json();
-
-
-    // Return the data if everything is fine
-    res.status(200).json(data);
+  };
+// Get all bookings for a user
+const getUserBookings = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const bookings = await Booking.find({ userId }).sort({ createdAt: -1 });
+    res.status(200).json(bookings);
   } catch (error) {
-    console.error("Error fetching data:", error); // Log the error for debugging
-    res.status(500).json({ error: "An error occurred while fetching data. Please try again later." });
+    console.error("Error fetching bookings:", error);
+    res.status(500).json({ error: "Failed to fetch bookings" });
   }
 };
 
-const createPayment = async (req, res) => {
+// Get a single booking by ID
+const getBookingById = async (req, res) => {
   try {
-    const { amount, currency = 'inr' } = req.body;
+    const bookingId = req.params.id;
+    const booking = await Booking.findById(bookingId);
 
-    // Use req.userId instead of req.user.id
-    if (!req.userId) {
-      return res.status(401).json({ error: "Unauthorized: User not authenticated" });
+    if (!booking) {
+      return res.status(404).json({ error: "Booking not found" });
     }
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Convert to cents
-      currency,
-      metadata: {
-        userId: req.userId.toString(), // Use req.userId here
-      }
-    });
-
-    res.json({
-      clientSecret: paymentIntent.client_secret
-    });
+    res.status(200).json(booking);
   } catch (error) {
-    console.error('Payment Intent Error:', error);
-    res.status(500).json({ error: error.message });
+    console.error("Error fetching booking:", error);
+    res.status(500).json({ error: "Failed to fetch booking" });
   }
 };
 
-const webHook = async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-
+// Update booking status
+const updateBookingStatus = async (req, res) => {
   try {
-    const event = stripe.webhooks.constructEvent(
-      req.body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET
+    const bookingId = req.params.id;
+    const { status } = req.body;
+
+    const booking = await Booking.findByIdAndUpdate(
+      bookingId,
+      { status },
+      { new: true }
     );
 
-    switch (event.type) {
-      case 'payment_intent.succeeded':
-        const paymentIntent = event.data.object;
-        const userId = paymentIntent.metadata.userId;
-
-        // Update booking/order status in your database
-        // Example: await BookingModel.updateOne({ userId }, { status: 'paid' });
-        console.log(`Payment succeeded for user ${userId}`);
-        break;
-
-      case 'payment_intent.payment_failed':
-        const failedPayment = event.data.object;
-        const failedUserId = failedPayment.metadata.userId;
-
-        // Handle failed payment
-        // Example: await BookingModel.updateOne({ userId: failedUserId }, { status: 'failed' });
-        console.log(`Payment failed for user ${failedUserId}`);
-        break;
+    if (!booking) {
+      return res.status(404).json({ error: "Booking not found" });
     }
 
-    res.json({ received: true });
-  } catch (err) {
-    console.error('Webhook Error:', err.message);
-    res.status(400).send(`Webhook Error: ${err.message}`);
+    res.status(200).json(booking);
+  } catch (error) {
+    console.error("Error updating booking status:", error);
+    res.status(500).json({ error: "Failed to update booking status" });
   }
 };
 
-module.exports = {validatePincode , createPayment , webHook};
+module.exports = {
+  createBooking,
+  getUserBookings,
+  getBookingById,
+  updateBookingStatus,
+};

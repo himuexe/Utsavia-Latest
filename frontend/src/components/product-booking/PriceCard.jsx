@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { MapPin } from 'lucide-react';
-import * as bookingClient from '../../api/BookingApi';
+import * as apiClient from '../../api/ItemApi';
 import { useDispatch } from 'react-redux';
 import { showToast } from '../../store/appSlice';
 
@@ -30,7 +30,7 @@ const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
     setIsSubmitting(true);
 
     try {
-      const data = await bookingClient.validatePincode(pincode);
+      const data = await apiClient.validatePincode(pincode);
 
       if (data && data.Status === "Success" && data.PostOffice?.length > 0) {
         const pincodeDistrict = data.PostOffice[0].District.toLowerCase();

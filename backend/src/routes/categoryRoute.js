@@ -17,6 +17,9 @@ router.get("/items/:categoryId/:location", CategoryController.getAllItems);
 //getting item by id
 router.get("/item/:itemId/:location", CategoryController.getItemById);
 
+//check pincode 
+router.get("/pincode/:pincode", CategoryController.validatePincode);
+
 
 
 module.exports = router;

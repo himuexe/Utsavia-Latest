@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
-import * as bookingApi from "../api/BookingApi";
+import * as paymentApi from "../api/PaymentApi";
 import { showToast } from '../store/appSlice';
 import { clearCart } from '../store/cartSlice';
+import * as bookingApi from '../api/BookingApi';
 
 const key = import.meta.env.VITE_APP_STRIPE_PUBLISHABLE_KEY;
 const stripePromise = loadStripe(key);
@@ -55,7 +56,7 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
             timeSlot: bookingDetails.timeSlot,
           }];
 
-      const { clientSecret } = await bookingApi.createPaymentIntent({
+      const { clientSecret } = await paymentApi.createPaymentIntent({
         amount: total,
         currency: 'inr',
         metadata: { checkoutType, items: JSON.stringify(items) }
@@ -74,13 +75,20 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
       setPaymentState(prev => ({ ...prev, isProcessing: false }));
     }
   };
-
-  const handlePaymentSuccess = async () => {
+  const handlePaymentSuccess = async (paymentIntentId) => {
     try {
-      await bookingApi.updateBookingStatus({
-        items: checkoutType === 'cart' ? cartItems : [bookingDetails],
-        status: 'paid'
-      });
+      const items = checkoutType === 'cart' ? cartItems : [bookingDetails];
+      const totalAmount = items.reduce((sum, item) => sum + item.price, 0);
+
+      // Create booking after payment success
+      const bookingData = {
+        items,
+        totalAmount,
+        paymentIntentId,
+      };
+
+      const booking = await bookingApi.createBooking(bookingData);
+      console.log("Booking created:", booking);
 
       if (checkoutType === 'cart') {
         dispatch(clearCart());
@@ -89,12 +97,11 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
       navigate('/payment-success');
     } catch (error) {
       dispatch(showToast({
-        message: 'Payment recorded but status update failed',
-        type: 'ERROR'
+        message: 'Payment recorded but booking creation failed',
+        type: 'ERROR',
       }));
     }
   };
-
   return {
     paymentState,
     stripePromise,

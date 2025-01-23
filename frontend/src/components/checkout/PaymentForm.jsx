@@ -21,17 +21,20 @@ const PaymentForm = ({ amount, onSuccess }) => {
     setError(null);
 
     try {
+      // Submit the payment form
       const { error: submitError } = await elements.submit();
       if (submitError) {
         setError(submitError.message);
         return;
       }
 
-      const { error: confirmError } = await stripe.confirmPayment({
+      // Confirm the payment
+      const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           return_url: `${window.location.origin}/payment-success`,
         },
+        redirect: 'if_required', // Prevents automatic redirection
       });
 
       if (confirmError) {
@@ -40,8 +43,9 @@ const PaymentForm = ({ amount, onSuccess }) => {
           message: confirmError.message, 
           type: 'ERROR' 
         }));
-      } else {
-        onSuccess?.();
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        // Call the onSuccess callback with the paymentIntent ID
+        onSuccess?.(paymentIntent.id);
       }
     } catch (err) {
       setError('Payment failed. Please try again.');
