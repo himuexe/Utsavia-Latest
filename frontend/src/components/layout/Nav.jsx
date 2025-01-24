@@ -1,8 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
 import {
-  CalendarHeart,
   User,
   LogOut,
   Settings,
@@ -10,7 +9,6 @@ import {
   Menu,
   X,
   Gift,
-  Clock,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -54,16 +52,33 @@ const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfilePanelOpen, setIsProfilePanelOpen] = useState(false);
   const [isCitySelectorOpen, setIsCitySelectorOpen] = useState(false);
+  const [userName, setUserName] = useState("");
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const selectedCity = useSelector(selectSelectedCity);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const fetchUser = async () => {
+        try {
+          const user = await apiClient.fetchCurrentUser();
+          setUserName(user.firstName); 
+        } catch (error) {
+          console.error("Error fetching user data:");
+        }
+      };
+
+      fetchUser();
+    }
+  }, [isLoggedIn]);
 
   const signOutMutation = useMutation(apiClient.signOut, {
     onSuccess: async () => {
       await queryClient.invalidateQueries("validateToken");
       setIsProfilePanelOpen(false);
       setIsMenuOpen(false);
+      setUserName(""); // Clear the user's name on sign out
       dispatch(
         showToast({ message: "Signed out successfully!", type: "SUCCESS" })
       );
@@ -133,27 +148,20 @@ const Nav = () => {
             onChange={() => setIsCitySelectorOpen(true)}
           />
           <div className="h-6 w-px bg-[#F0F0F0] mx-2" />
-          <NavigationButton
-            icon={CalendarHeart}
-            to="/events"
-            className="flex items-center gap-2 px-4 py-2 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
-          >
-            Browse Events
-          </NavigationButton>
-          <NavigationButton
-            icon={Clock}
-            to="/last-minute"
-            className="flex items-center gap-2 px-4 py-2 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
-          >
-            Last Minute
-          </NavigationButton>
           {isLoggedIn ? (
-            <button
-              onClick={() => setIsProfilePanelOpen(true)}
-              className="p-3 rounded-xl hover:bg-[#FF6B6B] hover:text-white transition-all duration-300 group"
-            >
-              <User className="w-6 h-6 text-[#2D3436] group-hover:text-white" />
-            </button>
+            <>
+              <NavigationButton
+                className="flex items-center gap-2 px-4 py-2 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
+              >
+                Hello , {userName}
+              </NavigationButton>
+              <button
+                onClick={() => setIsProfilePanelOpen(true)}
+                className="p-3 rounded-xl hover:bg-[#FF6B6B] hover:text-white transition-all duration-300 group"
+              >
+                <User className="w-6 h-6 text-[#2D3436] group-hover:text-white" />
+              </button>
+            </>
           ) : (
             <NavigationButton
               icon={User}
