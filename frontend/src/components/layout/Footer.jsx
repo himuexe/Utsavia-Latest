@@ -121,8 +121,6 @@ const Footer = () => {
 
   return (
     <footer
-      initial="hidden"
-      whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
       variants={containerVariants}
       className="bg-[#F9F9F9] text-[#2D3436] py-16 px-6 overflow-hidden relative border-t border-[#F0F0F0]"

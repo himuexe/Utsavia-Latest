@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useQuery } from 'react-query';
-import { Elements } from '@stripe/react-stripe-js';
-import * as apiClient from '../api/MyUserApi';
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useQuery } from "react-query";
+import { Elements } from "@stripe/react-stripe-js";
+import * as apiClient from "../api/MyUserApi";
 import {
   selectCartItems,
   selectCheckoutType,
   selectBookingDetails,
-} from '../store/cartSlice';
-import { selectIsAddressValid, selectIsLoggedIn } from '../store/appSlice';
-import { useCheckout } from '../hooks/useCheckout';
-import AddressForm from '../components/checkout/AddressForm';
-import AddressDisplay from '../components/checkout/AddressDisplay';
-import PaymentForm from '../components/checkout/PaymentForm';
-import OrderSummaryItem from '../components/checkout/OrderSummaryItem';
-import CheckoutButton from '../components/checkout/CheckoutButton';
-import Loading from '../components/ui/Loading';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+} from "../store/cartSlice";
+import { selectIsAddressValid, selectIsLoggedIn } from "../store/appSlice";
+import { useCheckout } from "../hooks/useCheckout";
+import AddressForm from "../components/checkout/AddressForm";
+import AddressDisplay from "../components/checkout/AddressDisplay";
+import PaymentForm from "../components/checkout/PaymentForm";
+import OrderSummaryItem from "../components/checkout/OrderSummaryItem";
+import CheckoutButton from "../components/checkout/CheckoutButton";
+import Loading from "../components/ui/Loading";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const CheckoutPage = () => {
   const [isEditing, setIsEditing] = useState(false);
-
+  const [paymentMethod, setPaymentMethod] = useState("stripe");
   // Selectors
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const navigate = useNavigate();
@@ -31,12 +31,12 @@ const CheckoutPage = () => {
   const bookingDetails = useSelector(selectBookingDetails);
 
   useEffect(() => {
-    if (checkoutType === 'direct' && !bookingDetails) {
+    if (checkoutType === "direct" && !bookingDetails) {
       // Redirect to home page or another appropriate page
-      navigate('/');
-    } else if (checkoutType === 'cart' && cartItems.length === 0) {
+      navigate("/");
+    } else if (checkoutType === "cart" && cartItems.length === 0) {
       // Redirect to the cart page if the cart is empty
-      navigate('/cart');
+      navigate("/cart");
     }
   }, [checkoutType, bookingDetails, cartItems, navigate]);
 
@@ -54,7 +54,7 @@ const CheckoutPage = () => {
     isLoading,
     error,
     refetch: refetchProfile,
-  } = useQuery('currentUser', apiClient.fetchCurrentUser, {
+  } = useQuery("currentUser", apiClient.fetchCurrentUser, {
     enabled: isLoggedIn,
     retry: 2,
   });
@@ -71,7 +71,7 @@ const CheckoutPage = () => {
   }
 
   const total =
-    checkoutType === 'cart'
+    checkoutType === "cart"
       ? cartItems.reduce((sum, item) => sum + item.price, 0)
       : bookingDetails?.price || 0;
 
@@ -100,7 +100,7 @@ const CheckoutPage = () => {
           ) : (
             <div className="bg-white rounded-2xl border border-[#F0F0F0] p-6 shadow-lg">
               <h2 className="text-xl font-semibold text-[#2D3436] mb-4">
-                {isEditing ? 'Edit Delivery Details' : 'Enter Delivery Details'}
+                {isEditing ? "Edit Delivery Details" : "Enter Delivery Details"}
               </h2>
               <AddressForm
                 initialData={userProfile}
@@ -124,7 +124,7 @@ const CheckoutPage = () => {
           </h2>
 
           <div className="space-y-4">
-            {checkoutType === 'cart' &&
+            {checkoutType === "cart" &&
               cartItems.map((item) => (
                 <OrderSummaryItem
                   key={item._id}
@@ -132,7 +132,8 @@ const CheckoutPage = () => {
                     <div className="flex flex-col">
                       <span>{item.itemName}</span>
                       <span className="text-sm">
-                        {new Date(item.date).toLocaleDateString()} - {item.timeSlot}
+                        {new Date(item.date).toLocaleDateString()} -{" "}
+                        {item.timeSlot}
                       </span>
                     </div>
                   }
@@ -140,11 +141,17 @@ const CheckoutPage = () => {
                 />
               ))}
 
-            {checkoutType === 'direct' && bookingDetails && (
+            {checkoutType === "direct" && bookingDetails && (
               <>
-                <OrderSummaryItem label="Item" value={bookingDetails.itemName} />
+                <OrderSummaryItem
+                  label="Item"
+                  value={bookingDetails.itemName}
+                />
                 <OrderSummaryItem label="Date" value={bookingDetails.date} />
-                <OrderSummaryItem label="Time" value={bookingDetails.timeSlot} />
+                <OrderSummaryItem
+                  label="Time"
+                  value={bookingDetails.timeSlot}
+                />
               </>
             )}
 
@@ -154,21 +161,40 @@ const CheckoutPage = () => {
               type="total"
             />
 
-            {paymentState.showPayment && paymentState.clientSecret ? (
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700">
+                Payment Method
+              </label>
+              <select
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              >
+                <option value="stripe">Stripe</option>
+                <option value="razorpay">Razorpay</option>
+              </select>
+            </div>
+
+            {paymentState.showPayment &&
+            paymentState.clientSecret &&
+            paymentMethod === "stripe" ? (
               <div className="mt-6">
                 <Elements
                   stripe={stripePromise}
                   options={{
                     clientSecret: paymentState.clientSecret,
                     appearance: {
-                      theme: 'night',
+                      theme: "night",
                       variables: {
-                        colorPrimary: '#FF6B6B',
+                        colorPrimary: "#FF6B6B",
                       },
                     },
                   }}
                 >
-                  <PaymentForm amount={total} onSuccess={handlePaymentSuccess} />
+                  <PaymentForm
+                    amount={total}
+                    onSuccess={handlePaymentSuccess}
+                  />
                 </Elements>
               </div>
             ) : (
@@ -177,7 +203,7 @@ const CheckoutPage = () => {
                 isAddressValid={isAddressValid}
                 isEditing={isEditing}
                 isProcessing={paymentState.isProcessing}
-                onClick={() => handleProceedToPayment(total)}
+                onClick={() => handleProceedToPayment(total, paymentMethod)}
               />
             )}
           </div>

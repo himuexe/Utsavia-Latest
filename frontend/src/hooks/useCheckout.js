@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
@@ -14,32 +14,38 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
   const [paymentState, setPaymentState] = useState({
     clientSecret: null,
     showPayment: false,
-    isProcessing: false
+    isProcessing: false,
+    paymentMethod: 'stripe', // Default to Stripe
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const validateCheckout = () => {
-      const savedCheckoutType = localStorage.getItem('checkoutType');
-      const savedBookingDetails = JSON.parse(localStorage.getItem('bookingDetails'));
-
-      if (savedCheckoutType === 'cart' && cartItems.length === 0) {
-        // handleCheckoutError('No items in cart');
-      } else if (savedCheckoutType === 'direct' && !savedBookingDetails) {
-        handleCheckoutError('No booking details found');
+  // Function to dynamically load the Razorpay script
+  const loadRazorpayScript = () => {
+    return new Promise((resolve, reject) => {
+      // Check if the script is already loaded
+      if (window.Razorpay) {
+        console.log("Razorpay script already loaded");
+        resolve();
+        return;
       }
-    };
 
-    validateCheckout();
-  }, [cartItems, navigate, dispatch]);
-
-  const handleCheckoutError = (message) => {
-    dispatch(showToast({ message, type: 'ERROR' }));
-    navigate('/');
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true; // Load the script asynchronously
+      script.onload = () => {
+        console.log('Razorpay script loaded successfully');
+        resolve();
+      };
+      script.onerror = () => {
+        console.error('Failed to load Razorpay script');
+        reject(new Error('Failed to load Razorpay script'));
+      };
+      document.body.appendChild(script);
+    });
   };
 
-  const handleProceedToPayment = async (total) => {
+  const handleProceedToPayment = async (total, paymentMethod = 'stripe') => {
     setPaymentState(prev => ({ ...prev, isProcessing: true }));
     try {
       const items = checkoutType === 'cart' 
@@ -56,18 +62,49 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
             timeSlot: bookingDetails.timeSlot,
           }];
 
-      const { clientSecret } = await paymentApi.createPaymentIntent({
+      const { clientSecret, orderId } = await paymentApi.createPaymentIntent({
         amount: total,
         currency: 'inr',
-        metadata: { checkoutType, items: JSON.stringify(items) }
+        metadata: { checkoutType, items: JSON.stringify(items) },
+        paymentMethod,
       });
 
       setPaymentState({
         clientSecret,
         showPayment: true,
-        isProcessing: false
+        isProcessing: false,
+        paymentMethod,
       });
+
+      if (paymentMethod === 'razorpay' && orderId) {
+        // Load Razorpay script dynamically
+        await loadRazorpayScript();
+
+        const options = {
+          key: import.meta.env.VITE_APP_RAZORPAY_KEY_ID,
+          amount: total * 100, // Amount in paise
+          currency: 'INR',
+          name: 'Your Company Name',
+          description: 'Payment for Booking',
+          order_id: orderId,
+          handler: async (response) => {
+            await handlePaymentSuccess(response.razorpay_payment_id);
+          },
+          prefill: {
+            name: 'Customer Name',
+            email: 'customer@example.com',
+            contact: '9999999999'
+          },
+          theme: {
+            color: '#F37254'
+          }
+        };
+
+        const razorpayInstance = new window.Razorpay(options);
+        razorpayInstance.open();
+      }
     } catch (error) {
+      console.error('Payment initialization failed:', error);
       dispatch(showToast({
         message: error.response?.data?.message || 'Payment initialization failed',
         type: 'ERROR'
@@ -76,26 +113,22 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
     }
   };
 
-  const handlePaymentSuccess = async (paymentIntentId) => {
+  const handlePaymentSuccess = async (paymentId) => {
     try {
       const items = checkoutType === 'cart' ? cartItems : [bookingDetails];
       const totalAmount = items.reduce((sum, item) => sum + item.price, 0);
 
-      // Create booking after payment success
       const bookingData = {
         items,
         totalAmount,
-        paymentIntentId,
+        paymentIntentId: paymentId,
       };
 
       const booking = await bookingApi.createBooking(bookingData);
       console.log("Booking created:", booking);
 
       if (checkoutType === 'cart') {
-        // Clear cart from local storage and Redux state
         dispatch(clearCart());
-
-        // Clear cart from the server
         await dispatch(clearCartFromServer()).unwrap();
       }
 
