@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
 import * as paymentApi from "../api/PaymentApi";
 import { showToast } from '../store/appSlice';
-import { clearCart, clearCartFromServer } from '../store/cartSlice';
+import { clearCart, clearCartFromServer ,clearCheckoutDetails } from '../store/cartSlice';
 import * as bookingApi from '../api/BookingApi';
 
 const key = import.meta.env.VITE_APP_STRIPE_PUBLISHABLE_KEY;
@@ -130,6 +130,9 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
       if (checkoutType === 'cart') {
         dispatch(clearCart());
         await dispatch(clearCartFromServer()).unwrap();
+      }
+      else{
+        dispatch(clearCheckoutDetails());
       }
 
       navigate('/payment-success');
