@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import * as apiClient from '../../api/MyUserApi';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
@@ -11,18 +11,20 @@ const AddressForm = ({ onSuccess, initialData }) => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
+    setValue,
+    trigger,
   } = useForm({
     defaultValues: initialData,
   });
+
+  const [addresses, setAddresses] = useState(initialData?.addresses || []); // Separate state for addresses
   const dispatch = useDispatch();
 
-  // Reset form when initial data changes
+  // Sync addresses with form state
   useEffect(() => {
-    if (initialData) {
-      reset(initialData);
-    }
-  }, [initialData, reset]);
+    setValue("addresses", addresses);
+    trigger("addresses"); // Trigger validation for addresses
+  }, [addresses, setValue, trigger]);
 
   const mutation = useMutation(apiClient.updateUserProfile, {
     onSuccess: () => {
@@ -37,7 +39,25 @@ const AddressForm = ({ onSuccess, initialData }) => {
   });
 
   const onSubmit = (data) => {
+    if (data.addresses.length === 0) {
+      dispatch(showToast({ message: 'At least one address is required', type: 'ERROR' }));
+      return;
+    }
     mutation.mutate(data);
+  };
+
+  const handleAddAddress = () => {
+    const newAddress = { street: "", city: "", state: "", zipCode: "", country: "", isPrimary: false };
+    setAddresses((prev) => [...prev, newAddress]); // Update addresses state
+  };
+
+  const handleRemoveAddress = (index) => {
+    if (addresses.length === 1) {
+      dispatch(showToast({ message: 'At least one address is required', type: 'ERROR' }));
+      return;
+    }
+    const updatedAddresses = addresses.filter((_, i) => i !== index);
+    setAddresses(updatedAddresses); // Update addresses state
   };
 
   return (
@@ -67,24 +87,56 @@ const AddressForm = ({ onSuccess, initialData }) => {
 
       <div>
         <label className="block text-sm font-medium text-[#666] mb-1">
-          Delivery Address
+          Delivery Addresses
         </label>
-        <textarea
-          className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-          focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
-          bg-white text-[#2D3436] placeholder-[#666] min-h-[100px]"
-          placeholder="Enter your complete address"
-          {...register('address', {
-            required: 'Address is required',
-            minLength: {
-              value: 10,
-              message: 'Address should be at least 10 characters long',
-            },
-          })}
-        />
-        {errors.address && (
-          <span className="text-[#FF6B6B] text-sm mt-1">{errors.address.message}</span>
-        )}
+        {addresses.map((address, index) => (
+          <div key={index} className="mb-4 p-4 border border-[#F0F0F0] rounded-lg">
+            <input
+              type="text"
+              placeholder="Street"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+              {...register(`addresses.${index}.street`, { required: 'Street is required' })}
+            />
+            <input
+              type="text"
+              placeholder="City"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+              {...register(`addresses.${index}.city`, { required: 'City is required' })}
+            />
+            <input
+              type="text"
+              placeholder="State"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+              {...register(`addresses.${index}.state`, { required: 'State is required' })}
+            />
+            <input
+              type="text"
+              placeholder="Zip Code"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+              {...register(`addresses.${index}.zipCode`, { required: 'Zip Code is required' })}
+            />
+            <input
+              type="text"
+              placeholder="Country"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+              {...register(`addresses.${index}.country`, { required: 'Country is required' })}
+            />
+            <button
+              type="button"
+              onClick={() => handleRemoveAddress(index)}
+              className="text-[#FF6B6B] hover:text-[#FF6B6B]/90"
+            >
+              Remove Address
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={handleAddAddress}
+          className="bg-[#FF6B6B] text-white px-4 py-2 rounded-lg hover:bg-[#FF6B6B]/90"
+        >
+          Add Address
+        </button>
       </div>
 
       <button

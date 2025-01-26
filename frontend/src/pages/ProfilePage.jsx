@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setAddressValidity } from '../store/appSlice';
+import { setAddressValidity } from "../store/appSlice";
 import * as apiClient from "../api/MyUserApi";
-import { Edit, Save, X } from 'lucide-react';
+import { Edit, Save, X } from "lucide-react";
 import { showToast } from "../store/appSlice";
+import Loading from "../components/ui/Loading";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -14,10 +15,10 @@ const UserProfile = () => {
   const [validationError, setValidationError] = useState(null);
 
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    address: '',
+    firstName: "",
+    lastName: "",
+    phone: "",
+    addresses: [],
   });
 
   const dispatch = useDispatch();
@@ -29,10 +30,15 @@ const UserProfile = () => {
         setError(null);
         const userData = await apiClient.fetchCurrentUser();
         setUser(userData);
-        setFormData(userData);
+        setFormData({
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          phone: userData.phone,
+          addresses: userData.addresses || [],
+        });
       } catch (err) {
-        setError('Failed to load user profile. Please try again later.');
-        console.error('Error loading user profile:', err);
+        setError("Failed to load user profile. Please try again later.");
+        console.error("Error loading user profile:", err);
       } finally {
         setIsLoading(false);
       }
@@ -43,9 +49,51 @@ const UserProfile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
+    }));
+  };
+
+  const handleAddressChange = (e, index) => {
+    const { name, value } = e.target;
+    const updatedAddresses = [...formData.addresses];
+    updatedAddresses[index] = {
+      ...updatedAddresses[index],
+      [name]: value,
+    };
+    setFormData((prev) => ({
+      ...prev,
+      addresses: updatedAddresses,
+    }));
+  };
+
+  const handleAddAddress = () => {
+    setFormData((prev) => ({
+      ...prev,
+      addresses: [
+        ...prev.addresses,
+        { street: "", city: "", state: "", zipCode: "", country: "", isPrimary: false },
+      ],
+    }));
+  };
+
+  const handleRemoveAddress = (index) => {
+    const updatedAddresses = formData.addresses.filter((_, i) => i !== index);
+    setFormData((prev) => ({
+      ...prev,
+      addresses: updatedAddresses,
+    }));
+  };
+
+  const handleSetPrimaryAddress = (index) => {
+    const updatedAddresses = formData.addresses.map((address, i) => ({
+      ...address,
+      isPrimary: i === index, // Set only the selected address as primary
+    }));
+    setFormData((prev) => ({
+      ...prev,
+      addresses: updatedAddresses,
     }));
   };
 
@@ -56,27 +104,26 @@ const UserProfile = () => {
     setValidationError(null);
 
     try {
-      const updatedUser = await apiClient.updateUserProfile(formData);
+      const updatedUser = await apiClient.updateUserProfile({
+        phone: formData.phone,
+        addresses: formData.addresses,
+      });
       setUser(updatedUser);
       setIsEditing(false);
       const isComplete = await apiClient.checkProfileCompletion();
       dispatch(setAddressValidity(isComplete === "" ? false : isComplete));
-      dispatch(showToast({ message: 'Profile updated successfully', type: 'SUCCESS' }));
+      dispatch(showToast({ message: "Profile updated successfully", type: "SUCCESS" }));
     } catch (err) {
-      setError('Failed to update profile. Please try again.');
-      console.error('Error updating profile:', err);
-      dispatch(showToast({ message: 'Failed to update profile', type: 'ERROR' }));
+      setError("Failed to update profile. Please try again.");
+      console.error("Error updating profile:", err);
+      dispatch(showToast({ message: "Failed to update profile", type: "ERROR" }));
     } finally {
       setIsSaving(false);
     }
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="text-[#FF6B6B] text-xl">Loading...</div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
@@ -88,15 +135,13 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto bg-white rounded-lg border border-[#F0F0F0] shadow-lg p-6 mt-4">
+<div className="w-full max-w-2xl mx-auto bg-white rounded-lg border border-[#F0F0F0] shadow-lg p-6 mt-4">
       <div className="container">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-[#2D3436] mb-2">
-            {isEditing ? 'Edit Your Profile' : 'Your Profile'}
+            {isEditing ? "Edit Your Profile" : "Your Profile"}
           </h1>
-          <p className="text-[#2D3436]/80">
-            Update your personal information
-          </p>
+          <p className="text-[#2D3436]/80">Update your personal information</p>
         </div>
 
         {validationError && (
@@ -163,21 +208,90 @@ const UserProfile = () => {
 
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
-                Address
+                Addresses
               </label>
-              <textarea
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                disabled={!isEditing}
-                rows="4"
-                className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0]
-                focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
-                disabled:text-[#2D3436]/50 resize-none"
-              />
+              {formData.addresses.map((address, index) => (
+                <div key={index} className="mb-6 p-4 border border-[#F0F0F0] rounded-lg">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      name="street"
+                      value={address.street}
+                      onChange={(e) => handleAddressChange(e, index)}
+                      disabled={!isEditing}
+                      placeholder="Street"
+                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
+                    />
+                    <input
+                      type="text"
+                      name="city"
+                      value={address.city}
+                      onChange={(e) => handleAddressChange(e, index)}
+                      disabled={!isEditing}
+                      placeholder="City"
+                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
+                    />
+                    <input
+                      type="text"
+                      name="state"
+                      value={address.state}
+                      onChange={(e) => handleAddressChange(e, index)}
+                      disabled={!isEditing}
+                      placeholder="State"
+                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
+                    />
+                    <input
+                      type="text"
+                      name="zipCode"
+                      value={address.zipCode}
+                      onChange={(e) => handleAddressChange(e, index)}
+                      disabled={!isEditing}
+                      placeholder="Zip Code"
+                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
+                    />
+                    <input
+                      type="text"
+                      name="country"
+                      value={address.country}
+                      onChange={(e) => handleAddressChange(e, index)}
+                      disabled={!isEditing}
+                      placeholder="Country"
+                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
+                    />
+                  </div>
+                  <div className="mt-4 flex items-center justify-between">
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={address.isPrimary}
+                        onChange={() => handleSetPrimaryAddress(index)}
+                        disabled={!isEditing}
+                        className="form-checkbox h-4 w-4 text-[#FF6B6B] rounded focus:ring-[#FF6B6B]"
+                      />
+                      <span className="text-sm text-[#2D3436]/80">Primary Address</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveAddress(index)}
+                      disabled={!isEditing}
+                      className="text-[#FF6B6B] hover:text-[#FF6B6B]/90 disabled:text-[#2D3436]/50"
+                    >
+                      Remove Address
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {isEditing && (
+                <button
+                  type="button"
+                  onClick={handleAddAddress}
+                  className="bg-[#FF6B6B] text-white px-4 py-2 rounded-lg hover:bg-[#FF6B6B]/90"
+                >
+                  Add Address
+                </button>
+              )}
             </div>
           </div>
-
           <div className="mt-6 flex justify-end space-x-4">
             {!isEditing ? (
               <button
@@ -213,7 +327,7 @@ const UserProfile = () => {
                   hover:shadow-lg hover:shadow-[#FF6B6B]/20"
                 >
                   <Save size={20} />
-                  {isSaving ? 'Saving...' : 'Save Changes'}
+                  {isSaving ? "Saving..." : "Save Changes"}
                 </button>
               </>
             )}

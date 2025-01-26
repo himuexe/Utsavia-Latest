@@ -3,7 +3,7 @@ import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { useDispatch } from 'react-redux';
 import { showToast } from '../../store/appSlice';
 
-const PaymentForm = ({ amount, onSuccess }) => {
+const PaymentForm = ({ amount, onSuccess, selectedAddress }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState(null);
@@ -28,11 +28,22 @@ const PaymentForm = ({ amount, onSuccess }) => {
         return;
       }
 
-      // Confirm the payment
+      // Confirm the payment with the address
       const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           return_url: `${window.location.origin}/payment-success`,
+          payment_method_data: {
+            billing_details: {
+              address: {
+                line1: selectedAddress.street,
+                city: selectedAddress.city,
+                state: selectedAddress.state,
+                postal_code: selectedAddress.zipCode,
+                country: selectedAddress.country,
+              },
+            },
+          },
         },
         redirect: 'if_required', // Prevents automatic redirection
       });
@@ -44,8 +55,8 @@ const PaymentForm = ({ amount, onSuccess }) => {
           type: 'ERROR',
         }));
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        // Call the onSuccess callback with the paymentIntent ID
-        onSuccess?.(paymentIntent.id);
+        // Call the onSuccess callback with the paymentIntent ID and selectedAddress
+        onSuccess?.(paymentIntent.id, selectedAddress);
       }
     } catch (err) {
       setError('Payment failed. Please try again.');

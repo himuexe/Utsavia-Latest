@@ -24,6 +24,16 @@ const authMethodSchema = new mongoose.Schema({
   }
 }, { _id: false });
 
+
+const addressSchema = new mongoose.Schema({
+  street: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  zipCode: { type: String, required: true },
+  country: { type: String, required: true },
+  isPrimary: { type: Boolean, default: false } 
+}, { _id: false });
+
 const userSchema = new mongoose.Schema({
   firstName: { 
     type: String, 
@@ -37,10 +47,7 @@ const userSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
-  address: { 
-    type: String, 
-    default: '' 
-  },
+  addresses: [addressSchema], // Array of addresses
   phone: { 
     type: String, 
     default: '' 
@@ -49,8 +56,6 @@ const userSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-
-
 
 const User = mongoose.model("User", userSchema);
 

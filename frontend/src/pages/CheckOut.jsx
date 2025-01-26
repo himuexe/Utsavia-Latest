@@ -22,25 +22,22 @@ import { motion } from "framer-motion";
 const CheckoutPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("stripe");
-  // Selectors
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const navigate = useNavigate();
   const isAddressValid = useSelector(selectIsAddressValid);
   const cartItems = useSelector(selectCartItems);
   const checkoutType = useSelector(selectCheckoutType);
   const bookingDetails = useSelector(selectBookingDetails);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   useEffect(() => {
     if (checkoutType === "direct" && !bookingDetails) {
-      // Redirect to home page or another appropriate page
       navigate("/");
     } else if (checkoutType === "cart" && cartItems.length === 0) {
-      // Redirect to the cart page if the cart is empty
       navigate("/cart");
     }
   }, [checkoutType, bookingDetails, cartItems, navigate]);
 
-  // Custom hook for checkout logic
   const {
     paymentState,
     stripePromise,
@@ -48,7 +45,6 @@ const CheckoutPage = () => {
     handlePaymentSuccess,
   } = useCheckout(cartItems, checkoutType, bookingDetails);
 
-  // Profile data query
   const {
     data: userProfile,
     isLoading,
@@ -69,12 +65,22 @@ const CheckoutPage = () => {
       </div>
     );
   }
-
   const total =
     checkoutType === "cart"
       ? cartItems.reduce((sum, item) => sum + item.price, 0)
       : bookingDetails?.price || 0;
 
+  const handleSelectAddress = (address) => {
+    setSelectedAddress(address);
+  };
+
+  const handleProceed = () => {
+    if (!selectedAddress) {
+      alert("Please select an address before proceeding.");
+      return;
+    }
+    handleProceedToPayment(total, paymentMethod, selectedAddress);
+  };
   return (
     <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
       <motion.div
@@ -96,6 +102,7 @@ const CheckoutPage = () => {
             <AddressDisplay
               userProfile={userProfile}
               onEdit={() => setIsEditing(true)}
+              onSelectAddress={handleSelectAddress}
             />
           ) : (
             <div className="bg-white rounded-2xl border border-[#F0F0F0] p-6 shadow-lg">
@@ -194,16 +201,17 @@ const CheckoutPage = () => {
                   <PaymentForm
                     amount={total}
                     onSuccess={handlePaymentSuccess}
+                    selectedAddress={selectedAddress}
                   />
                 </Elements>
               </div>
             ) : (
               <CheckoutButton
                 isLoggedIn={isLoggedIn}
-                isAddressValid={isAddressValid}
+                isAddressValid={isAddressValid && selectedAddress}
                 isEditing={isEditing}
                 isProcessing={paymentState.isProcessing}
-                onClick={() => handleProceedToPayment(total, paymentMethod)}
+                onClick={handleProceed}
               />
             )}
           </div>

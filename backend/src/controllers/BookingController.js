@@ -2,25 +2,38 @@ const Booking = require("../models/booking");
 
 // Create a new booking
 const createBooking = async (req, res) => {
-    try {
-      const { items, totalAmount, paymentIntentId } = req.body;
-      const userId = req.userId;
-  
-      const newBooking = new Booking({
-        userId,
-        items,
-        totalAmount,
-        paymentIntentId,
-        status: "paid", // Set status to "paid" after successful payment
-      });
-  
-      await newBooking.save();
-      res.status(201).json(newBooking);
-    } catch (error) {
-      console.error("Error creating booking:", error);
-      res.status(500).json({ error: "Failed to create booking" });
+  try {
+    const { items, totalAmount, paymentIntentId, address } = req.body;
+    const userId = req.userId;
+
+    // Validate the address object
+    if (!address || !address.street || !address.city || !address.state || !address.zipCode || !address.country) {
+      return res.status(400).json({ error: "Address is incomplete. Please provide all required fields." });
     }
-  };
+
+    const newBooking = new Booking({
+      userId,
+      items,
+      totalAmount,
+      paymentIntentId,
+      address: { // Ensure the address object is properly structured
+        street: address.street,
+        city: address.city,
+        state: address.state,
+        zipCode: address.zipCode,
+        country: address.country,
+        isPrimary: address.isPrimary || false, // Optional field
+      },
+      status: "paid", // Set status to "paid" after successful payment
+    });
+
+    await newBooking.save();
+    res.status(201).json(newBooking);
+  } catch (error) {
+    console.error("Error creating booking:", error);
+    res.status(500).json({ error: "Failed to create booking" });
+  }
+};
 // Get all bookings for a user
 const getUserBookings = async (req, res) => {
   try {

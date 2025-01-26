@@ -121,21 +121,21 @@ const updateCurrentUser = async (req, res) => {
     return res.status(400).json({ message: errors.array() });
   }
   try {
-    const { phone, address } = req.body;
+    const { phone, addresses } = req.body; 
     const user = await User.findById(req.userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
     user.phone = phone;
-    user.address = address;
+    user.addresses = addresses; 
     await user.save();
     const updatedUser = {
       _id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email,
+      email: user.primaryEmail,
       phone: user.phone,
-      address: user.address,
+      addresses: user.addresses, 
     };
     res.status(200).json(updatedUser);
   } catch (error) {
@@ -148,9 +148,9 @@ const checkCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "User  not found" });
+      return res.status(404).json({ message: "User not found" });
     }
-    const isAddressComplete = user.address && user.address.trim() !== "";
+    const isAddressComplete = user.addresses && user.addresses.length > 0;
     const isPhoneComplete = user.phone && user.phone.trim() !== "";
     const isProfileComplete = isAddressComplete && isPhoneComplete;
     res.json({

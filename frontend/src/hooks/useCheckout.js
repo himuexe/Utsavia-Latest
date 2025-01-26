@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
 import * as paymentApi from "../api/PaymentApi";
 import { showToast } from '../store/appSlice';
-import { clearCart, clearCartFromServer ,clearCheckoutDetails } from '../store/cartSlice';
+import { clearCart, clearCartFromServer, clearCheckoutDetails } from '../store/cartSlice';
 import * as bookingApi from '../api/BookingApi';
 
 const key = import.meta.env.VITE_APP_STRIPE_PUBLISHABLE_KEY;
@@ -20,10 +20,8 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Function to dynamically load the Razorpay script
   const loadRazorpayScript = () => {
     return new Promise((resolve, reject) => {
-      // Check if the script is already loaded
       if (window.Razorpay) {
         console.log("Razorpay script already loaded");
         resolve();
@@ -32,7 +30,7 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
 
       const script = document.createElement('script');
       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.async = true; // Load the script asynchronously
+      script.async = true;
       script.onload = () => {
         console.log('Razorpay script loaded successfully');
         resolve();
@@ -45,7 +43,15 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
     });
   };
 
-  const handleProceedToPayment = async (total, paymentMethod = 'stripe') => {
+  const handleProceedToPayment = async (total, paymentMethod = 'stripe', selectedAddress) => {
+    if (!selectedAddress || !selectedAddress.street || !selectedAddress.city || !selectedAddress.state || !selectedAddress.zipCode || !selectedAddress.country) {
+      dispatch(showToast({
+        message: 'Please provide a complete address before proceeding.',
+        type: 'ERROR',
+      }));
+      return;
+    }
+  
     setPaymentState(prev => ({ ...prev, isProcessing: true }));
     try {
       const items = checkoutType === 'cart' 
@@ -61,25 +67,24 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
             date: bookingDetails.date,
             timeSlot: bookingDetails.timeSlot,
           }];
-
+  
       const { clientSecret, orderId } = await paymentApi.createPaymentIntent({
         amount: total,
         currency: 'inr',
         metadata: { checkoutType, items: JSON.stringify(items) },
         paymentMethod,
       });
-
+  
       setPaymentState({
         clientSecret,
         showPayment: true,
         isProcessing: false,
         paymentMethod,
       });
-
+  
       if (paymentMethod === 'razorpay' && orderId) {
-        // Load Razorpay script dynamically
         await loadRazorpayScript();
-
+  
         const options = {
           key: import.meta.env.VITE_APP_RAZORPAY_KEY_ID,
           amount: total * 100, // Amount in paise
@@ -88,7 +93,7 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
           description: 'Payment for Booking',
           order_id: orderId,
           handler: async (response) => {
-            await handlePaymentSuccess(response.razorpay_payment_id);
+            await handlePaymentSuccess(response.razorpay_payment_id, selectedAddress);
           },
           prefill: {
             name: 'Customer Name',
@@ -99,7 +104,7 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
             color: '#F37254'
           }
         };
-
+  
         const razorpayInstance = new window.Razorpay(options);
         razorpayInstance.open();
       }
@@ -113,28 +118,27 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
     }
   };
 
-  const handlePaymentSuccess = async (paymentId) => {
+  const handlePaymentSuccess = async (paymentId, selectedAddress) => {
     try {
       const items = checkoutType === 'cart' ? cartItems : [bookingDetails];
       const totalAmount = items.reduce((sum, item) => sum + item.price, 0);
-
+  
       const bookingData = {
         items,
         totalAmount,
         paymentIntentId: paymentId,
+        address: selectedAddress, 
       };
-
+  
       const booking = await bookingApi.createBooking(bookingData);
-      console.log("Booking created:", booking);
-
+  
       if (checkoutType === 'cart') {
         dispatch(clearCart());
         await dispatch(clearCartFromServer()).unwrap();
-      }
-      else{
+      } else {
         dispatch(clearCheckoutDetails());
       }
-
+  
       navigate('/payment-success');
     } catch (error) {
       dispatch(showToast({

@@ -71,7 +71,7 @@ export const fetchCurrentUser = async () => {
 export const updateUserProfile = async (formData) => {
   const requestBody = {
     phone: formData.phone || "",
-    address: formData.address || "",
+    addresses: formData.addresses || [], // Send addresses as an array
   };
 
   const response = await fetch(`${API_BASE_URL}/api/user/me`, {

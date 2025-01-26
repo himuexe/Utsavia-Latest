@@ -106,13 +106,6 @@ const Nav = () => {
         My Events
       </NavigationButton>
       <NavigationButton
-        icon={ShoppingCart}
-        to="/cart"
-        className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
-      >
-        Cart Items
-      </NavigationButton>
-      <NavigationButton
         icon={Settings}
         to="/settings"
         className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
@@ -155,6 +148,12 @@ const Nav = () => {
               >
                 Hello , {userName}
               </NavigationButton>
+              <button
+                onClick={() => navigate("/cart")}
+                className="p-3 rounded-xl hover:bg-[#FF6B6B] hover:text-white transition-all duration-300 group"
+              >
+                <ShoppingCart className="w-6 h-6 text-[#2D3436] group-hover:text-white" />
+              </button>
               <button
                 onClick={() => setIsProfilePanelOpen(true)}
                 className="p-3 rounded-xl hover:bg-[#FF6B6B] hover:text-white transition-all duration-300 group"
