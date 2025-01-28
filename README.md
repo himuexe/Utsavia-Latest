@@ -9,7 +9,7 @@
 
 ## Frontend (React)
 
-1. State Management - ContextAPI Hook
+1. State Management - Redux
 2. Routing - React Router
 3. Styling - Tailwind CSS with Framer Motion 
 4. Data Fetching & API Integration - React Query
@@ -29,6 +29,5 @@
 
 ## Hosting & Deployment (Pre Production)
 
-1. Frontend Hosting: Vercel
-2. Backend Hosting: Heroku 
+Render
 

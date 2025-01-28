@@ -71,6 +71,7 @@ const categoryRouter = require("./routes/categoryRoute");
 const bookingRouter = require("./routes/bookingRoute");
 const paymentRouter = require("./routes/paymentRoute");
 const cartRoutes = require('./routes/cartRoute');
+const cateringRoutes = require('./routes/cateringRoute');
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
@@ -78,6 +79,7 @@ app.use("/api/category", categoryRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/booking", bookingRouter);
 app.use('/api/cart', cartRoutes);
+app.use('/api/catering', cateringRoutes);
 
 // Start server
 const server = app.listen(PORT, () => {

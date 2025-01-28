@@ -89,7 +89,7 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
           key: import.meta.env.VITE_APP_RAZORPAY_KEY_ID,
           amount: total * 100, // Amount in paise
           currency: 'INR',
-          name: 'Your Company Name',
+          name: 'Utsavia',
           description: 'Payment for Booking',
           order_id: orderId,
           handler: async (response) => {
