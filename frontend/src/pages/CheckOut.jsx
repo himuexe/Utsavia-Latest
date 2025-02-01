@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useQuery } from "react-query";
 import { Elements } from "@stripe/react-stripe-js";
 import * as apiClient from "../api/MyUserApi";
+import * as itemApiClient from "../api/ItemApi"; 
 import {
   selectCartItems,
   selectCheckoutType,
@@ -18,17 +19,22 @@ import CheckoutButton from "../components/checkout/CheckoutButton";
 import Loading from "../components/ui/Loading";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { showToast } from "../store/appSlice";
 
 const CheckoutPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("stripe");
+  const [isPincodeValid, setIsPincodeValid] = useState(false);
+  const [isPincodeChecking, setIsPincodeChecking] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const navigate = useNavigate();
   const isAddressValid = useSelector(selectIsAddressValid);
   const cartItems = useSelector(selectCartItems);
   const checkoutType = useSelector(selectCheckoutType);
   const bookingDetails = useSelector(selectBookingDetails);
-  const [selectedAddress, setSelectedAddress] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (checkoutType === "direct" && !bookingDetails) {
@@ -55,6 +61,66 @@ const CheckoutPage = () => {
     retry: 2,
   });
 
+  const validatePincode = async (pincode, city) => {
+    if (!pincode.trim()) {
+      dispatch(showToast({ message: "Please enter a pincode", type: "ERROR" }));
+      return false;
+    }
+    if (!/^\d{6}$/.test(pincode)) {
+      dispatch(showToast({ message: "Please enter a valid 6-digit pincode", type: "ERROR" }));
+      return false;
+    }
+
+    setIsPincodeChecking(true);
+
+    try {
+      const data = await itemApiClient.validatePincode(pincode);
+
+      if (data && data.Status === "Success" && data.PostOffice?.length > 0) {
+        const pincodeDistrict = data.PostOffice[0].District.toLowerCase();
+        const currentLocationNormalized = city.toLowerCase();
+
+        if (
+          pincodeDistrict.includes(currentLocationNormalized) ||
+          currentLocationNormalized.includes(pincodeDistrict)
+        ) {
+          setIsPincodeValid(true);
+          dispatch(showToast({ message: `Pincode verified for ${city}!`, type: "SUCCESS" }));
+          return true;
+        } else {
+          dispatch(showToast({ message: `This pincode is for ${data.PostOffice[0].District}, not for ${city}. Please enter a pincode for ${city}.`, type: "ERROR" }));
+          setIsPincodeValid(false);
+          return false;
+        }
+      } else {
+        dispatch(showToast({ message: "Invalid pincode. Please enter a valid pincode.", type: "ERROR" }));
+        setIsPincodeValid(false);
+        return false;
+      }
+    } catch (err) {
+      console.error("Error validating pincode:", err);
+      dispatch(showToast({ message: "Unable to validate pincode. Please try again.", type: "ERROR" }));
+      setIsPincodeValid(false);
+      return false;
+    } finally {
+      setIsPincodeChecking(false);
+    }
+  };
+
+  const handleProceed = async () => {
+    if (!selectedAddress) {
+      alert("Please select an address before proceeding.");
+      return;
+    }
+
+    const isPincodeValidForCity = await validatePincode(selectedAddress.zipCode, selectedAddress.city);
+    if (!isPincodeValidForCity) {
+      return;
+    }
+
+    handleProceedToPayment(total, paymentMethod, selectedAddress);
+  };
+
   if (isLoading) return <Loading />;
   if (error) {
     return (
@@ -65,6 +131,7 @@ const CheckoutPage = () => {
       </div>
     );
   }
+
   const total =
     checkoutType === "cart"
       ? cartItems.reduce((sum, item) => sum + item.price, 0)
@@ -74,13 +141,6 @@ const CheckoutPage = () => {
     setSelectedAddress(address);
   };
 
-  const handleProceed = () => {
-    if (!selectedAddress) {
-      alert("Please select an address before proceeding.");
-      return;
-    }
-    handleProceedToPayment(total, paymentMethod, selectedAddress);
-  };
   return (
     <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
       <motion.div
@@ -210,7 +270,7 @@ const CheckoutPage = () => {
                 isLoggedIn={isLoggedIn}
                 isAddressValid={isAddressValid && selectedAddress}
                 isEditing={isEditing}
-                isProcessing={paymentState.isProcessing}
+                isProcessing={paymentState.isProcessing || isPincodeChecking}
                 onClick={handleProceed}
               />
             )}
