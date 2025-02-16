@@ -1,64 +1,6 @@
 const Category = require("../models/category");
 const Item = require("../models/item");
 
-// Temporary function to create categories
-const createCategory = async (req, res) => {
-  try {
-    const { name, parentId, level, image } = req.body;
-
-    // Create slug from name
-    const slug = name.toLowerCase().replace(/\s+/g, "-");
-
-    // If it has a parent, get parent's path
-    let path = [];
-    if (parentId) {
-      const parent = await Category.findById(parentId);
-      path = [...parent.path, parentId];
-    }
-
-    const category = await Category.create({
-      name,
-      slug,
-      level,
-      parentId,
-      path,
-      image,
-    });
-
-    res.status(201).json(category);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error creating category" });
-  }
-};
-
-const createItem = async (req, res) => {
-  try {
-    const {
-      name,
-      description,
-      prices,
-      category,
-      image,
-      isActive,
-    } = req.body;
-
-    const item = await Item.create({
-      name,
-      description,
-      prices,
-      category: category,
-      image,
-      isActive,
-    });
-
-    res.status(201).json(item);
-  } catch (error) {
-    console.error("Error in createItem:", error);
-    res.status(500).json({ error: "Error creating item" });
-  }
-};
-
 const getAllSubCats = async (req, res) => {
   try {
     const subcategories = await Category.find({
@@ -147,9 +89,8 @@ const validatePincode = async (req, res) => {
   }
 };
 
-module.exports = { createCategory 
-  ,getAllSubCats,
-  createItem,
+module.exports = { 
+  getAllSubCats,
   getAllItems,
   getItemById,
   validatePincode

@@ -20,7 +20,6 @@ import ProductBookingPage from "./pages/ProductBookingPage";
 import CheckoutPage from "./pages/CheckOut";
 import CartPage from "./pages/CartPage";
 import MyBookingsPage from "./pages/MyBookingPage";
-import CateringBookingPage from "./pages/CateringBookingPage";
 import { selectSelectedCity, selectIsLoggedIn } from "./store/appSlice";
 
 const AuthWrapper = ({ children }) => {
@@ -84,18 +83,6 @@ const AppRoutes = () => {
             <Layout>
               {selectedCity ? (
                 <ProductBookingPage selectedCity={selectedCity} />
-              ) : (
-                <CitySelector isOpen={true} />
-              )}
-            </Layout>
-          }
-        />
-        <Route
-          path="/catering"
-          element={
-            <Layout>
-              {selectedCity ? (
-                <CateringBookingPage selectedCity={selectedCity} />
               ) : (
                 <CitySelector isOpen={true} />
               )}
