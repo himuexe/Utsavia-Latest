@@ -24,7 +24,7 @@ const createBooking = async (req, res) => {
         country: address.country,
         isPrimary: address.isPrimary || false, // Optional field
       },
-      status: "paid", // Set status to "paid" after successful payment
+      status: "pending", 
     });
 
     await newBooking.save();
