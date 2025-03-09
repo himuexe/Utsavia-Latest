@@ -130,7 +130,7 @@ const AppRoutes = () => {
           element={
             <AuthWrapper>
               <RegLayout>
-                <CheckoutPage />
+                <CheckoutPage selectedCity={selectedCity} />
               </RegLayout>
             </AuthWrapper>
           }

@@ -22,7 +22,7 @@ import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { showToast } from "../store/appSlice";
 
-const CheckoutPage = () => {
+const CheckoutPage = ({selectedCity}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("stripe");
   const [isPincodeValid, setIsPincodeValid] = useState(false);
@@ -113,7 +113,7 @@ const CheckoutPage = () => {
       return;
     }
 
-    const isPincodeValidForCity = await validatePincode(selectedAddress.zipCode, selectedAddress.city);
+    const isPincodeValidForCity = await validatePincode(selectedAddress.zipCode, selectedCity);
     if (!isPincodeValidForCity) {
       return;
     }
