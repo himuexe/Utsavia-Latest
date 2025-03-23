@@ -45,7 +45,8 @@ const userSchema = new mongoose.Schema({
   },
   primaryEmail: { 
     type: String, 
-    required: true 
+    required: true ,
+    unique: true
   },
   addresses: [addressSchema], // Array of addresses
   phone: { 
