@@ -7,6 +7,11 @@ const itemSchema = new mongoose.Schema({
     trim: true
   },
   description: String,
+  vendor: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'vendors', 
+    required: false 
+  },
   prices: [{
     city: {
       type: String,

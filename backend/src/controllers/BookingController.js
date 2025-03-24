@@ -1,5 +1,6 @@
 const Booking = require("../models/booking");
-
+const Vendor = require("../models/vendor");
+const Item = require("../models/item");
 // Create a new booking
 const createBooking = async (req, res) => {
   try {
@@ -11,18 +12,43 @@ const createBooking = async (req, res) => {
       return res.status(400).json({ error: "Address is incomplete. Please provide all required fields." });
     }
 
+    // Validate items array
+    if (!items || items.length === 0) {
+      return res.status(400).json({ error: "Items are required for booking." });
+    }
+
+    const firstItemId = items[0].itemId;
+    if (!firstItemId) {
+      return res.status(400).json({ error: "Item information is incomplete." });
+    }
+
+    const item = await Item.findById(firstItemId).populate('vendor');
+    if (!item) {
+      return res.status(404).json({ error: "Item not found." });
+    }
+
+    // Check if vendor exists, but don't fail if it doesn't
+    const vendorId = item.vendor?._id || null;
+
     const newBooking = new Booking({
       userId,
-      items,
+      vendorId, 
+      items: items.map(item => ({
+        itemId: item.itemId,
+        itemName: item.itemName,
+        price: item.price,
+        date: item.date,
+        timeSlot: item.timeSlot
+      })),
       totalAmount,
       paymentIntentId,
-      address: { // Ensure the address object is properly structured
+      address: {
         street: address.street,
         city: address.city,
         state: address.state,
         zipCode: address.zipCode,
         country: address.country,
-        isPrimary: address.isPrimary || false, // Optional field
+        isPrimary: address.isPrimary || false,
       },
       status: "pending", 
     });
