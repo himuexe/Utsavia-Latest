@@ -17,29 +17,40 @@ const createBooking = async (req, res) => {
       return res.status(400).json({ error: "Items are required for booking." });
     }
 
-    const firstItemId = items[0].itemId;
-    if (!firstItemId) {
+    // Get all item IDs from the request
+    const itemIds = items.map(item => item.itemId);
+    if (itemIds.some(id => !id)) {
       return res.status(400).json({ error: "Item information is incomplete." });
     }
 
-    const item = await Item.findById(firstItemId).populate('vendor');
-    if (!item) {
-      return res.status(404).json({ error: "Item not found." });
+    // Find all items with their vendors
+    const foundItems = await Item.find({ _id: { $in: itemIds } }).populate('vendor');
+    if (foundItems.length !== items.length) {
+      return res.status(404).json({ error: "Some items not found." });
     }
 
-    // Check if vendor exists, but don't fail if it doesn't
-    const vendorId = item.vendor?._id || null;
+    // Create a mapping of itemId to vendor for quick lookup
+    const itemVendorMap = {};
+    foundItems.forEach(item => {
+      itemVendorMap[item._id.toString()] = item.vendor?._id || null;
+    });
+
+    // Prepare the items array with vendor information
+    const bookingItems = items.map(item => {
+      const foundItem = foundItems.find(i => i._id.toString() === item.itemId);
+      return {
+        itemId: item.itemId,
+        itemName: foundItem.name, // Get name from database rather than request
+        price: item.price,
+        date: item.date,
+        timeSlot: item.timeSlot,
+        vendorId: itemVendorMap[item.itemId]
+      };
+    });
 
     const newBooking = new Booking({
       userId,
-      vendorId, 
-      items: items.map(item => ({
-        itemId: item.itemId,
-        itemName: item.itemName,
-        price: item.price,
-        date: item.date,
-        timeSlot: item.timeSlot
-      })),
+      items: bookingItems,
       totalAmount,
       paymentIntentId,
       address: {

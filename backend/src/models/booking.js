@@ -7,17 +7,18 @@ const bookingSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    vendorId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "vendors",
-      required: false,
-    },
     items: [
       {
+        itemId: { type: mongoose.Schema.Types.ObjectId, ref: "Item" },
         itemName: { type: String, required: true },
         price: { type: Number, required: true },
         date: { type: Date, required: true },
         timeSlot: { type: String, required: true },
+        vendorId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "vendors",
+          required: false,
+        },
       },
     ],
     totalAmount: { type: Number, required: true },
