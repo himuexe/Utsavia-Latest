@@ -14,7 +14,8 @@ const authMethodSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    index:false
   },
   password: { 
     type: String,
@@ -48,7 +49,7 @@ const userSchema = new mongoose.Schema({
     required: true ,
     unique: true
   },
-  addresses: [addressSchema], // Array of addresses
+  addresses: [addressSchema], 
   phone: { 
     type: String, 
     default: '' 
