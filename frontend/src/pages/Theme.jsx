@@ -8,19 +8,19 @@ import { MapPin } from "lucide-react";
 const ThemeSkeleton = () => (
   <Card hover={false} className="h-[28rem] bg-[#F9F9F9] border border-[#F0F0F0]">
     <CardHeader>
-      <div className="aspect-[4/3] bg-[#F0F0F0] animate-pulse" />
+      <div className="aspect-4/3 bg-[#F0F0F0] animate-pulse" />
     </CardHeader>
     <CardContent>
       <div className="space-y-4">
-        <div className="h-4 bg-[#F0F0F0] rounded animate-pulse w-1/3" />
-        <div className="h-6 bg-[#F0F0F0] rounded animate-pulse w-3/4" />
-        <div className="h-4 bg-[#F0F0F0] rounded animate-pulse w-2/3" />
+        <div className="h-4 bg-[#F0F0F0] rounded-sm animate-pulse w-1/3" />
+        <div className="h-6 bg-[#F0F0F0] rounded-sm animate-pulse w-3/4" />
+        <div className="h-4 bg-[#F0F0F0] rounded-sm animate-pulse w-2/3" />
       </div>
     </CardContent>
     <CardFooter>
       <div className="flex items-center justify-between">
-        <div className="h-6 bg-[#F0F0F0] rounded animate-pulse w-1/4" />
-        <div className="h-10 bg-[#F0F0F0] rounded animate-pulse w-1/3" />
+        <div className="h-6 bg-[#F0F0F0] rounded-sm animate-pulse w-1/4" />
+        <div className="h-10 bg-[#F0F0F0] rounded-sm animate-pulse w-1/3" />
       </div>
     </CardFooter>
   </Card>
@@ -78,14 +78,14 @@ const ThemesPage = ({ selectedCity }) => {
           items.map((theme) => (
             <Card key={theme._id} className="bg-[#F9F9F9] border border-[#F0F0F0] h-auto">
               <CardHeader>
-                <div className="aspect-[4/3] relative overflow-hidden rounded-lg">
+                <div className="aspect-4/3 relative overflow-hidden rounded-lg">
                   <img
                     src={theme.image}
                     alt={theme.name}
                     className="object-cover w-full h-full transform hover:scale-110 transition-transform duration-500"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="flex items-center gap-2 text-white">
                       <MapPin className="w-4 h-4" />

@@ -105,7 +105,7 @@ const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
                 placeholder="Enter Pincode"
                 disabled={isSubmitting}
                 className="w-full px-4 py-2 bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] rounded-lg 
-                focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+                focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
                 disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50"
               />
               <button

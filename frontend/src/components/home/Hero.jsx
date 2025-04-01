@@ -43,7 +43,7 @@ const CategoryCards = () => {
               <div className="relative overflow-hidden rounded-lg md:rounded-2xl bg-[#F9F9F9] 
                 transition-all duration-300 hover:scale-105 border border-[#F0F0F0] 
                 hover:border-[#FF6B6B] hover:shadow-lg hover:shadow-[#FF6B6B]/10">
-                <div className="aspect-[4/3] overflow-hidden">
+                <div className="aspect-4/3 overflow-hidden">
                   <img
                     src={category.image}
                     alt={category.name}

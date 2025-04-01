@@ -71,7 +71,7 @@ const SignIn = () => {
           <input
             type="email"
             placeholder="Enter your email"
-            className="w-full p-3 rounded-xl border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+            className="w-full p-3 rounded-xl border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
             bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50"
             {...register("email", { required: "This field is required" })}
           />
@@ -88,7 +88,7 @@ const SignIn = () => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
-              className="w-full p-3 rounded-xl border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+              className="w-full p-3 rounded-xl border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
               bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50 pr-10"
               {...register("password", {
                 required: "This field is required",
@@ -135,9 +135,9 @@ const SignIn = () => {
         {!isFromBooking && (
           <>
             <div className="relative flex items-center gap-4 mb-4">
-              <div className="flex-grow border-t border-[#F0F0F0]"></div>
+              <div className="grow border-t border-[#F0F0F0]"></div>
               <span className="text-[#2D3436]/50 text-sm">or</span>
-              <div className="flex-grow border-t border-[#F0F0F0]"></div>
+              <div className="grow border-t border-[#F0F0F0]"></div>
             </div>
 
             <button

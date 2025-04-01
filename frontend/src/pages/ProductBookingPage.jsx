@@ -262,7 +262,7 @@ const ProductBookingPage = ({ selectedCity }) => {
               onChange={handleDateChange}
               min={new Date().toISOString().split("T")[0]}
               className="w-full p-2 mb-6 bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] rounded-lg 
-              focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
             />
 
             <div className="flex items-center gap-2 mb-4">

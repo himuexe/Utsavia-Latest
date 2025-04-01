@@ -38,7 +38,7 @@ const Contact = () => {
             <span className="text-[#FF6B6B] font-semibold text-sm uppercase tracking-wider">Contact Us</span>
           </div>
           
-          <form onSubmit={onSubmit} className="space-y-6 backdrop-blur-sm bg-white/70 p-8 rounded-2xl shadow-lg border border-[#F0F0F0]">
+          <form onSubmit={onSubmit} className="space-y-6 backdrop-blur-xs bg-white/70 p-8 rounded-2xl shadow-lg border border-[#F0F0F0]">
             <div className="space-y-5">
               <div>
                 <label htmlFor="name" className="block font-secondary text-sm font-semibold text-[#2D3436] mb-2">
@@ -49,7 +49,7 @@ const Contact = () => {
                   name='name'
                   type="text"
                   placeholder="Your name"
-                  className="w-full px-4 py-3 border-2 border-[#F0F0F0] rounded-xl focus:outline-none focus:border-[#FF6B6B] focus:ring-2 focus:ring-[#FF6B6B]/50 transition-all duration-300 bg-white/70"
+                  className="w-full px-4 py-3 border-2 border-[#F0F0F0] rounded-xl focus:outline-hidden focus:border-[#FF6B6B] focus:ring-2 focus:ring-[#FF6B6B]/50 transition-all duration-300 bg-white/70"
                   required
                 />
               </div>
@@ -63,7 +63,7 @@ const Contact = () => {
                   id="email"
                   type="email"
                   placeholder="your.email@example.com"
-                  className="w-full px-4 py-3 border-2 border-[#F0F0F0] rounded-xl focus:outline-none focus:border-[#FF6B6B] focus:ring-2 focus:ring-[#FF6B6B]/50 transition-all duration-300 bg-white/70"
+                  className="w-full px-4 py-3 border-2 border-[#F0F0F0] rounded-xl focus:outline-hidden focus:border-[#FF6B6B] focus:ring-2 focus:ring-[#FF6B6B]/50 transition-all duration-300 bg-white/70"
                   required
                 />
               </div>
@@ -77,7 +77,7 @@ const Contact = () => {
                   name='subject'
                   type="text"
                   placeholder="How can we help?"
-                  className="w-full px-4 py-3 border-2 border-[#F0F0F0] rounded-xl focus:outline-none focus:border-[#FF6B6B] focus:ring-2 focus:ring-[#FF6B6B]/50 transition-all duration-300 bg-white/70"
+                  className="w-full px-4 py-3 border-2 border-[#F0F0F0] rounded-xl focus:outline-hidden focus:border-[#FF6B6B] focus:ring-2 focus:ring-[#FF6B6B]/50 transition-all duration-300 bg-white/70"
                   required
                 />
               </div>
@@ -91,7 +91,7 @@ const Contact = () => {
                   name='message'
                   rows={4}
                   placeholder="Your message..."
-                  className="w-full px-4 py-3 border-2 border-[#F0F0F0] rounded-xl focus:outline-none focus:border-[#FF6B6B] focus:ring-2 focus:ring-[#FF6B6B]/50 transition-all duration-300 bg-white/70"
+                  className="w-full px-4 py-3 border-2 border-[#F0F0F0] rounded-xl focus:outline-hidden focus:border-[#FF6B6B] focus:ring-2 focus:ring-[#FF6B6B]/50 transition-all duration-300 bg-white/70"
                   required
                 />
               </div>
@@ -111,11 +111,11 @@ const Contact = () => {
         </div>
 
         <div className="w-full space-y-6">
-          <div className="bg-white/70 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-[#F0F0F0]">
+          <div className="bg-white/70 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-xs border border-[#F0F0F0]">
             <h3 className="text-2xl font-bold mb-6 text-[#2D3436] font-primary">Our Location</h3>
             <div className="space-y-6">
               <div className="flex items-start space-x-4 font-happiness">
-                <MapPin className="w-6 h-6 text-[#FF6B6B] mt-1 flex-shrink-0" />
+                <MapPin className="w-6 h-6 text-[#FF6B6B] mt-1 shrink-0" />
                 <div>
                   <p className="text-[#2D3436] font-medium">Reg office: 10 A Tamil Nagar</p>
                   <p className="text-[#2D3436] font-medium">2nd Street M.C Road Chennai</p>
@@ -123,17 +123,17 @@ const Contact = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-4 font-happiness">
-                <Phone className="w-6 h-6 text-[#FF6B6B] flex-shrink-0" />
+                <Phone className="w-6 h-6 text-[#FF6B6B] shrink-0" />
                 <p className="text-[#2D3436] font-medium">+9 (666) 699-6969</p>
               </div>
               <div className="flex items-center space-x-4 font-happiness">
-                <Mail className="w-6 h-6 text-[#FF6B6B] flex-shrink-0" />
+                <Mail className="w-6 h-6 text-[#FF6B6B] shrink-0" />
                 <p className="text-[#2D3436] font-medium">info@utsavia.com</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white/70 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-[#F0F0F0]">
+          <div className="bg-white/70 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-xs border border-[#F0F0F0]">
             <h3 className="text-2xl font-bold mb-6 text-[#2D3436] font-primary">Connect With Us</h3>
             <div className="flex space-x-6">
               {[Facebook, Twitter, Instagram, Globe].map((Icon, index) => (
@@ -148,7 +148,7 @@ const Contact = () => {
             </div>
           </div>
 
-          <div className="bg-white/70 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-[#F0F0F0]">
+          <div className="bg-white/70 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-xs border border-[#F0F0F0]">
             <h3 className="text-2xl font-bold mb-6 text-[#2D3436] font-primary">Visit Us</h3>
             <p className="text-[#2D3436] font-medium leading-relaxed font-happiness">
               Love exploring our creative office? Plan an appointment and experience our corporate environment firsthand.

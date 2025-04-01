@@ -160,7 +160,7 @@ const UserProfile = () => {
                 value={formData.firstName}
                 disabled
                 className="w-full p-2 rounded-lg text-[#2D3436] bg-[#F9F9F9] border border-[#F0F0F0] 
-                focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+                focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
               />
             </div>
 
@@ -174,7 +174,7 @@ const UserProfile = () => {
                 value={formData.lastName}
                 disabled
                 className="w-full p-2 rounded-lg text-[#2D3436] bg-[#F9F9F9] border border-[#F0F0F0] 
-                focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+                focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
               />
             </div>
 
@@ -201,7 +201,7 @@ const UserProfile = () => {
                 onChange={handleInputChange}
                 disabled={!isEditing}
                 className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0]
-                focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]
+                focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]
                 disabled:text-[#2D3436]/50"
               />
             </div>
@@ -220,7 +220,7 @@ const UserProfile = () => {
                       onChange={(e) => handleAddressChange(e, index)}
                       disabled={!isEditing}
                       placeholder="Street"
-                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
+                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
                     />
                     <input
                       type="text"
@@ -229,7 +229,7 @@ const UserProfile = () => {
                       onChange={(e) => handleAddressChange(e, index)}
                       disabled={!isEditing}
                       placeholder="City"
-                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
+                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
                     />
                     <input
                       type="text"
@@ -238,7 +238,7 @@ const UserProfile = () => {
                       onChange={(e) => handleAddressChange(e, index)}
                       disabled={!isEditing}
                       placeholder="State"
-                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
+                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
                     />
                     <input
                       type="text"
@@ -247,7 +247,7 @@ const UserProfile = () => {
                       onChange={(e) => handleAddressChange(e, index)}
                       disabled={!isEditing}
                       placeholder="Zip Code"
-                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
+                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
                     />
                     <input
                       type="text"
@@ -256,7 +256,7 @@ const UserProfile = () => {
                       onChange={(e) => handleAddressChange(e, index)}
                       disabled={!isEditing}
                       placeholder="Country"
-                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
+                      className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] disabled:text-[#2D3436]/50"
                     />
                   </div>
                   <div className="mt-4 flex items-center justify-between">
@@ -266,7 +266,7 @@ const UserProfile = () => {
                         checked={address.isPrimary}
                         onChange={() => handleSetPrimaryAddress(index)}
                         disabled={!isEditing}
-                        className="form-checkbox h-4 w-4 text-[#FF6B6B] rounded focus:ring-[#FF6B6B]"
+                        className="form-checkbox h-4 w-4 text-[#FF6B6B] rounded-sm focus:ring-[#FF6B6B]"
                       />
                       <span className="text-sm text-[#2D3436]/80">Primary Address</span>
                     </label>

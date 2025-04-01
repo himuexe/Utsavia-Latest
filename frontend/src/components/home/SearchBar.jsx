@@ -46,7 +46,7 @@ const SimpleSearchBar = () => {
               onChange={e => setSearchText(e.target.value)}
               placeholder="Find your perfect celebration..."
               className="w-full pl-10 p-3 rounded-xl border border-[#F0F0F0] 
-                focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]
+                focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]
                 bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50"
             />
             <button
@@ -69,7 +69,7 @@ const SimpleSearchBar = () => {
                 value={category}
                 onChange={e => setCategory(e.target.value)}
                 className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-                  focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]
+                  focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]
                   bg-[#F9F9F9] text-[#2D3436] appearance-none"
               >
                 <option value="all">All Celebrations</option>
@@ -106,7 +106,7 @@ const SimpleSearchBar = () => {
             onChange={e => setSearchText(e.target.value)}
             placeholder="Find your perfect celebration..."
             className="w-full pl-10 p-3 rounded-xl border border-[#F0F0F0] 
-              focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]
+              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]
               bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50"
           />
           <button
@@ -123,7 +123,7 @@ const SimpleSearchBar = () => {
             value={category}
             onChange={e => setCategory(e.target.value)}
             className="w-full pl-10 p-3 rounded-xl border border-[#F0F0F0] 
-              focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]
+              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]
               bg-[#F9F9F9] text-[#2D3436] appearance-none"
           >
             <option value="all">All Celebrations</option>

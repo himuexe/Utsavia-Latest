@@ -69,7 +69,7 @@ const AddressForm = ({ onSuccess, initialData }) => {
         <input
           type="tel"
           className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-          focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+          focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
           bg-white text-[#2D3436] placeholder-[#666]"
           placeholder="Enter your phone number"
           {...register('phone', {
@@ -94,31 +94,31 @@ const AddressForm = ({ onSuccess, initialData }) => {
             <input
               type="text"
               placeholder="Street"
-              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
               {...register(`addresses.${index}.street`, { required: 'Street is required' })}
             />
             <input
               type="text"
               placeholder="City"
-              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
               {...register(`addresses.${index}.city`, { required: 'City is required' })}
             />
             <input
               type="text"
               placeholder="State"
-              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
               {...register(`addresses.${index}.state`, { required: 'State is required' })}
             />
             <input
               type="text"
               placeholder="Zip Code"
-              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
               {...register(`addresses.${index}.zipCode`, { required: 'Zip Code is required' })}
             />
             <input
               type="text"
               placeholder="Country"
-              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-none focus:ring-2 focus:ring-[#FF6B6B]"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
               {...register(`addresses.${index}.country`, { required: 'Country is required' })}
             />
             <button

@@ -16,7 +16,7 @@ const CitySelector = ({ onClose, isOpen }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-xs" onClick={onClose} />
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-lg border border-[#F0F0F0] z-10">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-[#2D3436] font-primary">

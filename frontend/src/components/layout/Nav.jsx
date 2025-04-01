@@ -28,7 +28,7 @@ const SidePanel = ({ isOpen, onClose, title, children }) => {
   return (
     <>
       <div
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+        className="fixed inset-0 bg-black/20 backdrop-blur-xs z-40"
         onClick={onClose}
       />
       <div className="fixed top-0 right-0 w-80 h-full bg-white z-50 shadow-2xl p-8 flex flex-col border-l border-[#FF6B6B]">

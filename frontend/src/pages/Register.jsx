@@ -66,7 +66,7 @@ const Register = () => {
             </label>
             <input
               className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-              focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
               bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50"
               placeholder="Enter your first name"
               {...register("firstName", { required: "This field is required" })}
@@ -81,7 +81,7 @@ const Register = () => {
             </label>
             <input
               className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-              focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
               bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50"
               placeholder="Enter your last name"
               {...register("lastName", { required: "This field is required" })}
@@ -99,7 +99,7 @@ const Register = () => {
           <input
             type="email"
             className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-            focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+            focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
             bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50"
             placeholder="Enter your email"
             {...register("email", { required: "This field is required" })}
@@ -117,7 +117,7 @@ const Register = () => {
             <input
               type={showPassword ? "text" : "password"}
               className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-              focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
               bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50 pr-10"
               placeholder="Enter your password"
               {...register("password", {
@@ -149,7 +149,7 @@ const Register = () => {
             <input
               type={showConfirmPassword ? "text" : "password"}
               className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-              focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] 
+              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
               bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50 pr-10"
               placeholder="Confirm your password"
               {...register("confirmPassword", {
