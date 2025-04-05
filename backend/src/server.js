@@ -71,6 +71,7 @@ const categoryRouter = require("./routes/categoryRoute");
 const bookingRouter = require("./routes/bookingRoute");
 const paymentRouter = require("./routes/paymentRoute");
 const cartRoutes = require('./routes/cartRoute');
+const chatbotRoutes = require('./routes/chatbotRoute');
 
 
 app.use("/api/user", userRouter);
@@ -79,6 +80,7 @@ app.use("/api/category", categoryRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/booking", bookingRouter);
 app.use('/api/cart', cartRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 // Start server
 const server = app.listen(PORT, () => {
