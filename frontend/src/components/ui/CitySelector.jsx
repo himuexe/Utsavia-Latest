@@ -19,18 +19,18 @@ const CitySelector = ({ onClose, isOpen }) => {
       <div className="fixed inset-0 bg-black/50 backdrop-blur-xs" onClick={onClose} />
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-lg border border-[#F0F0F0] z-10">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-[#2D3436] font-primary">
+          <h2 className="text-2xl  text-secondary font-primary">
             Select Your City
           </h2>
           <button
             onClick={onClose}
             className="p-1 hover:bg-[#F0F0F0] rounded-full transition-colors"
           >
-            <X className="w-6 h-6 text-[#2D3436] hover:text-[#FF6B6B]" />
+            <X className="w-6 h-6 text-icon hover:text-hover1" />
           </button>
         </div>
 
-        <p className="text-[#2D3436] mb-6 font-secondary">
+        <p className="text-primary mb-6 font-secondary">
           Find more than 3000 decorations, gifts, and surprises!
         </p>
 
@@ -40,11 +40,11 @@ const CitySelector = ({ onClose, isOpen }) => {
               key={city}
               onClick={() => handleCitySelection(city)}
               className={`
-                p-3 rounded-xl text-sm font-medium transition-all
+                p-3 rounded-xl text-sm font-medium transition-all font-primary
                 ${
                   selectedCity === city
-                    ? 'bg-[#FF6B6B] text-white border border-[#FF6B6B]'
-                    : 'bg-[#F0F0F0] border border-[#F0F0F0] text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white font-happiness'
+                    ? 'border-hover1 text-hover1 border '
+                    : 'bg-[#F0F0F0] border border-[#F0F0F0] text-primary hover:bg-white hover:border-hover1 hover:text-hover1'
                 }
               `}
             >

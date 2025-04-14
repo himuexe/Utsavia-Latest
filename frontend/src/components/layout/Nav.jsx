@@ -21,31 +21,7 @@ import * as apiClient from "../../api/MyUserApi";
 import NavigationButton from "../ui/NavigationButton";
 import CompanyLogo from "../ui/CompanyLogo";
 import LocationDisplay from "../ui/LocationDisplay";
-
-const SidePanel = ({ isOpen, onClose, title, children }) => {
-  if (!isOpen) return null;
-
-  return (
-    <>
-      <div
-        className="fixed inset-0 bg-black/20 backdrop-blur-xs z-40"
-        onClick={onClose}
-      />
-      <div className="fixed top-0 right-0 w-80 h-full bg-white z-50 shadow-2xl p-8 flex flex-col border-l border-[#FF6B6B]">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-[#2D3436]">{title}</h2>
-          <button
-            onClick={onClose}
-            className="text-[#2D3436] hover:text-[#FF6B6B] transition-colors"
-          >
-            <X className="h-6 w-6" />
-          </button>
-        </div>
-        <div className="space-y-4 text-[#2D3436]">{children}</div>
-      </div>
-    </>
-  );
-};
+import SidePanel from "./SidePanel";
 
 const Nav = () => {
   const dispatch = useDispatch();
@@ -63,7 +39,7 @@ const Nav = () => {
       const fetchUser = async () => {
         try {
           const user = await apiClient.fetchCurrentUser();
-          setUserName(user.firstName); 
+          setUserName(user.firstName);
         } catch (error) {
           console.error("Error fetching user data:");
         }
@@ -78,7 +54,7 @@ const Nav = () => {
       await queryClient.invalidateQueries("validateToken");
       setIsProfilePanelOpen(false);
       setIsMenuOpen(false);
-      setUserName(""); // Clear the user's name on sign out
+      setUserName("");
       dispatch(
         showToast({ message: "Signed out successfully!", type: "SUCCESS" })
       );
@@ -103,14 +79,7 @@ const Nav = () => {
         to="/mybookings"
         className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
       >
-        My Events
-      </NavigationButton>
-      <NavigationButton
-        icon={Settings}
-        to="/settings"
-        className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
-      >
-        Settings
+        My Bookings
       </NavigationButton>
       <NavigationButton
         icon={LogOut}
@@ -132,7 +101,7 @@ const Nav = () => {
   );
 
   return (
-    <header className="bg-white py-4 px-6 sticky top-0 z-40 shadow-md select-none border-b border-[#F0F0F0]">
+    <header className="bg-background py-4 px-6 sticky top-0 z-40 shadow-md select-none border-b border-[#F0F0F0]">
       <div className="container mx-auto flex justify-between items-center">
         <CompanyLogo onClick={() => navigate("/")} />
         <nav className="hidden md:flex space-x-4 items-center font-secondary text-[#2D3436]">
@@ -143,32 +112,30 @@ const Nav = () => {
           <div className="h-6 w-px bg-[#F0F0F0] mx-2" />
           {isLoggedIn ? (
             <>
-              <NavigationButton
-                className="flex items-center gap-2 px-4 py-2 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
-              >
+              <span className="flex  items-center gap-2 px-4 py-2 text-primary rounded-xl font-medium text-base">
                 Hello , {userName}
-              </NavigationButton>
+              </span>
               <button
                 onClick={() => navigate("/cart")}
-                className="p-3 rounded-xl hover:bg-[#FF6B6B] hover:text-white transition-all duration-300 group"
+                className="p-3 rounded-xl hover:bg-white transition-all duration-300 cursor-pointer group"
               >
-                <ShoppingCart className="w-6 h-6 text-[#2D3436] group-hover:text-white" />
+                <ShoppingCart className="w-6 h-6 text-icon group-hover:text-hover1 " />
               </button>
               <button
                 onClick={() => setIsProfilePanelOpen(true)}
-                className="p-3 rounded-xl hover:bg-[#FF6B6B] hover:text-white transition-all duration-300 group"
+                className="p-3 rounded-xl hover:bg-white   transition-all duration-300 group cursor-pointer"
               >
-                <User className="w-6 h-6 text-[#2D3436] group-hover:text-white" />
+                <User className="w-6 h-6 text-icon group-hover:text-hover1" />
               </button>
             </>
           ) : (
-            <NavigationButton
-              icon={User}
-              to="/login"
-              className="flex items-center gap-2 px-4 py-2 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
-            >
-              Login
-            </NavigationButton>
+            <button
+            onClick={() => navigate("/login")}
+            className="p-3 flex flex-row gap-3 items-center rounded-xl hover:bg-white transition-all duration-300 cursor-pointer group"
+          >
+            <User className="w-6 h-6 text-icon group-hover:text-hover1 " />
+            <span className="font-secondary text-primary">Login</span>
+          </button>
           )}
         </nav>
         <button
