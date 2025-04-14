@@ -55,18 +55,18 @@ const Register = () => {
         className="flex flex-col gap-4"
         onSubmit={onSubmit}
       >
-        <h2 className="text-3xl font-bold text-center text-[#2D3436] mb-6">
+        <h2 className="text-3xl font-happiness text-center text-primary mb-6">
           Create an Account
         </h2>
 
         <div className="flex gap-4">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
+            <label className="block text-sm font-medium text-secondary font-secondary mb-1">
               First Name
             </label>
             <input
               className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
+              focus:outline-hidden focus:ring-2 focus:ring-hover1 
               bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50"
               placeholder="Enter your first name"
               {...register("firstName", { required: "This field is required" })}
@@ -76,12 +76,12 @@ const Register = () => {
             )}
           </div>
           <div className="flex-1">
-            <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
+            <label className="block text-sm font-medium text-secondary font-secondary  mb-1">
               Last Name
             </label>
             <input
               className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
+              focus:outline-hidden focus:ring-2 focus:ring-hover1 
               bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50"
               placeholder="Enter your last name"
               {...register("lastName", { required: "This field is required" })}
@@ -93,13 +93,13 @@ const Register = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
+          <label className="block text-sm font-medium text-secondary font-secondary mb-1">
             Email
           </label>
           <input
             type="email"
             className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-            focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
+            focus:outline-hidden focus:ring-2 focus:ring-hover1
             bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50"
             placeholder="Enter your email"
             {...register("email", { required: "This field is required" })}
@@ -110,14 +110,14 @@ const Register = () => {
         </div>
 
         <div className="mb-4 relative">
-          <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
+          <label className="block text-sm font-medium text-secondary font-secondary mb-1">
             Password
           </label>
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
+              focus:outline-hidden focus:ring-2 focus:ring-hover1 
               bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50 pr-10"
               placeholder="Enter your password"
               {...register("password", {
@@ -131,7 +131,7 @@ const Register = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#2D3436]/50 hover:text-[#FF6B6B] transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#2D3436]/50 hover:text-hover1 transition-colors"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -142,14 +142,14 @@ const Register = () => {
         </div>
 
         <div className="mb-4 relative">
-          <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
+          <label className="block text-sm font-medium text-secondary font-secondary mb-1">
             Confirm Password
           </label>
           <div className="relative">
             <input
               type={showConfirmPassword ? "text" : "password"}
               className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
+              focus:outline-hidden focus:ring-2 focus:ring-hover1 
               bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50 pr-10"
               placeholder="Confirm your password"
               {...register("confirmPassword", {
@@ -165,7 +165,7 @@ const Register = () => {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#2D3436]/50 hover:text-[#FF6B6B] transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#2D3436]/50 hover:text-hover1 transition-colors"
             >
               {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -177,17 +177,17 @@ const Register = () => {
 
         <button
           type="submit"
-          className="w-full bg-[#FF6B6B] text-white p-3 rounded-xl 
-          hover:bg-[#FF6B6B]/90 transition-colors 
-          hover:shadow-lg hover:shadow-[#FF6B6B]/20"
+          className="w-full bg-background text-primary font-primary p-3 rounded-xl 
+          hover:bg-white transition-colors 
+          hover:shadow-lg hover:shadow-[#9333EA]/20"
         >
           Create Account
         </button>
         <div className="flex items-center justify-between mb-4">
           <Link 
             to="/login"
-            state={location.state} // Preserve the state when going back to login
-            className="text-sm text-[#2D3436]/80 hover:text-[#FF6B6B] transition-colors"
+            state={location.state} 
+            className="text-sm text-[#2D3436]/80 hover:text-hover1 transition-colors"
           >
             Already have an account? Sign in
           </Link>

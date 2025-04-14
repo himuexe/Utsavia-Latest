@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from "react-query";
 import {
   User,
   LogOut,
-  Settings,
   ShoppingCart,
   Menu,
   X,
@@ -70,14 +69,14 @@ const Nav = () => {
       <NavigationButton
         icon={User}
         to="/profile"
-        className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
+        className="w-full flex items-center gap-3 px-4 py-3  rounded-xl transition-all font-medium text-base"
       >
         Profile
       </NavigationButton>
       <NavigationButton
         icon={Gift}
         to="/mybookings"
-        className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
+        className="w-full flex items-center gap-3 px-4 py-3  rounded-xl transition-all font-medium text-base"
       >
         My Bookings
       </NavigationButton>
@@ -85,7 +84,7 @@ const Nav = () => {
         icon={LogOut}
         onClick={handleSignOut}
         isLoading={signOutMutation.isLoading}
-        className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
+        className="w-full flex items-center gap-3 px-4 py-3  rounded-xl transition-all font-medium text-base"
       >
         Sign Out
       </NavigationButton>
@@ -94,7 +93,7 @@ const Nav = () => {
     <NavigationButton
       icon={User}
       to="/login"
-      className="w-full flex items-center gap-3 px-4 py-3 text-[#2D3436] hover:bg-[#FF6B6B] hover:text-white rounded-xl transition-all font-medium text-base"
+      className="w-full flex items-center gap-3 px-4 py-3  rounded-xl transition-all font-medium text-base"
     >
       Login
     </NavigationButton>
@@ -117,13 +116,15 @@ const Nav = () => {
               </span>
               <button
                 onClick={() => navigate("/cart")}
-                className="p-3 rounded-xl hover:bg-white transition-all duration-300 cursor-pointer group"
+                className="p-3 rounded-xl hover:bg-white  duration-300 cursor-pointer group transition-colors 
+          hover:shadow-lg hover:shadow-[#9333EA]/20" 
               >
                 <ShoppingCart className="w-6 h-6 text-icon group-hover:text-hover1 " />
               </button>
               <button
                 onClick={() => setIsProfilePanelOpen(true)}
-                className="p-3 rounded-xl hover:bg-white   transition-all duration-300 group cursor-pointer"
+                className="p-3 rounded-xl hover:bg-white  duration-300 group cursor-pointer transition-colors 
+          hover:shadow-lg hover:shadow-[#9333EA]/20"
               >
                 <User className="w-6 h-6 text-icon group-hover:text-hover1" />
               </button>
@@ -131,7 +132,8 @@ const Nav = () => {
           ) : (
             <button
             onClick={() => navigate("/login")}
-            className="p-3 flex flex-row gap-3 items-center rounded-xl hover:bg-white transition-all duration-300 cursor-pointer group"
+            className="p-3 flex flex-row gap-3 items-center rounded-xl hover:bg-white  duration-300 cursor-pointer group transition-colors 
+          hover:shadow-lg hover:shadow-[#9333EA]/20"
           >
             <User className="w-6 h-6 text-icon group-hover:text-hover1 " />
             <span className="font-secondary text-primary">Login</span>

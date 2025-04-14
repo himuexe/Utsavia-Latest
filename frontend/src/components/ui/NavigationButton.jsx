@@ -5,7 +5,8 @@ export const NavigationButton = ({ icon: Icon, children, to, onClick, isLoading 
     {to ? (
       <Link 
         to={to} 
-        className="flex items-center gap-3 text-primary hover:bg-white hover:text-hover1 px-4 py-3 rounded-xl transition-all duration-300 font-medium group"
+        className="flex items-center gap-3 text-primary hover:bg-white hover:text-hover1 px-4 py-3 rounded-xl transition-all duration-300 font-medium group 
+          hover:shadow-lg hover:shadow-[#9333EA]/20"
       >
         {Icon && (
           <Icon 
@@ -17,7 +18,8 @@ export const NavigationButton = ({ icon: Icon, children, to, onClick, isLoading 
     ) : (
       <button
         onClick={onClick}
-        className="flex items-center gap-3 text-primary hover:bg-white hover:text-hover1 px-4 py-3 rounded-xl w-full transition-all duration-300 font-medium group disabled:opacity-50 disabled:cursor-not-allowed"
+        className="flex items-center gap-3 text-primary hover:bg-white hover:text-hover1 px-4 py-3 rounded-xl w-full transition-all duration-300 font-medium group disabled:opacity-50 disabled:cursor-not-allowed 
+          hover:shadow-lg hover:shadow-[#9333EA]/20"
         disabled={isLoading}
       >
         {Icon && (

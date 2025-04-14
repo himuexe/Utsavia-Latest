@@ -3,9 +3,9 @@ import Footer from "../components/layout/Footer";
 import Nav from "../components/layout/Nav";
 const Layout = ({ children }) => {
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div className="flex flex-col min-h-screen bg-background">
       <Nav />
-      <div className="container mx-auto py-10 flex-1">{children}</div>
+      <div className="container mx-auto py-10 flex-1 ">{children}</div>
       <Footer />
       <ChatBot/>
     </div>

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api/MyUserApi";
 import { useDispatch } from "react-redux";
-import { Eye, EyeOff, Heart } from 'lucide-react';
+import { Eye, EyeOff, Heart } from "lucide-react";
 import { showToast } from "../store/appSlice";
 
 const SignIn = () => {
@@ -22,7 +22,9 @@ const SignIn = () => {
 
   const mutation = useMutation(apiClient.signIn, {
     onSuccess: async () => {
-      dispatch(showToast({ message: 'Signed in successfully', type: 'SUCCESS' }));
+      dispatch(
+        showToast({ message: "Signed in successfully", type: "SUCCESS" })
+      );
       await queryClient.invalidateQueries("validateToken");
 
       // Check if we have booking details in the state
@@ -30,7 +32,7 @@ const SignIn = () => {
         // If we have booking details, go directly to checkout
         navigate("/checkout", {
           state: { bookingDetails: location.state.bookingDetails },
-          replace: true
+          replace: true,
         });
       } else {
         // Otherwise, go to the saved location or home
@@ -39,7 +41,7 @@ const SignIn = () => {
       }
     },
     onError: async (error) => {
-      dispatch(showToast({ message: error.message, type: 'ERROR' }));
+      dispatch(showToast({ message: error.message, type: "ERROR" }));
     },
   });
 
@@ -56,39 +58,38 @@ const SignIn = () => {
 
   return (
     <div className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-lg p-8 mt-8 border border-[#F0F0F0]">
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={onSubmit}
-      >
-        <h2 className="text-3xl font-bold text-[#2D3436] text-center mb-4">
+      <form className="flex flex-col gap-4" onSubmit={onSubmit}>
+        <h2 className="text-3xl font-happiness text-primary text-center mb-4">
           Welcome Back
         </h2>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
+          <label className="block text-sm font-medium text-secondary mb-1 font-secondary">
             Email
           </label>
           <input
             type="email"
             placeholder="Enter your email"
-            className="w-full p-3 rounded-xl border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
+            className="w-full p-3 rounded-xl border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-hover1
             bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50"
             {...register("email", { required: "This field is required" })}
           />
           {errors.email && (
-            <span className="text-[#FF6B6B] text-sm mt-1">{errors.email.message}</span>
+            <span className="text-[#FF6B6B] text-sm mt-1">
+              {errors.email.message}
+            </span>
           )}
         </div>
 
         <div className="mb-4 relative">
-          <label className="block text-sm font-medium text-[#2D3436]/80 mb-1">
+          <label className="block text-sm font-medium text-secondary mb-1 font-secondary">
             Password
           </label>
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
-              className="w-full p-3 rounded-xl border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
+              className="w-full p-3 rounded-xl border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-hover1 
               bg-[#F9F9F9] text-[#2D3436] placeholder-[#2D3436]/50 pr-10"
               {...register("password", {
                 required: "This field is required",
@@ -101,33 +102,36 @@ const SignIn = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#2D3436]/50 hover:text-[#FF6B6B] transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#2D3436]/50 hover:text-hover1 transition-colors"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
           {errors.password && (
-            <span className="text-[#FF6B6B] text-sm mt-1">{errors.password.message}</span>
+            <span className="text-[#FF6B6B] text-sm mt-1">
+              {errors.password.message}
+            </span>
           )}
         </div>
 
         <div className="flex items-center justify-between mb-4">
-          <Link 
-            to="/register" 
+          <Link
+            to="/register"
             state={location.state}
-            className="text-sm text-[#2D3436]/80 hover:text-[#FF6B6B] 
-              transition-colors flex items-center gap-1"
+            className="text-sm text-secondary font-secondary 
+              transition-colors flex items-center gap-1 group hover:text-hover1"
           >
-            <Heart className="w-4 h-4" />
+            <Heart className="w-4 h-4 text-icon group-hover:text-hover1" />
             Create Account
           </Link>
           <button
             type="submit"
-            className="bg-[#FF6B6B] text-white px-6 py-2 rounded-xl 
-            hover:bg-[#FF6B6B]/90 transition-colors 
-            hover:shadow-lg hover:shadow-[#FF6B6B]/20"
+            className="p-3 flex flex-row gap-3 items-center rounded-xl  duration-300 cursor-pointer group bg-background hover:bg-white transition-colors 
+          hover:shadow-lg hover:shadow-[#9333EA]/20"
           >
-            Login
+            <span className="font-secondary text-primary group-hover:text-hover1 ">
+              Login
+            </span>
           </button>
         </div>
 
