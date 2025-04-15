@@ -96,7 +96,7 @@ const CartPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 bg-white min-h-screen text-[#2D3436]">
-      <h1 className="text-2xl font-bold mb-8">Shopping Cart</h1>
+      <h1 className="text-2xl font-secondary text-primary mb-8">Shopping Cart</h1>
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
           {cartItems.map((item) => (
@@ -107,8 +107,9 @@ const CartPage = () => {
           <CartSummary items={cartItems} />
           <button
             onClick={handleCheckout}
-            className="w-full bg-[#FF6B6B] text-white py-3 rounded-lg font-semibold
-              hover:bg-[#FF6B6B]/90 transition-colors duration-200 hover:shadow-lg hover:shadow-[#FF6B6B]/20"
+            className="w-full bg-background text-primary font-primary p-3 rounded-xl 
+          hover:bg-white transition-colors 
+          hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer"
           >
             Proceed to Checkout
           </button>

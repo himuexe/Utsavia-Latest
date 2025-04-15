@@ -252,8 +252,8 @@ const ProductBookingPage = ({ selectedCity }) => {
 
           <div className="bg-white rounded-xl border border-[#F0F0F0] p-6 shadow-lg">
             <div className="flex items-center gap-2 mb-4">
-              <Calendar className="text-[#FF6B6B]" />
-              <span className="font-semibold text-[#2D3436]">Select Date</span>
+              <Calendar className="text-icon" />
+              <span className="font-semibold text-primary">Select Date</span>
             </div>
 
             <input
@@ -262,12 +262,12 @@ const ProductBookingPage = ({ selectedCity }) => {
               onChange={handleDateChange}
               min={new Date().toISOString().split("T")[0]}
               className="w-full p-2 mb-6 bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] rounded-lg 
-              focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
+              focus:outline-hidden focus:ring-2 focus:ring-hover1"
             />
 
             <div className="flex items-center gap-2 mb-4">
-              <Clock className="text-[#FF6B6B]" />
-              <span className="font-semibold text-[#2D3436]">Select Time Slot</span>
+              <Clock className="text-icon" />
+              <span className="font-semibold text-primary">Select Time Slot</span>
             </div>
 
             <TimeSlotSelector
@@ -293,8 +293,9 @@ const ProductBookingPage = ({ selectedCity }) => {
                     cartLoading ||
                     !isLoggedIn
                   }
-                  className="w-full bg-[#FF6B6B] text-white py-3 rounded-lg font-semibold
-                    hover:bg-[#FF6B6B]/90 transition-colors duration-200 
+                  className="w-full bg-background text-primary font-primary p-3 rounded-xl 
+          hover:bg-white transition-colors 
+          hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer
                     disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50 disabled:cursor-not-allowed"
                 >
                   {cartLoading
@@ -306,8 +307,9 @@ const ProductBookingPage = ({ selectedCity }) => {
                 <button
                   onClick={handleBooking}
                   disabled={!selectedDate || !selectedSlot || !pincode}
-                  className="w-full bg-[#FFD166] text-[#2D3436] py-3 rounded-lg font-semibold
-                    hover:bg-[#FFD166]/90 transition-colors duration-200 
+                  className="w-full bg-background text-primary font-primary p-3 rounded-xl 
+          hover:bg-white transition-colors 
+          hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer
                     disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50 disabled:cursor-not-allowed"
                 >
                   {!selectedDate || !selectedSlot || !pincode

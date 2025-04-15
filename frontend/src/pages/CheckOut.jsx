@@ -154,7 +154,7 @@ const CheckoutPage = ({selectedCity}) => {
           animate={{ opacity: 1, x: 0 }}
           className="space-y-6"
         >
-          <h1 className="text-4xl font-bold text-[#2D3436] mb-6">
+          <h1 className="text-4xl  text-primary font-primary mb-6">
             Delivery Information
           </h1>
 
@@ -186,7 +186,7 @@ const CheckoutPage = ({selectedCity}) => {
           animate={{ opacity: 1, x: 0 }}
           className="bg-white rounded-2xl border border-[#F0F0F0] p-6 shadow-lg"
         >
-          <h2 className="text-3xl font-bold text-[#2D3436] mb-6">
+          <h2 className="text-3xl  text-secondary font-secondary mb-6">
             Order Summary
           </h2>
 
@@ -229,7 +229,7 @@ const CheckoutPage = ({selectedCity}) => {
             />
 
             <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-primary font-primary">
                 Payment Method
               </label>
               <select
@@ -237,8 +237,9 @@ const CheckoutPage = ({selectedCity}) => {
                 onChange={(e) => setPaymentMethod(e.target.value)}
                 className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-hidden focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
               >
-                <option value="stripe">Pay with Card</option>
                 <option value="razorpay">Pay with UPI and Netbank</option>
+                <option value="stripe">Pay with Card</option>
+                
               </select>
             </div>
 
@@ -251,9 +252,9 @@ const CheckoutPage = ({selectedCity}) => {
                   options={{
                     clientSecret: paymentState.clientSecret,
                     appearance: {
-                      theme: "night",
+                      theme: "day",
                       variables: {
-                        colorPrimary: "#FF6B6B",
+                        colorPrimary: "#9333EA",
                       },
                     },
                   }}

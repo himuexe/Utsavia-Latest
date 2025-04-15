@@ -149,7 +149,7 @@ const SignIn = () => {
               onClick={handleGoogleSignIn}
               className="w-full flex items-center justify-center gap-2 
               bg-[#F9F9F9] border border-[#F0F0F0] text-[#2D3436] p-3 rounded-xl 
-              hover:bg-[#F0F0F0] transition-all"
+              hover:bg-[#F0F0F0] transition-all cursor-pointer"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path

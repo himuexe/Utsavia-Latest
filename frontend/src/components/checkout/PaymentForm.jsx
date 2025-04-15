@@ -70,7 +70,7 @@ const PaymentForm = ({ amount, onSuccess, selectedAddress }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 ">
       <PaymentElement />
       {error && (
         <div className="text-[#FF6B6B] text-sm bg-[#FF6B6B]/10 p-3 rounded-lg">
@@ -80,8 +80,9 @@ const PaymentForm = ({ amount, onSuccess, selectedAddress }) => {
       <button
         type="submit"
         disabled={!stripe || processing}
-        className="w-full bg-[#FF6B6B] text-white py-3 rounded-xl font-semibold
-          hover:bg-[#FF6B6B]/90 transition-colors duration-200 
+        className="w-full bg-background text-primary font-primary p-3 rounded-xl 
+          hover:bg-white transition-colors 
+          hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointerduration-200 
           disabled:bg-[#F0F0F0] disabled:text-[#666] disabled:cursor-not-allowed"
       >
         {processing ? 'Processing...' : `Pay ₹${amount.toLocaleString()}`}

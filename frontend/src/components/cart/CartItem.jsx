@@ -27,7 +27,7 @@ const CartItem = ({ item }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-[#F0F0F0] p-4 mb-4 shadow-lg hover:shadow-xl transition-shadow duration-200">
+    <div className="bg-white rounded-lg border border-[#F0F0F0] p-4 mb-4  hover:shadow-lg hover:shadow-[#9333EA]/20 transition-shadow duration-200">
       <div className="flex items-center gap-4">
         <div className="w-24 h-24">
           <img
@@ -40,8 +40,8 @@ const CartItem = ({ item }) => {
           />
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-[#2D3436]">{item.itemName}</h3>
-          <div className="mt-1 space-y-1 text-sm text-[#666]">
+          <h3 className="text-lg font-secondary text-secondary">{item.itemName}</h3>
+          <div className="mt-1 space-y-1 font-primary text-sm text-primary">
             <p>Date: {new Date(item.date).toLocaleDateString()}</p>
             <p>Time: {item.timeSlot}</p>
             <p>Location: {item.city}</p>
@@ -49,10 +49,10 @@ const CartItem = ({ item }) => {
           </div>
         </div>
         <div className="flex flex-col items-end gap-4">
-          <span className="text-xl font-bold text-[#FF6B6B]">₹{item.price.toLocaleString()}</span>
+          <span className="text-xl font-primary text-primary">₹{item.price.toLocaleString()}</span>
           <button
             onClick={handleRemove}
-            className="text-[#666] hover:text-[#FF6B6B] transition-colors"
+            className="text-[#666] hover:text-[#FF6B6B] transition-colors cursor-pointer"
             aria-label="Remove item"
           >
             <Trash2 size={20} />

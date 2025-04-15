@@ -14,28 +14,10 @@ const BookingCard = ({ booking, onViewDetails, onUpdateStatus }) => {
       className="bg-white rounded-2xl border border-[#F0F0F0] p-6 shadow-lg hover:shadow-xl transition-shadow duration-200"
     >
       <h2 className="text-xl font-bold text-[#2D3436] mb-4">Booking ID: {_id}</h2>
-      <div className="space-y-3 text-[#666]">
-        <p>
-          <span className="font-medium">Status:</span>{' '}
-          <span
-            className={`px-2 py-1 rounded-full text-xs ${
-              status === 'paid'
-                ? 'bg-green-100 text-green-600'
-                : status === 'pending'
-                ? 'bg-yellow-100 text-yellow-600'
-                : 'bg-red-100 text-red-600'
-            }`}
-          >
-            {status}
-          </span>
-        </p>
+      <div className="space-y-3 text-primary font-primary">
         <p>
           <span className="font-medium">Total Amount:</span> ₹
           {totalAmount.toLocaleString()}
-        </p>
-        <p>
-          <span className="font-medium">Date:</span>{' '}
-          {format(new Date(createdAt), 'dd MMM yyyy, hh:mm a')}
         </p>
         {address && (
           <div>
@@ -50,7 +32,7 @@ const BookingCard = ({ booking, onViewDetails, onUpdateStatus }) => {
           <ul className="list-disc list-inside">
             {items.map((item, index) => (
               <li key={index}>
-                {item.name} - {new Date(item.date).toLocaleDateString()} ({item.timeSlot})
+                {item.itemName} - {new Date(item.date).toLocaleDateString()} ({item.timeSlot})
               </li>
             ))}
           </ul>
@@ -58,15 +40,10 @@ const BookingCard = ({ booking, onViewDetails, onUpdateStatus }) => {
         <div className="mt-6 flex space-x-4">
           <button
             onClick={onViewDetails}
-            className="bg-[#FF6B6B] text-white px-4 py-2 rounded-lg hover:bg-[#FF6B6B]/90 transition-colors duration-200"
+            className=" text-primary bg-background hover:bg-white hover:text-hover1 px-4 py-3 rounded-xl w-full transition-all duration-300 font-medium group disabled:opacity-50 disabled:cursor-not-allowed 
+          hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer"
           >
             View Details
-          </button>
-          <button
-            onClick={() => onUpdateStatus('cancelled')}
-            className="bg-[#2D3436] text-white px-4 py-2 rounded-lg hover:bg-[#2D3436]/90 transition-colors duration-200"
-          >
-            Cancel Booking
           </button>
         </div>
       </div>

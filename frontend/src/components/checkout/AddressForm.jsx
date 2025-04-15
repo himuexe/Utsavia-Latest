@@ -63,13 +63,13 @@ const AddressForm = ({ onSuccess, initialData }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-[#666] mb-1">
+        <label className="block text-sm font-medium text-primary font-primary mb-1">
           Phone Number
         </label>
         <input
           type="tel"
           className="w-full p-3 rounded-xl border border-[#F0F0F0] 
-          focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
+          focus:outline-hidden focus:ring-2 focus:ring-hover1 
           bg-white text-[#2D3436] placeholder-[#666]"
           placeholder="Enter your phone number"
           {...register('phone', {
@@ -86,45 +86,45 @@ const AddressForm = ({ onSuccess, initialData }) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-[#666] mb-1">
+        <label className="block text-sm font-medium text-primary font-primary mb-1">
           Delivery Addresses
         </label>
         {addresses.map((address, index) => (
-          <div key={index} className="mb-4 p-4 border border-[#F0F0F0] rounded-lg">
+          <div key={index} className="mb-4 p-4 border border-[#F0F0F0] rounded-lg gap-1 flex flex-col">
             <input
               type="text"
               placeholder="Street"
-              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-hover1"
               {...register(`addresses.${index}.street`, { required: 'Street is required' })}
             />
             <input
               type="text"
               placeholder="City"
-              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-hover1"
               {...register(`addresses.${index}.city`, { required: 'City is required' })}
             />
             <input
               type="text"
               placeholder="State"
-              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-hover1"
               {...register(`addresses.${index}.state`, { required: 'State is required' })}
             />
             <input
               type="text"
               placeholder="Zip Code"
-              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-hover1"
               {...register(`addresses.${index}.zipCode`, { required: 'Zip Code is required' })}
             />
             <input
               type="text"
               placeholder="Country"
-              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B]"
+              className="w-full p-2 rounded-lg bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] focus:outline-hidden focus:ring-2 focus:ring-hover1"
               {...register(`addresses.${index}.country`, { required: 'Country is required' })}
             />
             <button
               type="button"
               onClick={() => handleRemoveAddress(index)}
-              className="text-[#FF6B6B] hover:text-[#FF6B6B]/90"
+              className="text-[#FF6B6B] hover:text-[#FF6B6B]/90 cursor-pointer"
             >
               Remove Address
             </button>
@@ -133,7 +133,8 @@ const AddressForm = ({ onSuccess, initialData }) => {
         <button
           type="button"
           onClick={handleAddAddress}
-          className="bg-[#FF6B6B] text-white px-4 py-2 rounded-lg hover:bg-[#FF6B6B]/90"
+          className="p-3 flex flex-row gap-3 items-center rounded-xl  duration-300 cursor-pointer group bg-background hover:bg-white transition-colors 
+          hover:shadow-lg hover:shadow-[#9333EA]/20"
         >
           Add Address
         </button>
@@ -142,11 +143,11 @@ const AddressForm = ({ onSuccess, initialData }) => {
       <button
         type="submit"
         disabled={mutation.isLoading}
-        className="w-full bg-[#FF6B6B] text-white py-3 rounded-xl font-semibold
-          hover:bg-[#FF6B6B]/90 transition-colors duration-200 
-          disabled:bg-[#F0F0F0] disabled:text-[#666] disabled:cursor-not-allowed"
+        className="w-full bg-background text-primary font-primary p-3 rounded-xl 
+          hover:bg-white transition-colors 
+          hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer disabled:cursor-not-allowed"
       >
-        {mutation.isLoading ? 'Updating...' : 'Save Address'}
+        {mutation.isLoading ? 'Updating...' : 'Save Addresses'}
       </button>
     </form>
   );

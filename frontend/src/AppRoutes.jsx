@@ -21,6 +21,7 @@ import CheckoutPage from "./pages/CheckOut";
 import CartPage from "./pages/CartPage";
 import MyBookingsPage from "./pages/MyBookingPage";
 import { selectSelectedCity, selectIsLoggedIn } from "./store/appSlice";
+import CategoriesPage from "./pages/Categories";
 
 const AuthWrapper = ({ children }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -63,6 +64,14 @@ const AppRoutes = () => {
             <RegLayout>
               <Contact />
             </RegLayout>
+          }
+        />
+        <Route
+          path="/themes"
+          element={
+            <Layout>
+              <CategoriesPage />
+            </Layout>
           }
         />
         <Route

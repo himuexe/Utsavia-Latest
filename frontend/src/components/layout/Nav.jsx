@@ -33,6 +33,11 @@ const Nav = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const handleCloseMenus = useCallback(() => {
+    setIsMenuOpen(false);
+    setIsProfilePanelOpen(false);
+  }, []);
+
   useEffect(() => {
     if (isLoggedIn) {
       const fetchUser = async () => {
@@ -69,6 +74,7 @@ const Nav = () => {
       <NavigationButton
         icon={User}
         to="/profile"
+        onNavigate={handleCloseMenus}
         className="w-full flex items-center gap-3 px-4 py-3  rounded-xl transition-all font-medium text-base"
       >
         Profile
@@ -76,6 +82,7 @@ const Nav = () => {
       <NavigationButton
         icon={Gift}
         to="/mybookings"
+        onNavigate={handleCloseMenus}
         className="w-full flex items-center gap-3 px-4 py-3  rounded-xl transition-all font-medium text-base"
       >
         My Bookings

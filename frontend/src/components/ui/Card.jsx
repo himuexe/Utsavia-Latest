@@ -6,7 +6,7 @@ const Card = ({ children, className = "", hover = true }) => {
       className={`
         bg-white rounded-lg overflow-hidden
         border border-[#F0F0F0]
-        ${hover ? 'hover:border-[#FF6B6B] hover:-translate-y-1' : 'shadow-md'}
+        ${hover ? 'hover:border-hover1 hover:-translate-y-1' : 'shadow-md'}
         transform transition-all duration-300
         ${className} min-h-[28rem]
       `}

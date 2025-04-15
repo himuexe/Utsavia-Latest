@@ -95,11 +95,6 @@ export const useCheckout = (cartItems, checkoutType, bookingDetails) => {
           handler: async (response) => {
             await handlePaymentSuccess(response.razorpay_payment_id, selectedAddress);
           },
-          prefill: {
-            name: 'Customer Name',
-            email: 'customer@example.com',
-            contact: '9999999999'
-          },
           theme: {
             color: '#F37254'
           }

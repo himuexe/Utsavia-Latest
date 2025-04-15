@@ -1,69 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import * as apiClient from "../../api/ItemApi"; 
-
-const CategoryCards = () => {
-  const [categories, setCategories] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await apiClient.getSubCategories(); 
-        setCategories(data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-        setError(error.message); 
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
+import { Link } from "react-router-dom";
+import { FaStar } from "react-icons/fa";
+ const Hero = () => {
   return (
-    <div className="w-full bg-white py-12 border-t border-[#F0F0F0]">
-      <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-[#2D3436]">
-          Make Every Occasion Extra Special
-        </h2>
-
-        {error && (
-          <div className="text-[#FF6B6B] text-center mb-4 bg-[#FF6B6B]/10 py-2 rounded-lg">
-            Failed to fetch categories
+    <div className="relative bg-gradient-to-r from-primary to-secondary overflow-hidden">
+      <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10"></div>
+      <div className="max-w-7xl mx-auto px-4 py-16 md:py-24 relative z-10">
+        <div className="flex flex-col md:flex-row items-center justify-between">
+          <div className="w-full md:w-1/2 text-white mb-10 md:mb-0">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-happiness font-bold leading-tight mb-6">
+              Transform Your <span className="text-marigold">Events</span> With Stunning Decor
+            </h1>
+            <p className="text-lg md:text-xl opacity-90 mb-8 max-w-lg">
+              Book premium event decorations for any occasion. Easy to order, delivered to your door.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link to="/themes" className="bg-white text-primary px-8 py-3 rounded-full font-medium text-lg hover:bg-opacity-90 transition-all shadow-lg transform hover:-translate-y-1">
+                Browse Themes
+              </Link>
+              <Link to="/contact" className="border-2 border-white text-white px-8 py-3 rounded-full font-medium text-lg hover:bg-white hover:text-primary transition-all">
+                Contact Us
+              </Link>
+            </div>
           </div>
-        )}
-
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {categories.map((category) => (
-            <Link
-              key={category._id}
-              to={`/themes/${category._id}`}
-              className="group cursor-pointer"
-            >
-              <div className="relative overflow-hidden rounded-lg md:rounded-2xl bg-[#F9F9F9] 
-                transition-all duration-300 hover:scale-105 border border-[#F0F0F0] 
-                hover:border-[#FF6B6B] hover:shadow-lg hover:shadow-[#FF6B6B]/10">
-                <div className="aspect-4/3 overflow-hidden">
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="w-full h-full object-cover transition-transform duration-500 
-                      group-hover:scale-105 opacity-90 group-hover:opacity-100"
-                  />
-                </div>
+          <div className="w-full md:w-1/2 relative">
+            <div className="bg-white p-4 rounded-2xl shadow-2xl">
+              <img 
+                src="/H1.jpg" 
+                alt="Beautiful Event Decoration" 
+                className="w-full h-80 object-cover rounded-xl"
+              />
+            </div>
+            <div className="absolute -bottom-5 -left-5 bg-white p-3 rounded-lg shadow-lg">
+              <div className="bg-marigold text-white p-2 rounded-md flex items-center">
+                <FaStar className="mr-1" />
+                <span className="font-bold">4.9</span>
+                <span className="ml-1 text-sm">(2.5k+ reviews)</span>
               </div>
-              <div className="p-2 md:p-4">
-                <h3 className="text-[#2D3436] text-sm md:text-lg font-semibold text-center 
-                  group-hover:text-[#FF6B6B] transition-colors">
-                  {category.name}
-                </h3>
-              </div>
-            </Link>
-          ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
-export default CategoryCards;
+export default Hero;

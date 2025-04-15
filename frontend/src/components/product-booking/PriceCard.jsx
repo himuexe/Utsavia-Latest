@@ -88,7 +88,7 @@ const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
     <div className="bg-white rounded-xl border border-[#F0F0F0] p-6 mb-6 shadow-lg">
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <span className="text-3xl font-bold text-[#FF6B6B]">
+          <span className="text-3xl font-primary text-icon">
             {locationPrice
               ? `₹${locationPrice.toLocaleString()}`
               : "Price unavailable for this location"}
@@ -105,20 +105,20 @@ const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
                 placeholder="Enter Pincode"
                 disabled={isSubmitting}
                 className="w-full px-4 py-2 bg-[#F9F9F9] text-[#2D3436] border border-[#F0F0F0] rounded-lg 
-                focus:outline-hidden focus:ring-2 focus:ring-[#FF6B6B] 
+                focus:outline-hidden focus:ring-2 focus:ring-hover1 
                 disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50"
               />
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="bg-[#FF6B6B] text-white px-4 py-2 rounded-lg 
-                hover:bg-[#FF6B6B]/90 transition-colors
-                disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50"
+                className="bg-background text-primary px-4 py-2 rounded-lg 
+                hover:bg-white hover:shadow-lg hover:shadow-hover1/40 transition-colors
+                disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50 cursor-pointer"
               >
                 {isSubmitting ? "Checking..." : "Submit"}
               </button>
             </div>
-            <MapPin className="absolute right-24 top-2.5 text-[#2D3436]/50" size={20} />
+            <MapPin className="absolute right-24 top-2.5 text-icon" size={20} />
           </div>
         </div>
       </div>

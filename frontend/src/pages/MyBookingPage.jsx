@@ -69,7 +69,7 @@ const MyBookingsPage = () => {
         animate={{ opacity: 1, y: 0 }}
         className="space-y-8"
       >
-        <h1 className="text-4xl font-bold text-[#2D3436] mb-6">
+        <h1 className="text-4xl  text-primary font-secondary mb-6">
           My Bookings
         </h1>
 

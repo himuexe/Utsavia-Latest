@@ -7,10 +7,10 @@ const TimeSlotSelector = ({ slots = [], selectedSlot, onSelect }) => (
         <button
           key={slot}
           onClick={() => onSelect(slot)}
-          className={`p-2 rounded-lg text-sm ${
+          className={`p-2 rounded-lg text-sm font-primary ${
             selectedSlot === slot
-              ? "bg-[#FF6B6B] text-white" // Coral Pink for selected slot
-              : "bg-[#F0F0F0] text-[#2D3436] hover:bg-[#FFD166]" // Light Gray for unselected, Pastel Yellow on hover
+              ? "border-hover1 text-hover1 border" // Coral Pink for selected slot
+              : "g-[#F0F0F0] border border-[#F0F0F0] text-primary hover:bg-white hover:border-hover1 hover:text-hover1" // Light Gray for unselected, Pastel Yellow on hover
           } transition-colors duration-200`} // Smooth transition for hover effects
         >
           {slot}

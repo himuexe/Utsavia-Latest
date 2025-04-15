@@ -61,7 +61,7 @@ const ThemesPage = ({ selectedCity }) => {
     return (
       <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
         <h1 className="text-3xl font-bold text-[#FF6B6B] mb-8">
-          Error: No Themes Found
+          No Themes Found
         </h1>
       </div>
     );
@@ -69,7 +69,7 @@ const ThemesPage = ({ selectedCity }) => {
 
   return (
     <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
-      <h1 className="text-3xl font-bold text-[#2D3436] mb-8">
+      <h1 className="text-3xl  text-primary font-happiness mb-8">
         All Themes
       </h1>
 
@@ -98,10 +98,10 @@ const ThemesPage = ({ selectedCity }) => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-semibold text-[#2D3436] line-clamp-2">
+                  <h3 className="text-xl font-secondary text-primary line-clamp-2">
                     {theme.name}
                   </h3>
-                  <p className="text-[#2D3436]/80 text-sm line-clamp-2">
+                  <p className="text-primary text-sm line-clamp-2">
                     {theme.description ||
                       "Transform your special moments into unforgettable memories."}
                   </p>
@@ -109,14 +109,14 @@ const ThemesPage = ({ selectedCity }) => {
               </CardContent>
               <CardFooter>
                 <div className="flex items-center justify-between w-full">
-                  <span className="text-xl font-bold text-[#FF6B6B]">
+                  <span className="text-xl font-semibold text-icon">
                     ₹{theme.prices[0]?.price.toLocaleString() || "N/A"}
                   </span>
                   <button
                     onClick={() => navigate(`/info/${theme._id}`)}
-                    className="px-4 py-2 bg-[#FF6B6B] text-white 
-                    rounded-xl hover:bg-[#FF6B6B]/90
-                    transition-all duration-300 font-medium"
+                    className="px-4 py-2 bg-secondary/70 text-white
+                    rounded-xl hover:bg-primary  shadow-lg
+                    transition-all duration-300 font-medium cursor-pointer"
                   >
                     View Details
                   </button>
