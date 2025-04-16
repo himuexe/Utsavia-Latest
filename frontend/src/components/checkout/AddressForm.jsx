@@ -134,7 +134,7 @@ const AddressForm = ({ onSuccess, initialData }) => {
           type="button"
           onClick={handleAddAddress}
           className="p-3 flex flex-row gap-3 items-center rounded-xl  duration-300 cursor-pointer group bg-background hover:bg-white transition-colors 
-          hover:shadow-lg hover:shadow-[#9333EA]/20"
+          hover:shadow-lg hover:shadow-[#9333EA]/20 border border-hover1"
         >
           Add Address
         </button>
@@ -145,7 +145,7 @@ const AddressForm = ({ onSuccess, initialData }) => {
         disabled={mutation.isLoading}
         className="w-full bg-background text-primary font-primary p-3 rounded-xl 
           hover:bg-white transition-colors 
-          hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer disabled:cursor-not-allowed"
+          hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer disabled:cursor-not-allowed border border-hover1"
       >
         {mutation.isLoading ? 'Updating...' : 'Save Addresses'}
       </button>

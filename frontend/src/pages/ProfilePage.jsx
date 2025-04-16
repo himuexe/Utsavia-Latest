@@ -5,6 +5,7 @@ import * as apiClient from "../api/MyUserApi";
 import { Edit, Save, X } from "lucide-react";
 import { showToast } from "../store/appSlice";
 import Loading from "../components/ui/Loading";
+import NotFoundPage from "./404";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -128,9 +129,7 @@ const UserProfile = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="text-[#FF6B6B] text-xl">{error}</div>
-      </div>
+      <NotFoundPage/>
     );
   }
 
@@ -299,7 +298,7 @@ const UserProfile = () => {
                 type="button"
                 onClick={() => setIsEditing(true)}
                 className="p-3 flex flex-row gap-3 items-center rounded-xl  duration-300 cursor-pointer group bg-background hover:bg-white transition-colors 
-          hover:shadow-lg hover:shadow-[#9333EA]/20"
+          hover:shadow-lg hover:shadow-[#9333EA]/20 border border-hover1"
               >
                 <Edit size={20} />
                 Edit Profile
@@ -313,7 +312,7 @@ const UserProfile = () => {
                     setFormData(user);
                   }}
                   className="bg-[#F0F0F0] text-[#2D3436] px-4 py-2 rounded-lg 
-                  hover:bg-[#F0F0F0]/90 transition-colors flex items-center gap-2 cursor-pointer"
+                  hover:bg-[#F0F0F0]/90 transition-colors flex items-center gap-2 cursor-pointer border border-hover1"
                 >
                   <X size={20} />
                   Cancel
@@ -322,7 +321,7 @@ const UserProfile = () => {
                   type="submit"
                   disabled={isSaving}
                   className="p-3 flex flex-row gap-3 items-center rounded-xl  duration-300 cursor-pointer group bg-background hover:bg-white transition-colors 
-          hover:shadow-lg hover:shadow-[#9333EA]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          hover:shadow-lg hover:shadow-[#9333EA]/20 disabled:opacity-50 disabled:cursor-not-allowed border border-hover1"
                 >
                   <Save size={20} />
                   {isSaving ? "Saving..." : "Save Changes"}

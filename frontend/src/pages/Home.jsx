@@ -34,7 +34,7 @@ const CTASection = () => {
 
 const Home = () => {
   return (
-    <div>
+    <div >
       <CategoryCards />
       <Hero />
       <TrustBadges />

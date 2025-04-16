@@ -24,8 +24,8 @@ const CategoryCards = () => {
   const displayedCategories = categories.slice(0, 8);
 
   return (
-    <div className="w-full bg-white py-12 border-t border-[#F0F0F0]">
-      <div className="max-w-7xl mx-auto px-4">
+    <div className="bg-gray-50 ">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex justify-between items-center mb-12">
           <h2 className="text-3xl md:text-4xl font-happiness text-primary">
             Make Every Occasion Extra Special

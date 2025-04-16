@@ -17,15 +17,26 @@ const createBooking = async (req, res) => {
       return res.status(400).json({ error: "Items are required for booking." });
     }
 
-    // Get all item IDs from the request
-    const itemIds = items.map(item => item.itemId);
-    if (itemIds.some(id => !id)) {
-      return res.status(400).json({ error: "Item information is incomplete." });
+    // Check for duplicate items with same date and time
+    const itemDateTimeMap = {};
+    for (const item of items) {
+      if (!item.itemId || !item.date || !item.timeSlot) {
+        return res.status(400).json({ error: "Item information is incomplete." });
+      }
+      
+      const key = `${item.itemId}-${item.date}-${item.timeSlot}`;
+      if (itemDateTimeMap[key]) {
+        return res.status(400).json({ error: "Duplicate booking for the same item, date, and time slot." });
+      }
+      itemDateTimeMap[key] = true;
     }
 
+    // Get all unique item IDs from the request
+    const itemIds = items.map(item => item.itemId);
+    
     // Find all items with their vendors
     const foundItems = await Item.find({ _id: { $in: itemIds } }).populate('vendor');
-    if (foundItems.length !== items.length) {
+    if (foundItems.length !== new Set(itemIds).size) {
       return res.status(404).json({ error: "Some items not found." });
     }
 

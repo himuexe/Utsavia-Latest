@@ -127,7 +127,7 @@ const SignIn = () => {
           <button
             type="submit"
             className="p-3 flex flex-row gap-3 items-center rounded-xl  duration-300 cursor-pointer group bg-background hover:bg-white transition-colors 
-          hover:shadow-lg hover:shadow-[#9333EA]/20"
+          hover:shadow-lg hover:shadow-[#9333EA]/20 border border-hover1"
           >
             <span className="font-secondary text-primary group-hover:text-hover1 ">
               Login
@@ -148,8 +148,8 @@ const SignIn = () => {
               type="button"
               onClick={handleGoogleSignIn}
               className="w-full flex items-center justify-center gap-2 
-              bg-[#F9F9F9] border border-[#F0F0F0] text-[#2D3436] p-3 rounded-xl 
-              hover:bg-[#F0F0F0] transition-all cursor-pointer"
+              bg-[#F9F9F9]  text-[#2D3436] p-3 rounded-xl 
+              hover:bg-[#F0F0F0] transition-all cursor-pointer border border-hover1"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path

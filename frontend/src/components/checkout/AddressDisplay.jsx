@@ -24,7 +24,7 @@ const AddressDisplay = ({ userProfile, onEdit, onSelectAddress }) => {
       <div className="space-y-2 text-primary font-primary">
         <p className="">Phone: {userProfile?.phone || 'Not provided'}</p>
         {userProfile?.addresses?.map((address, index) => (
-          <div key={index} className="border border-[#F0F0F0] p-4 rounded-lg hover:shadow-lg hover:shadow-[#9333EA]/20 transition-all">
+          <div key={index} className="border border-[#F0F0F0] p-4 rounded-lg hover:shadow-lg hover:shadow-[#9333EA]/20 transition-all hover:border-hover1">
             <label className="flex items-center space-x-2 cursor-pointer ">
               <input
                 type="radio"

@@ -88,7 +88,7 @@ const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
     <div className="bg-white rounded-xl border border-[#F0F0F0] p-6 mb-6 shadow-lg">
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <span className="text-3xl font-primary text-icon">
+          <span className="text-3xl font-primary text-primary">
             {locationPrice
               ? `₹${locationPrice.toLocaleString()}`
               : "Price unavailable for this location"}
@@ -113,7 +113,7 @@ const PriceCard = ({ prices, selectedCity, onPincodeSubmit }) => {
                 disabled={isSubmitting}
                 className="bg-background text-primary px-4 py-2 rounded-lg 
                 hover:bg-white hover:shadow-lg hover:shadow-hover1/40 transition-colors
-                disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50 cursor-pointer"
+                disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50 cursor-pointer border border-hover1"
               >
                 {isSubmitting ? "Checking..." : "Submit"}
               </button>

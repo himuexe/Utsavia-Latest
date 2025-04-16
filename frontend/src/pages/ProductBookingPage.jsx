@@ -20,11 +20,11 @@ import ProductInfoCard from "../components/product-booking/ProductInfoCard";
 import TimeSlotSelector from "../components/product-booking/TimeSlotSelector";
 import ValidationStatus from "../components/product-booking/ValidationStatus";
 import Loading from "../components/ui/Loading";
-
+import NotFoundPage from "./404";
+import { IoMdArrowRoundBack } from "react-icons/io";
 const ProductBookingPage = ({ selectedCity }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [pincode, setPincode] = useState("");
@@ -218,11 +218,7 @@ const ProductBookingPage = ({ selectedCity }) => {
 
   if (isError) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
-        <div className="text-center text-[#FF6B6B]">
-          Item not available at this location. Please try again later.
-        </div>
-      </div>
+      <NotFoundPage/>
     );
   }
 
@@ -236,7 +232,13 @@ const ProductBookingPage = ({ selectedCity }) => {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen bg-white">
+    <div className="bg-gray-50 min-h-screen container mx-auto px-4 sm:px-6 lg:px-8 py-12 ">
+              <div
+                onClick={() => window.history.back()}
+                className="flex items-center text-primary hover:text-secondary mb-4 cursor-pointer"
+              >
+                <IoMdArrowRoundBack className="mr-1" /> Back
+              </div>
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="h-[400px] lg:h-auto">
           <ProductImageCard imageUrl={item?.image} />
@@ -296,7 +298,7 @@ const ProductBookingPage = ({ selectedCity }) => {
                   className="w-full bg-background text-primary font-primary p-3 rounded-xl 
           hover:bg-white transition-colors 
           hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer
-                    disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50 disabled:cursor-not-allowed"
+                    disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50 disabled:cursor-not-allowed border border-hover1"
                 >
                   {cartLoading
                     ? "Adding to Cart..."
@@ -310,7 +312,7 @@ const ProductBookingPage = ({ selectedCity }) => {
                   className="w-full bg-background text-primary font-primary p-3 rounded-xl 
           hover:bg-white transition-colors 
           hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer
-                    disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50 disabled:cursor-not-allowed"
+                    disabled:bg-[#F0F0F0] disabled:text-[#2D3436]/50 disabled:cursor-not-allowed border border-hover1"
                 >
                   {!selectedDate || !selectedSlot || !pincode
                     ? `Complete Required Fields to Continue`

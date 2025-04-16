@@ -22,6 +22,7 @@ import CartPage from "./pages/CartPage";
 import MyBookingsPage from "./pages/MyBookingPage";
 import { selectSelectedCity, selectIsLoggedIn } from "./store/appSlice";
 import CategoriesPage from "./pages/Categories";
+import ScrollToTop from "./components/ui/ScrollToTop";
 
 const AuthWrapper = ({ children }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -49,6 +50,7 @@ const AppRoutes = () => {
 
   return (
     <Router>
+      <ScrollToTop>
       <Routes>
         <Route
           path="/"
@@ -166,6 +168,7 @@ const AppRoutes = () => {
         />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      </ScrollToTop>
     </Router>
   );
 };

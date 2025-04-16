@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useQuery } from "react-query";
 import { Elements } from "@stripe/react-stripe-js";
 import * as apiClient from "../api/MyUserApi";
-import * as itemApiClient from "../api/ItemApi"; 
+import * as itemApiClient from "../api/ItemApi";
 import {
   selectCartItems,
   selectCheckoutType,
@@ -21,8 +21,10 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { showToast } from "../store/appSlice";
+import NotFoundPage from "./404";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
-const CheckoutPage = ({selectedCity}) => {
+const CheckoutPage = ({ selectedCity }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("stripe");
   const [isPincodeValid, setIsPincodeValid] = useState(false);
@@ -63,11 +65,16 @@ const CheckoutPage = ({selectedCity}) => {
 
   const validatePincode = async (pincode, city) => {
     if (!pincode.trim()) {
-      dispatch(showToast({ message: "Please enter a pincode", type: "ERROR" }));
+      dispatch(showToast({ message: "Please enter a pincode", type: "INFO" }));
       return false;
     }
     if (!/^\d{6}$/.test(pincode)) {
-      dispatch(showToast({ message: "Please enter a valid 6-digit pincode", type: "ERROR" }));
+      dispatch(
+        showToast({
+          message: "Please enter a valid 6-digit pincode",
+          type: "INFO",
+        })
+      );
       return false;
     }
 
@@ -85,21 +92,41 @@ const CheckoutPage = ({selectedCity}) => {
           currentLocationNormalized.includes(pincodeDistrict)
         ) {
           setIsPincodeValid(true);
-          dispatch(showToast({ message: `Pincode verified for ${city}!`, type: "SUCCESS" }));
+          dispatch(
+            showToast({
+              message: `Pincode verified for ${city}!`,
+              type: "SUCCESS",
+            })
+          );
           return true;
         } else {
-          dispatch(showToast({ message: `This pincode is for ${data.PostOffice[0].District}, not for ${city}. Please enter a pincode for ${city}.`, type: "ERROR" }));
+          dispatch(
+            showToast({
+              message: `This pincode is for ${data.PostOffice[0].District}, not for ${city}. Please enter a pincode for ${city}.`,
+              type: "ERROR",
+            })
+          );
           setIsPincodeValid(false);
           return false;
         }
       } else {
-        dispatch(showToast({ message: "Invalid pincode. Please enter a valid pincode.", type: "ERROR" }));
+        dispatch(
+          showToast({
+            message: "Invalid pincode. Please enter a valid pincode.",
+            type: "ERROR",
+          })
+        );
         setIsPincodeValid(false);
         return false;
       }
     } catch (err) {
       console.error("Error validating pincode:", err);
-      dispatch(showToast({ message: "Unable to validate pincode. Please try again.", type: "ERROR" }));
+      dispatch(
+        showToast({
+          message: "Unable to validate pincode. Please try again.",
+          type: "ERROR",
+        })
+      );
       setIsPincodeValid(false);
       return false;
     } finally {
@@ -113,7 +140,10 @@ const CheckoutPage = ({selectedCity}) => {
       return;
     }
 
-    const isPincodeValidForCity = await validatePincode(selectedAddress.zipCode, selectedCity);
+    const isPincodeValidForCity = await validatePincode(
+      selectedAddress.zipCode,
+      selectedCity
+    );
     if (!isPincodeValidForCity) {
       return;
     }
@@ -123,13 +153,7 @@ const CheckoutPage = ({selectedCity}) => {
 
   if (isLoading) return <Loading />;
   if (error) {
-    return (
-      <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
-        <div className="text-center text-[#FF6B6B]">
-          Error loading profile. Please try again.
-        </div>
-      </div>
-    );
+    return <NotFoundPage />;
   }
 
   const total =
@@ -142,7 +166,13 @@ const CheckoutPage = ({selectedCity}) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
+    <div className="container mx-auto  bg-gray-50 min-h-screen">
+      <div
+        onClick={() => window.history.back()}
+        className="flex items-center text-primary hover:text-secondary mb-4 cursor-pointer"
+      >
+        <IoMdArrowRoundBack className="mr-1" /> Back
+      </div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -239,7 +269,6 @@ const CheckoutPage = ({selectedCity}) => {
               >
                 <option value="razorpay">Pay with UPI and Netbank</option>
                 <option value="stripe">Pay with Card</option>
-                
               </select>
             </div>
 

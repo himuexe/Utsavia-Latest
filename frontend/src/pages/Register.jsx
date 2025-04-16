@@ -179,7 +179,7 @@ const Register = () => {
           type="submit"
           className="w-full bg-background text-primary font-primary p-3 rounded-xl 
           hover:bg-white transition-colors 
-          hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer"
+          hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer border border-hover1"
         >
           Create Account
         </button>

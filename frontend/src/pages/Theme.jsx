@@ -2,30 +2,15 @@ import React from "react";
 import { useQuery } from "react-query";
 import { useParams, useNavigate } from "react-router-dom";
 import * as apiClient from "../api/ItemApi";
-import { Card, CardHeader, CardContent, CardFooter } from "../components/ui/Card";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+} from "../components/theme/Card";
 import { MapPin } from "lucide-react";
-
-const ThemeSkeleton = () => (
-  <Card hover={false} className="h-[28rem] bg-[#F9F9F9] border border-[#F0F0F0]">
-    <CardHeader>
-      <div className="aspect-4/3 bg-[#F0F0F0] animate-pulse" />
-    </CardHeader>
-    <CardContent>
-      <div className="space-y-4">
-        <div className="h-4 bg-[#F0F0F0] rounded-sm animate-pulse w-1/3" />
-        <div className="h-6 bg-[#F0F0F0] rounded-sm animate-pulse w-3/4" />
-        <div className="h-4 bg-[#F0F0F0] rounded-sm animate-pulse w-2/3" />
-      </div>
-    </CardContent>
-    <CardFooter>
-      <div className="flex items-center justify-between">
-        <div className="h-6 bg-[#F0F0F0] rounded-sm animate-pulse w-1/4" />
-        <div className="h-10 bg-[#F0F0F0] rounded-sm animate-pulse w-1/3" />
-      </div>
-    </CardFooter>
-  </Card>
-);
-
+import ThemeSkeleton from "../components/theme/ThemeSkeleton";
+import { IoMdArrowRoundBack } from "react-icons/io";
 const ThemesPage = ({ selectedCity }) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -44,8 +29,8 @@ const ThemesPage = ({ selectedCity }) => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
-        <h1 className="text-3xl font-bold text-[#2D3436] mb-8">
+      <div className="container mx-auto px-4 py-8 bg-gray-50min-h-screen">
+        <h1 className="text-3xl  text-primary font-primary mb-8">
           Loading Themes...
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -69,14 +54,21 @@ const ThemesPage = ({ selectedCity }) => {
 
   return (
     <div className="container mx-auto px-4 py-8 bg-white min-h-screen">
-      <h1 className="text-3xl  text-primary font-happiness mb-8">
-        All Themes
-      </h1>
+      <div
+        onClick={() => window.history.back()}
+        className="flex items-center text-primary hover:text-secondary mb-4 cursor-pointer"
+      >
+        <IoMdArrowRoundBack className="mr-1" /> Back
+      </div>
+      <h1 className="text-3xl  text-primary font-happiness mb-8">All Themes</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {items.length > 0 ? (
           items.map((theme) => (
-            <Card key={theme._id} className="bg-[#F9F9F9] border border-[#F0F0F0] h-auto">
+            <Card
+              key={theme._id}
+              className="bg-[#F9F9F9] border border-[#F0F0F0] h-auto"
+            >
               <CardHeader>
                 <div className="aspect-4/3 relative overflow-hidden rounded-lg">
                   <img

@@ -17,7 +17,7 @@ export const CheckoutButton = ({
 
   return (
     <button
-      className="w-full bg-background text-primary font-primary p-3 rounded-xl 
+      className="w-full bg-background border border-hover1 text-primary font-primary p-3 rounded-xl 
           hover:bg-white transition-colors 
           hover:shadow-lg hover:shadow-[#9333EA]/20 cursor-pointer
         transform hover:scale-[1.02] active:scale-[0.98]

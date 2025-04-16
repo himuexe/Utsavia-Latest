@@ -100,7 +100,7 @@ const Nav = () => {
     <NavigationButton
       icon={User}
       to="/login"
-      className="w-full flex items-center gap-3 px-4 py-3  rounded-xl transition-all font-medium text-base"
+      className="w-full flex items-center gap-3 px-4 py-3  rounded-xl transition-all font-medium text-base "
     >
       Login
     </NavigationButton>
@@ -140,7 +140,7 @@ const Nav = () => {
             <button
             onClick={() => navigate("/login")}
             className="p-3 flex flex-row gap-3 items-center rounded-xl hover:bg-white  duration-300 cursor-pointer group transition-colors 
-          hover:shadow-lg hover:shadow-[#9333EA]/20"
+          hover:shadow-lg hover:shadow-[#9333EA]/20 border border-hover1"
           >
             <User className="w-6 h-6 text-icon group-hover:text-hover1 " />
             <span className="font-secondary text-primary">Login</span>
